@@ -1,0 +1,12 @@
+digraph {
+
+Node_0[shape=doublecircle,label="Node_0\l{b}\l"];
+Node_0 -> Node_2[label="a"];
+Node_2[label="Node_2\l{a}\l"];
+Node_2 -> Node_0[label="a"];
+Node_2 -> Node_1[label="b"];
+Node_1[label="Node_1\l{b}\l{a}\l"];
+Node_1 -> Node_2[label="a"];
+Node_1 -> Node_0[label="b"];
+
+}

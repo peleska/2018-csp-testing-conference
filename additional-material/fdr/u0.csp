@@ -1,0 +1,71 @@
+external prioritise
+
+
+
+channel a,b,c
+
+channel deadlock, FAIL, PASS
+
+RUN(X) = [] e:X @ e -> RUN(X)
+
+TEST_PASSED = RUN({ a,b,c,deadlock,PASS})
+
+--
+-- System under test
+--
+
+SUT = a -> ( Q |~| R )
+
+Q = a -> SUT [] c -> SUT
+    
+R = c -> R [] b -> SUT  
+
+
+--
+-- Test U0
+--
+U0 = a -> U1
+     []
+     deadlock -> FAIL -> SKIP
+
+U1 = b -> U2
+     []
+     deadlock -> U3
+
+U2 = a -> PASS -> SKIP
+     []
+     deadlock -> FAIL -> SKIP
+
+U3 = c -> PASS -> SKIP
+     []
+     deadlock -> FAIL -> SKIP
+
+--
+-- Test V0
+--
+V0 = a -> V1
+     []
+     deadlock -> FAIL -> SKIP
+
+V1 = b -> V2
+     []
+     deadlock -> V3
+
+V2 = a -> PASS -> SKIP
+     []
+     deadlock -> FAIL -> SKIP
+
+V3 = a -> PASS -> SKIP
+     []
+     deadlock -> FAIL -> SKIP
+
+
+
+SYSTEM_TEST0 = prioritise((SUT [| {a,b,c} |] U0),<{a,b,c},{deadlock}>)
+SYSTEM_TEST1 = prioritise((SUT [| {a,b,c} |] V0),<{a,b,c},{deadlock}>)
+
+assert TEST_PASSED [T= SYSTEM_TEST0
+assert TEST_PASSED [T= SYSTEM_TEST1
+
+
+

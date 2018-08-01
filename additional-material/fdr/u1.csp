@@ -1,0 +1,33 @@
+external prioritise
+
+
+
+channel a,b,c,deadlock, FAIL, PASS
+
+
+P = a -> R
+    
+R = c -> R |~| b -> P  
+
+
+
+U0 = a -> U1
+     []
+     deadlock -> FAIL -> SKIP
+
+U1 = b -> PASS -> SKIP
+     []
+     deadlock -> FAIL -> SKIP
+
+
+
+
+TEST_PASSED = [] e : { a,b,c,deadlock,PASS} @ e -> TEST_PASSED
+
+
+SYSTEM_TEST = prioritise((P [| {a,b,c} |] U0),<{a,b,c},{deadlock}>)
+
+assert TEST_PASSED [T= SYSTEM_TEST 
+
+
+

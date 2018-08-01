@@ -1,0 +1,10 @@
+transparent normal
+
+channel a, b
+
+Z = a -> (Q |~| R)
+
+Q = a -> Z [] b -> b -> Z
+
+R = b -> Z 
+

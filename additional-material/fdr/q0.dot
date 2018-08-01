@@ -1,0 +1,17 @@
+digraph {
+
+Node_0[shape=doublecircle,label="Node_0\l{a}\l"];
+Node_0 -> Node_2[label="a"];
+Node_2[label="Node_2\l{a,c}\l{c,b}\l"];
+Node_2 -> Node_0[label="a"];
+Node_2 -> Node_1[label="c"];
+Node_2 -> Node_0[label="b"];
+Node_1[label="Node_1\l{a}\l{c,b}\l"];
+Node_1 -> Node_2[label="a"];
+Node_1 -> Node_3[label="c"];
+Node_1 -> Node_0[label="b"];
+Node_3[label="Node_3\l{c,b}\l"];
+Node_3 -> Node_3[label="c"];
+Node_3 -> Node_0[label="b"];
+
+}
