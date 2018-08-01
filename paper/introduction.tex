@@ -1,0 +1,94 @@
+% =========================================================================
+
+\section{Introduction}
+\label{sec:intro}
+
+% =================================================================================
+
+\subsubsection*{Motivation}
+
+Model-based testing (MBT) is an  active research field that is currently
+evaluated and integrated into industrial verification processes by many
+companies. This holds particularly for the embedded and cyber-physical
+systems domain. While MBT is applied in different flavours, we consider the
+most effective variant to be the one where test cases and concrete test data,
+as well as checkers for the expected results~(\emph{test oracles}), are
+automatically generated from a reference model:~it guarantees the maximal
+return of investment for the time and effort invested into creating the test
+model. The test suites generated in this way, however, usually have different
+test strength, depending on the generation algorithms applied.
+
+For the safety-critical domain, test suites with guaranteed fault coverage
+are of particular interest. For black-box testing, guarantees can be given
+only if certain hypotheses are satisfied. These hypotheses are usually
+specified by a \emph{fault domain}:~a set of models that may or may not
+conform to the SUT. The so-called \emph{complete} test strategies guarantee
+to uncover every conformance violation of the SUT with respect to a reference
+model, provided that the true SUT behaviour is captured by a member of the
+fault domain.
+
+Generation methods for complete test suites have been developed for various
+modelling formalisms. In this paper, we use \emph{Communicating Sequential
+Processes (CSP)}~\cite{Hoare:1985:CSP:3921,Roscoe2010}; this is a mature
+process-algebraic approach that has been shown to be well-suited for the
+description of reactive control systems in many publications over almost five
+decades. Industrial success has also been reported.
+
+% ==================================================================================
+
+\subsubsection*{Contributions}
+
+This paper complements work published by two of the authors
+in~\cite{DBLP:conf/pts/CavalcantiS17}. There, fault domains are specified as
+collections of processes refining a  ``most general'' fault domain member.
+With this concept of fault domains, complete test suites may be finite or
+infinite. While this gives important insight into the theory of complete test
+suites, we are particularly interested in finite suites when it comes to
+their practical application.
+
+Therefore, we present a complementary approach to the definition of CSP fault
+domains in this paper. To this end, we observe that every finite-state CSP
+process can be semantically represented as a finite normalised transition
+graph, whose edges are labelled by the events the process engages in, and
+whose nodes are labelled by minimal acceptances or, alternatively, maximal
+refusals~\cite{Roscoe:1994:CME:197600}. The maximal refusals  express the
+degree of nondeterminism that is present in a given CSP process state that is
+in one-one-correspondence to a node of the normalised transition graph.
+Inspired by the way that fault-domains are specified for finite state
+machines (FSMs), we define them here as the set of CSP processes whose
+normalised transition graphs do not exceed the size of the reference model's
+graph by more than a give constant.
+
+Our main contributions in this paper are as follows.
+%
+\begin{enumerate}
+\item It is proven that for fault domains of the described type, complete
+    test suite generation methods can be given for verifying (1)~trace
+    equivalence, (2)~trace refinement, (3)~failures equivalence, and
+    (4)~failures refinement.
+
+\item We prove that finite complete test suites can be generated in all
+    four cases, when using the fault domains based on the size of the
+    members' normalised transition graphs.
+
+\item We present test suite generation techniques for each of the four
+    conformance relations by translating algorithms originally elaborated
+    for the FSM domain into the CSP world. This translation preserves the
+    completeness properties that have previously been established for the
+    FSM domain by other authors.
+\end{enumerate}
+%
+The possibility to translate complete test suites between different
+formalisms (here FSMs and CSP processes) has been investigated before by two
+of the authors~\cite{Huang2017}. \fxwarning{alcc: I miss a paragraph that
+discusses what is difficult. So far, it sounds like just application of known
+results, which is not true.}
+
+% ==================================================================================
+
+\subsubsection*{Overview}
+
+@todo
+
+
+% ==================================================================================

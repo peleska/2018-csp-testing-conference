@@ -1,0 +1,238 @@
+% =========================================================================
+\section{Preliminaries}
+\label{section:preliminaries}
+% =========================================================================
+
+In this section, we present the background material relevant to our work.
+
+% =========================================================================
+\subsection{Complete Test Suites}
+\label{sec:fsmfm}
+% =========================================================================
+
+We use the term \emph{signature} to denote a collection of comparable models
+represented in an arbitrary formalism. In this article, signatures represent
+sets of finite state machines over fixed input and output alphabets, or CSP
+processes with finite state, represented by their normalised transition
+graphs (see Section~\ref{sec:ntg}).
+
+Given a signature $Sig$  of models, a  \emph{fault model} ${\cal F} =
+(M,\le,Dom)$ specifies a \emph{reference model} $M\in Sig$, a
+\emph{conformance relation} $\le\ \subseteq Sig\times Sig$ between models,
+and a \emph{fault domain} $Dom\subseteq Sig$. This terminology
+follows~\cite{gotzhein_fault_1996}, where fault models have been originally
+introduced in the context of testing of finite state machines. Note that
+fault domains may contain both models conforming to the reference model and
+models violating the conformance relation. Note further that the reference
+model $M$ is not necessarily a member of the fault domain, although a model
+of the SUT behaviour is. For example, $M$ could be nondeterministic, while
+only deterministic implementation behaviours might be considered in the fault
+domain.
+%By $F(Sig,\le)$ we denote the set of all fault models ${\cal F}$
+%defined for
+%signature $Sig$ and conformance relation $\le$.
+
+Let $\tc(Sig)$ denote the set of all \emph{test cases} applicable to elements
+of $Sig$. This abstract notion of test case requires only the existence of a
+relation $\pass\subseteq Sig\times \tc(Sig)$. For $(M,U)\in\pass$, the infix
+notation $M\ \pass\ U$ is used, and interpreted as {\it `model $M$ passes the
+test case $U$'}. If $(M,U)\not\in\pass$ holds, this is abbreviated by $M\
+\tfail\ U$. Our specific notion of test cases for CSP models is elaborated in
+Section~\ref{sec:csptc}.
+
+A \emph{test suite} $\TS \subseteq \tc(Sig)$ denotes  a set of test cases. A
+model $M$ \emph{passes the test suite} $\TS$, also written as $M\ \pass\
+\TS$, if, and only if, $M\ \pass\ U$ for all $U\in \TS$. A test suite $\TS$
+is called \emph{complete} for fault model ${\cal F} = (M,\le,Dom)$, if, and
+only if, the following properties hold.
+\begin{enumerate}
+\item If a member $M'$ of the fault domain  conforms to the reference model $M$,
+it passes the test suite, that is,
+$$
+\forall M'\in Dom: M'\le M \Rightarrow M'\ \pass\ \TS
+$$
+This property is usually called \emph{soundness} of the test suite.
+
+\item If a member of the fault domain passes the test suite, it conforms to the reference model, that is,
+$$
+\forall M'\in Dom: M'\ \pass\ \TS \Rightarrow M'\le M
+$$
+This property is usually called \emph{exhaustiveness}.
+\end{enumerate}
+A test suite $\TS$ is \emph{finite} if it contains finitely many test cases and every test
+case $U\in\TS$ is finite in the sense that it terminates after a finite number of steps.
+It is trivial to see that, if $\TS$ is complete  for   ${\cal F} = (M,\le,Dom)$
+and $Dom'\subseteq Dom$, then $\TS$ is also complete for ${\cal F}' = (M,\le,Dom')$.
+
+ 
+% =========================================================================
+\subsection{CSP and Refinement}
+
+% =========================================================================
+
+\subsubsection*{Communicating Sequential Processes} @todo
+\fxwarning{alcc: I can make this small contribution.}
+
+% =========================================================================
+\subsubsection*{Normalised Transition Graphs for CSP Processes}
+\label{sec:ntg}
+
+As shown in~\cite{Roscoe:1994:CME:197600}, any finite-state CSP process $P$
+can be represented by a \emph{normalised transition graph}
+$$
+G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
+$$
+with nodes $N$, initial node $\ii n\in N$, and process alphabet $\Sigma$. The
+partial \emph{transition function} $t$ maps a node $n$ and an event
+$e\in\Sigma$ to its successor node $t(n,e)$, if, and only if, $(n,e)$ is in
+the domain of $t$, that is, there is a transition from $n$ with label $e$.
+Normalisation of $G(P)$ is reflected by the fact that $t$ is a function.
+
+A finite sequence of events $s\in\Sigma^*$ is a \emph{trace} of $P$, if there
+is a path through $G(P)$ starting  at $\ii n$ whose edge labels coincide with
+$s$. The set of traces of $P$ is denoted by $\trc(P)$. If $s\in\trc(P)$, then
+the process corresponding to $P$ after having executed $s$ is denoted by
+$P/s$. Since $G(P)$ is normalised, there is a unique node reached by applying
+the events from $s$ one by one, starting in $\ii n$. Therefore, $G(P)/s$  is
+also well defined.
+
+By $[n]^0$ we denote the \emph{fan-out} of $n$:~the set of events occurring
+as labels in any outgoing transitions.
+$$
+[n]^0 = \{ e\in\Sigma~|~(n,e)\in\dom~t \}
+$$
+We also use this notation for CSP processes:~$[P]^0$ is the set
+of events $P$ may engage into, in other words, the initials of $P$ after the
+empty trace of events, that is, $initials(P/\langle\rangle)$ as defined
+in~\cite{Roscoe2010}.
+
+The total function $r$ maps each node $n$ to its \emph{refulsals} $r(n) =
+\refs(n)$. Each element of $r(n)$ is a set of events that the CSP process $P$
+might refuse to engage into, when in a process state corresponding to $n$.
+The number of refusal sets in $\refs(P/s)$ specifies the degree of
+nondeterminism that is present in process state $P/s$: the more refusal sets
+contained in  $\refs(P/s)$, the more nondeterministic is the behaviour in
+state $P/s$. If $P/s$ is deterministic, its refusals coincide with the set of
+subsets of $\Sigma - [P/s]^0$, including the empty set.
+
+For finite CSP processes, since the refusals of each process state are
+subset-closed~\cite{Hoare:1985:CSP:3921,Roscoe2010}, $\refs(P/s)$ can be
+re-constructed by knowing the set of \emph{maximal refusals}
+$\maxrefs(P/s)\subseteq\refs(P/s)$. More formally, the maximal refusals
+$\maxrefs(P/s)$ are defined as
+$$
+\maxrefs(P/s) = \{ R \in\refs(P/s)~|~\forall R'\in \refs(P/s) - \{ R\}: R \not\subseteq R'\}
+$$
+Conversely, with the maximal refusals at hand, we can reconstruct the refusals by subset-closure:
+$$
+\refs(P/s) = \{ R'\in\power(\Sigma)~|~\exists R\in \maxrefs(P/s): R'\subseteq R \}.
+$$
+To see that this approach works only for finite CSP processes, consider the
+example where $\Sigma$ is infinite. In this case,
+$\maxrefs(STOP/\langle\rangle)$ is empty, and so we cannot use this set to
+calculate the refusals of $STOP$, that is, $\refs(STOP/\langle\rangle)$ as
+defined above. As with refusals, we also use the transition graph-oriented
+notation $\maxrefs(n) \subseteq r(n)$ to denote the maximal refusals
+associated with graph state $n$: if $n$ is the state reached in the
+transition graph by following the edge labels in trace $s$, then $\maxrefs(n)
+= \maxrefs(P/s)$.
+
+Well-formed normalised transition graphs must not refuse an event of the
+fan-out of a state in {\it every} refusal applicable in this state; more
+formally,
+\begin{equation}
+\label{eq:wellformedg}
+\forall n\in N, e\in\Sigma: (n,e)\in\dom~t \Rightarrow
+\exists R\in \maxrefs(n): e\not\in R
+\end{equation}
+%The total function $a$ maps each node to its set of \emph{minimal acceptances}:
+%if $n\in N$ corresponds to a deterministic process state of $P$, $ac(n)$ contains a single acceptance $A\subseteq \Sigma$, and every $e\in A$ is in one-one-correspondence with a transition $t(n,e)$. If $n$ corresponds to a nondeterministic process state, $ac(n)$ contains at least two acceptances $A_1, A_2, \dots, A_k$. This reflects the fact that in a nondeterministic state, $P$ must accept all events of one acceptance
+%$A_i, i \in \{ 1,\dots,k\}$, but may refuse all events $e$ from
+%$A_j \setminus A_i, j\neq i$.
+%
+%Each well-defined transition graph $G(P)$ fulfils the following condition. The union of all minimal acceptances in each node corresponds to the set of events labelling its outgoing transitions.
+%\begin{equation}
+%\label{eq:wellformedg}
+%\forall n\in N: (n,e)\in\dom~t \Leftrightarrow e\in\bigcup ac(n)
+%\end{equation}
+%In this condition, $\dom~t$ denotes the domain of function $t$.
+By construction, normalised transition graphs reflect the \emph{failures
+semantics} of finite-state CSP processes:~the traces $s$ of a process are the
+sequences of transition associated with paths through the graph,
+starting at $\ii n$. The pairs $(s,R)$ with $s\in\trc(P)$ and $R\in
+r(G(P)/s)$ represent the failures $\failure(P)$ of $P$.
+
+% .....................................................................................
+ \begin{figure}
+ %%\hspace*{-40mm}
+ \begin{center}
+\includegraphics[width=\textwidth]{q0.pdf}
+\end{center}
+%%\vspace*{-10mm}
+\caption{Normalised transition graph of CSP process $P$ from Example~\ref{ex:a}.}
+ \label{fig:tga}
+ \end{figure}
+% .......................................................................................
+
+\begin{example}{ex:a}
+Consider the CSP process $P$ defined below, and that the set of events
+$\Sigma$ is $\{a,b,c\}$.
+\begin{eqnarray*}
+P & = & a \then (Q\intchoice R)
+\\
+Q & = & a \then P \extchoice c \then P
+\\
+R & = & b \then P \extchoice c \then R
+\end{eqnarray*}
+Its transition graph $G(P)$ is shown in Fig.~\ref{fig:tga}. Process state
+$P/\langle\rangle$ is represented there as Node\_0, with $\{ b,c\}$ as the
+only maximal refusal, since $a$ can never be refused, and no other events are
+accepted. Having engaged into $a$, the transition emanating from Node\_0
+leads to Node\_2 representing  the process state $P/a = Q\intchoice R$. The
+internal choice operator induces several refusal sets derived from $Q$ and
+$R$. Since these processes accept their initial events in external choice,
+$Q\intchoice R$ induces two maximal refusal sets $\{b\}$ and
+$\{a\}$. Note that event $c$ can never be refused, since it is not a member
+of any maximal refusal.
+
+Having engaged into $c$, the next process state is represented by Node\_1.
+Due to normalisation, there is only a single transition satisfying
+$t(\text{Node\_2},c) = \text{Node\_1}$. This transition, however, can have
+been caused by either $Q$ or $R$ engaging into $c$, so Node\_1 corresponds to
+process state $Q/c \intchoice R/c = P \intchoice R$. This is reflected by the
+two maximal refusals labelling Node\_1.
+
+Similar considerations explain the other nodes and transitions in
+Fig.~\ref{fig:tga}.
+
+Note that the node names are generated by the FDR tool (see next paragraph).
+The node numbering is generated by FDR during the normalisation procedure.
+Therefore, the node numbers do not reflect the distance from the initial node
+Node\_0.
+%Node\_2 is a direct successor to the initial node Node\_0, while Node\_1 is a direct successor of Node\_2.
+\end{example}
+
+% =========================================================================
+
+\subsubsection*{Tool Considerations}
+The FDR tool~\cite{fdr} supports model checking and semantic analyses of CSP
+processes. It provides an API~\cite{fdrmanual} that can be used to construct
+normalised transition graphs for CSP processes.
+
+The FDR graph nodes are labelled by \emph{minimal acceptances} instead of
+maximal refusals as described above. Since such a minimal acceptance set is
+the complement of a maximal refusal, the function $r$ mapping states to their
+refusals can be implemented by creating the complements of all minimal
+acceptances and then building all subsets of these complements. For practical
+applications, the subset closure is never constructed in an explicit way;
+instead, sets are checked with respect to containment in a maximal refusal.
+
+%
+%The maximal refusals in each process state $P/s$
+% are the complements of
+%the minimal acceptances of the node $n$
+%corresponding to $P/s$. As a consequences, all failures
+%of $P$ are represented by some $(s,R)$, where $s$ is an initialised path through the transition graph and $R\subseteq (\Sigma-A)$ for some minimal acceptance $A\in ac(n)$,
+%such that $n$ is the node corresponding to $P/s$.
+
+ 
