@@ -38,7 +38,9 @@ decades. Industrial success has also been reported.
 
 \subsubsection*{Contributions}
 
-This paper complements work published by two of the authors
+This paper presents complete black-box test suites for divergence-free\footnote{The assumption of divergence freedom is usually applied in black-box testing, since it cannot distinguish between divergence and deadlock.} CSP processes interpreted 
+both in the trace   and the failures semantics.  
+Our results complement work published by two of the authors
 in~\cite{DBLP:conf/pts/CavalcantiS17}. There, fault domains are specified as
 collections of processes refining a  ``most general'' fault domain member.
 With this concept of fault domains, complete test suites may be finite or
@@ -46,8 +48,8 @@ infinite. While this gives important insight into the theory of complete test
 suites, we are particularly interested in finite suites when it comes to
 their practical application.
 
-Therefore, we present a complementary approach to the definition of CSP fault
-domains in this paper. To this end, we observe that every finite-state CSP
+Therefore,  a complementary approach to the definition of CSP fault
+domains is presented in this paper. To this end, we observe that every finite-state CSP
 process can be semantically represented as a finite normalised transition
 graph, whose edges are labelled by the events the process engages in, and
 whose nodes are labelled by minimal acceptances or, alternatively, maximal
@@ -55,38 +57,27 @@ refusals~\cite{Roscoe:1994:CME:197600}. The maximal refusals  express the
 degree of nondeterminism that is present in a given CSP process state that is
 in one-one-correspondence to a node of the normalised transition graph.
 Inspired by the way that fault-domains are specified for finite state
-machines (FSMs), we define them here as the set of CSP processes whose
+machines, we define them here as the set of CSP processes whose
 normalised transition graphs do not exceed the size of the reference model's
 graph by more than a give constant.
 
-Our main contributions in this paper are as follows.
-%
-\begin{enumerate}
-\item It is proven that for fault domains of the described type, complete
+Our main contributions in this paper consist in the proof that 
+for fault domains of the described type, finite, complete
     test suite generation methods can be given for verifying (1)~trace
     equivalence, (2)~trace refinement, (3)~failures equivalence, and
     (4)~failures refinement.
+    
+The existence of -- possibly infinite -- complete test suites has been established for process algebras in general and  for CSP in particular by several authors, 
+e.g.~\cite{Hennessy:1988:ATP:50497,Schneider:1995:OST:203471.203475,DBLP:conf/fm/PeleskaS96,peleska1997a,DBLP:conf/pts/CavalcantiS17}. To our best knowledge, however, this article is the first to present {\it finite}, complete test suites associated with this class of fault domains.
 
-\item We prove that finite complete test suites can be generated in all
-    four cases, when using the fault domains based on the size of the
-    members' normalised transition graphs.
-
-\item We present test suite generation techniques for each of the four
-    conformance relations by translating algorithms originally elaborated
-    for the FSM domain into the CSP world. This translation preserves the
-    completeness properties that have previously been established for the
-    FSM domain by other authors.
-\end{enumerate}
-%
-The possibility to translate complete test suites between different
-formalisms (here FSMs and CSP processes) has been investigated before by two
-of the authors~\cite{Huang2017}. \fxwarning{alcc: I miss a paragraph that
-discusses what is difficult. So far, it sounds like just application of known
-results, which is not true.}
-
+It should be noted that the presented results are of a theoretical nature: despite being finite, the resulting test suite size will still be too large to be applied in practice to real-world problems.
+We discuss a number of promising options how the test suite size can be reduced to become practically applicable.
+ 
 % ==================================================================================
 
 \subsubsection*{Overview}
+In Section~\ref{section:preliminaries}, 
+we present the background material relevant to our work.
 
 @todo
 

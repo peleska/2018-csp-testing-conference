@@ -3,66 +3,6 @@
 \label{section:preliminaries}
 % =========================================================================
 
-In this section, we present the background material relevant to our work.
-
-% =========================================================================
-\subsection{Complete Test Suites}
-\label{sec:fsmfm}
-% =========================================================================
-
-We use the term \emph{signature} to denote a collection of comparable models
-represented in an arbitrary formalism. In this article, signatures represent
-sets of finite state machines over fixed input and output alphabets, or CSP
-processes with finite state, represented by their normalised transition
-graphs (see Section~\ref{sec:ntg}).
-
-Given a signature $Sig$  of models, a  \emph{fault model} ${\cal F} =
-(M,\le,Dom)$ specifies a \emph{reference model} $M\in Sig$, a
-\emph{conformance relation} $\le\ \subseteq Sig\times Sig$ between models,
-and a \emph{fault domain} $Dom\subseteq Sig$. This terminology
-follows~\cite{gotzhein_fault_1996}, where fault models have been originally
-introduced in the context of testing of finite state machines. Note that
-fault domains may contain both models conforming to the reference model and
-models violating the conformance relation. Note further that the reference
-model $M$ is not necessarily a member of the fault domain, although a model
-of the SUT behaviour is. For example, $M$ could be nondeterministic, while
-only deterministic implementation behaviours might be considered in the fault
-domain.
-%By $F(Sig,\le)$ we denote the set of all fault models ${\cal F}$
-%defined for
-%signature $Sig$ and conformance relation $\le$.
-
-Let $\tc(Sig)$ denote the set of all \emph{test cases} applicable to elements
-of $Sig$. This abstract notion of test case requires only the existence of a
-relation $\pass\subseteq Sig\times \tc(Sig)$. For $(M,U)\in\pass$, the infix
-notation $M\ \pass\ U$ is used, and interpreted as {\it `model $M$ passes the
-test case $U$'}. If $(M,U)\not\in\pass$ holds, this is abbreviated by $M\
-\tfail\ U$. Our specific notion of test cases for CSP models is elaborated in
-Section~\ref{sec:csptc}.
-
-A \emph{test suite} $\TS \subseteq \tc(Sig)$ denotes  a set of test cases. A
-model $M$ \emph{passes the test suite} $\TS$, also written as $M\ \pass\
-\TS$, if, and only if, $M\ \pass\ U$ for all $U\in \TS$. A test suite $\TS$
-is called \emph{complete} for fault model ${\cal F} = (M,\le,Dom)$, if, and
-only if, the following properties hold.
-\begin{enumerate}
-\item If a member $M'$ of the fault domain  conforms to the reference model $M$,
-it passes the test suite, that is,
-$$
-\forall M'\in Dom: M'\le M \Rightarrow M'\ \pass\ \TS
-$$
-This property is usually called \emph{soundness} of the test suite.
-
-\item If a member of the fault domain passes the test suite, it conforms to the reference model, that is,
-$$
-\forall M'\in Dom: M'\ \pass\ \TS \Rightarrow M'\le M
-$$
-This property is usually called \emph{exhaustiveness}.
-\end{enumerate}
-A test suite $\TS$ is \emph{finite} if it contains finitely many test cases and every test
-case $U\in\TS$ is finite in the sense that it terminates after a finite number of steps.
-It is trivial to see that, if $\TS$ is complete  for   ${\cal F} = (M,\le,Dom)$
-and $Dom'\subseteq Dom$, then $\TS$ is also complete for ${\cal F}' = (M,\le,Dom')$.
 
  
 % =========================================================================
@@ -212,6 +152,29 @@ Node\_0.
 %Node\_2 is a direct successor to the initial node Node\_0, while Node\_1 is a direct successor of Node\_2.
 \end{example}
 
+Refinement relations between finite-state CSP processes $P, Q$ 
+can be be expressed by means of their normalised transition graphs in the following way.
+
+\begin{lemma}
+\label{lemma:tgtrcref}
+\begin{eqnarray}
+P \lessdet_T Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P))
+\label{eq:trcrefa}
+\\
+\label{eq:failrefa}
+P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {}
+\\ & & \forall s\in\trc(G(Q)), R_Q\in\maxrefs(G(Q)/s): 
+\\ & & \tabd
+\exists R_P\in\maxrefs(G(P)/s): R_Q\subseteq R_P
+\\
+\label{eq:failrefb}
+P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {}
+\\ & & \forall s\in\trc(G(Q)), A_Q\in\minaccs(G(Q)/s):
+\\ & & \tabd
+\exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
+\end{eqnarray}
+\end{lemma}
+
 % =========================================================================
 
 \subsubsection*{Tool Considerations}
@@ -234,5 +197,91 @@ instead, sets are checked with respect to containment in a maximal refusal.
 %corresponding to $P/s$. As a consequences, all failures
 %of $P$ are represented by some $(s,R)$, where $s$ is an initialised path through the transition graph and $R\subseteq (\Sigma-A)$ for some minimal acceptance $A\in ac(n)$,
 %such that $n$ is the node corresponding to $P/s$.
+
+
+
+% =========================================================================
+\subsection{Test Cases and Complete Test Suites}
+\label{sec:cspcompletedef}
+% =========================================================================
+
+@todo
+
+
+
+
+% =========================================================================
+\subsection{Minimal Hitting Sets}
+\label{sec:hit}
+% =========================================================================
+
+When testing for failures refinement, it will become apparent that the main idea of the underlying test strategy can be based on solving a \emph{hitting set problem}. Given a collection of finite sets $C = \{ A_1,\dots,A_n\}$ that are each subsets of a universe $\Sigma$, a \emph{hitting set} $H\subseteq\Sigma$ is a set satisfying
+\begin{equation}
+\label{eq:hit}
+\forall A\in C: H\cap C \neq\varnothing.
+\end{equation}
+
+A \emph{minimal hitting set} is a hitting set which cannot be further reduced without losing 
+the characteristinc property (\ref{eq:hit}). The problem of determining minimal hitting sets is known to be NP-hard~\cite{Book1975-BOOKRM}, but we will see below that it reduces 
+the effort of testing for failures refinement from a factor of $2^\Sigma$ to a factor that equals the number of minimal hitting sets.
+
+For testing in the failures model, the following lemmas about hitting sets are required.
+
+\begin{lemma}
+\label{lemma:hseta}
+Let $P, Q$ be two finite-state CSP processes satisfying $P\lessdet_T Q$. 
+For each $s\in\trc(P)$,
+let $\text{MINHIT}(s)$ denote the
+collection of all minimal hitting sets of $\minaccs(P/s)$. 
+Then the following statements are equivalent.
+\begin{enumerate}
+\item $P\lessdet_F Q$
+\item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{MINHIT}(s)$, $H$ is
+a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For showing ``$1 \Rightarrow 2$'', assume that $P\lessdet_F Q$ and suppose that
+$s\in\trc(P)\cap \trc(Q)$. Then Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), implies that 
+\[
+\forall A_Q\in\minaccs(G(Q)/s):
+\exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
+\]
+Therefore, every minimal acceptance set $A_Q\in\minaccs(G(Q)/s)$ contains a
+minimal acceptance set from  \minaccs(G(P)/s). As a consequence, any hitting set
+$H \in  \text{MINHIT}(s)$ also has a non-empty intersection with every 
+$A_Q\in\minaccs(G(Q)/s)$.
+
+To prove ``$2 \Rightarrow 1$'',
+assume $P\lessdet_T Q$, but $P\not\lessdet_F Q$. According to Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), there exists $s\in\trc(P)\cap \trc(Q)$ such that 
+\[
+\exists A_Q\in\minaccs(G(Q)/s): \forall A_P\in\minaccs(G(P)/s): A_P\not\subseteq A_Q (*)
+\]
+Define 
+\[
+\overline H = \bigcup_{A_P\in\minaccs(G(P)/s)} \big( A_P \setminus A_Q \big).
+\]
+Since $A_P \setminus A_Q \neq\varnothing$ because of (*), $\overline H$ is a hitting set
+of $\minaccs(G(P)/s)$ which has a non-empty intersection with $A_Q$. Minimising 
+$\overline H$ induces the existence
+of a minimal hitting set $H\in \text{MINHIT}(s)$ which is {\it not} a hitting set of 
+of $\minaccs(G(Q)/s)$. This completes the proof of the lemma.
+\xbox
+\end{proof}
+
+%\begin{lemma}
+%\label{lemma:hsetb}
+%
+%\end{lemma}
+%\begin{proof}
+%asd
+%\end{proof}
+%
+
+
+
+
+
+
 
  
