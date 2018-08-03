@@ -13,6 +13,10 @@
 \subsubsection*{Communicating Sequential Processes} @todo
 \fxwarning{alcc: I can make this small contribution.}
 
+
+Throughout this paper, the alphabet of CSP processes $P$ is denoted by $\Sigma$. 
+Since we are only considering ``classical'' CSP processes, the alphabet is always finite.
+
 % =========================================================================
 \subsubsection*{Normalised Transition Graphs for CSP Processes}
 \label{sec:ntg}
@@ -36,7 +40,7 @@ $P/s$. Since $G(P)$ is normalised, there is a unique node reached by applying
 the events from $s$ one by one, starting in $\ii n$. Therefore, $G(P)/s$  is
 also well defined.
 
-By $[n]^0$ we denote the \emph{fan-out} of $n$:~the set of events occurring
+By $[n]^0$ we denote the \emph{initials} of $n$:~the set of events occurring
 as labels in any outgoing transitions.
 $$
 [n]^0 = \{ e\in\Sigma~|~(n,e)\in\dom~t \}
@@ -60,13 +64,13 @@ subset-closed~\cite{Hoare:1985:CSP:3921,Roscoe2010}, $\refs(P/s)$ can be
 re-constructed by knowing the set of \emph{maximal refusals}
 $\maxrefs(P/s)\subseteq\refs(P/s)$. More formally, the maximal refusals
 $\maxrefs(P/s)$ are defined as
-$$
+\begin{equation}
 \maxrefs(P/s) = \{ R \in\refs(P/s)~|~\forall R'\in \refs(P/s) - \{ R\}: R \not\subseteq R'\}
-$$
+\end{equation}
 Conversely, with the maximal refusals at hand, we can reconstruct the refusals by subset-closure:
-$$
+\begin{equation}
 \refs(P/s) = \{ R'\in\power(\Sigma)~|~\exists R\in \maxrefs(P/s): R'\subseteq R \}.
-$$
+\end{equation}
 To see that this approach works only for finite CSP processes, consider the
 example where $\Sigma$ is infinite. In this case,
 $\maxrefs(STOP/\langle\rangle)$ is empty, and so we cannot use this set to
@@ -85,22 +89,41 @@ formally,
 \forall n\in N, e\in\Sigma: (n,e)\in\dom~t \Rightarrow
 \exists R\in \maxrefs(n): e\not\in R
 \end{equation}
-%The total function $a$ maps each node to its set of \emph{minimal acceptances}:
-%if $n\in N$ corresponds to a deterministic process state of $P$, $ac(n)$ contains a single acceptance $A\subseteq \Sigma$, and every $e\in A$ is in one-one-correspondence with a transition $t(n,e)$. If $n$ corresponds to a nondeterministic process state, $ac(n)$ contains at least two acceptances $A_1, A_2, \dots, A_k$. This reflects the fact that in a nondeterministic state, $P$ must accept all events of one acceptance
-%$A_i, i \in \{ 1,\dots,k\}$, but may refuse all events $e$ from
-%$A_j \setminus A_i, j\neq i$.
-%
-%Each well-defined transition graph $G(P)$ fulfils the following condition. The union of all minimal acceptances in each node corresponds to the set of events labelling its outgoing transitions.
-%\begin{equation}
-%\label{eq:wellformedg}
-%\forall n\in N: (n,e)\in\dom~t \Leftrightarrow e\in\bigcup ac(n)
-%\end{equation}
-%In this condition, $\dom~t$ denotes the domain of function $t$.
+
+
 By construction, normalised transition graphs reflect the \emph{failures
 semantics} of finite-state CSP processes:~the traces $s$ of a process are the
 sequences of transition associated with paths through the graph,
 starting at $\ii n$. The pairs $(s,R)$ with $s\in\trc(P)$ and $R\in
 r(G(P)/s)$ represent the failures $\failure(P)$ of $P$.
+
+When investigating  tests for failures refinement, 
+the notion of \emph{acceptances}~\cite{Hennessy:1988:ATP:50497} 
+which is dual to refusals will also be useful. An acceptance set of $P/s$ is a subset
+of the initials $[P/s]^0$, i.e. a subset of events labelling  outgoing transitions
+of $G(P)/s$. If the behaviour of  $P/s$ is deterministic, its only acceptance equals
+$[P/s]^0$, because $P/s$ will never refuse any of the events contained in this set. If
+$P/s$ is nondeterministic, it will internally choose one of it 
+\emph{minimal acceptance sets} $A$ and never refuse any event in $A$, while refusing the
+events in $\Sigma-A$. The acceptances of 
+ $P/s$ are denoted by $\accs(P/s)$, the minimal acceptances by $\minaccs(P/s)$. 
+ They fulfil the following rules.
+\begin{eqnarray}
+A\in \minaccs(P/s) & \Leftrightarrow & \exists R\in\maxrefs(P/s) \wedge A = \Sigma-R
+\label{eq:accref}
+\\
+\bigcup \{ A~|~A\in \accs(P/s)\} & = & [P/s]^0
+\label{eq:accinitials}
+\\
+ X\in\accs(P/s) &\Leftrightarrow & A\in \minaccs(P/s) \wedge A\subseteq X \subseteq [P/s]^0
+ \label{eq:accsubset}
+\end{eqnarray} 
+Note that (\ref{eq:accref}) can be regarded as a definition of minimal acceptances by means
+of maximal refusals. Then (\ref{eq:accinitials}) and (\ref{eq:accsubset}) are consequences
+of this definition and  the fact that refusals are subset-closed.
+
+Every node of a transition graph can be labelled with with its minimal acceptances, and this information is equivalent to 
+that contained in its maximal refusals.
 
 % .....................................................................................
  \begin{figure}
@@ -162,18 +185,39 @@ P \lessdet_T Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P))
 \label{eq:trcrefa}
 \\
 \label{eq:failrefa}
-P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {}
-\\ & & \forall s\in\trc(G(Q)), R_Q\in\maxrefs(G(Q)/s): 
+P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {} \nonumber
+\\ & & \forall s\in\trc(G(Q)), R_Q\in\maxrefs(G(Q)/s):  \nonumber
 \\ & & \tabd
 \exists R_P\in\maxrefs(G(P)/s): R_Q\subseteq R_P
 \\
 \label{eq:failrefb}
-P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {}
-\\ & & \forall s\in\trc(G(Q)), A_Q\in\minaccs(G(Q)/s):
+P \lessdet_F Q & \Leftrightarrow & \trc(G(Q)) \subseteq\trc(G(P)) \wedge {} \nonumber
+\\ & & \forall s\in\trc(G(Q)), A_Q\in\minaccs(G(Q)/s): \nonumber
 \\ & & \tabd
 \exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
 \end{eqnarray}
 \end{lemma}
+
+For proving our main theorems, it is necessary to consider the \emph{product} of 
+normalised transition graphs. We need this only for the investigation of corresponding traces in reference processes and processes under test. Therefore, the 
+labelling of nodes with maximal refusals or minimal acceptances   will be disregard in the 
+product construction.
+Consider two normalised transition graphs 
+\[
+G_i = ( N_i, \ii n_i, \Sigma, t_i : N_i\times\Sigma \pfun N_i, r_i : N_i \fun \mathbb{P}\mathbb{P}(\Sigma)),\qquad i = 1,2,
+\]
+over the same alphabet $\Sigma$. Then their product is defined by
+\begin{eqnarray}
+G_1\times G_2 & = & (N_1\times N_2,(\ii n_1,\ii n_2), t:(N_1\times N_2)\times\Sigma\pfun (N_1\times N_2))
+\\
+\dom~t & = & \{ ((n_1,n_2),e)\in (N_1\times N_2)\times\Sigma~|   \nonumber
+\\ & & \tabc
+(n_1,e)\in\dom~t_1\wedge 
+(n_2,e) \in\dom~t_2    \}
+\\
+t((n_1,n_2),e) & = & (t_1(n_1,e),t_2(n_2,e))\ \text{for $((n_1,n_2),e)\in\dom~t$}
+\end{eqnarray}
+
 
 % =========================================================================
 
@@ -189,6 +233,8 @@ refusals can be implemented by creating the complements of all minimal
 acceptances and then building all subsets of these complements. For practical
 applications, the subset closure is never constructed in an explicit way;
 instead, sets are checked with respect to containment in a maximal refusal.
+
+@todo
 
 %
 %The maximal refusals in each process state $P/s$
@@ -231,40 +277,42 @@ For testing in the failures model, the following lemmas about hitting sets are r
 \label{lemma:hseta}
 Let $P, Q$ be two finite-state CSP processes satisfying $P\lessdet_T Q$. 
 For each $s\in\trc(P)$,
-let $\text{MINHIT}(s)$ denote the
+let $\text{MINHIT}(P/s)$ denote the
 collection of all minimal hitting sets of $\minaccs(P/s)$. 
 Then the following statements are equivalent.
 \begin{enumerate}
 \item $P\lessdet_F Q$
-\item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{MINHIT}(s)$, $H$ is
+\item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{MINHIT}(P/s)$, $H$ is
 a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 For showing ``$1 \Rightarrow 2$'', assume that $P\lessdet_F Q$ and suppose that
-$s\in\trc(P)\cap \trc(Q)$. Then Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), implies that 
+$s\in\trc(P)\cap \trc(Q)$. Then Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), 
+states that 
 \[
 \forall A_Q\in\minaccs(G(Q)/s):
 \exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
 \]
-Therefore, every minimal acceptance set $A_Q\in\minaccs(G(Q)/s)$ contains a
-minimal acceptance set from  \minaccs(G(P)/s). As a consequence, any hitting set
-$H \in  \text{MINHIT}(s)$ also has a non-empty intersection with every 
-$A_Q\in\minaccs(G(Q)/s)$.
-
+Therefore,
+$H \in  \text{MINHIT}(P/s)$ not only implies $H\cap A_P\neq\varnothing$ for all minimal
+acceptances $A_P$, but also
+$H\cap A_Q\neq\varnothing$ for every minimal acceptance $A_Q$, because $A_P\subseteq A_Q$ for at least one $A_P$. As a consequence, each $H \in  \text{MINHIT}(P/s)$ is also a hitting set for $\minaccs(G(Q)/s)$.
+ 
 To prove ``$2 \Rightarrow 1$'',
 assume $P\lessdet_T Q$, but $P\not\lessdet_F Q$. According to Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), there exists $s\in\trc(P)\cap \trc(Q)$ such that 
 \[
-\exists A_Q\in\minaccs(G(Q)/s): \forall A_P\in\minaccs(G(P)/s): A_P\not\subseteq A_Q (*)
+\exists A_Q\in\minaccs(G(Q)/s): \forall A_P\in\minaccs(G(P)/s): A_P\not\subseteq A_Q 
+\qquad (*)
 \]
 Define 
 \[
-\overline H = \bigcup_{A_P\in\minaccs(G(P)/s)} \big( A_P \setminus A_Q \big).
+\overline H = \bigcup\{ A_P \setminus A_Q~|~A_P\in\minaccs(G(P)/s) \}.
 \]
-Since $A_P \setminus A_Q \neq\varnothing$ because of (*), $\overline H$ is a hitting set
-of $\minaccs(G(P)/s)$ which has a non-empty intersection with $A_Q$. Minimising 
+Since $A_P \setminus A_Q \neq\varnothing$ for all $A_P$ because of (*), $\overline H$ is a hitting set
+of $\minaccs(G(P)/s)$ which has an  empty intersection with $A_Q$. Minimising 
 $\overline H$ induces the existence
-of a minimal hitting set $H\in \text{MINHIT}(s)$ which is {\it not} a hitting set of 
+of a minimal hitting set $H\in \text{MINHIT}(P/s)$ which is {\it not} a hitting set of 
 of $\minaccs(G(Q)/s)$. This completes the proof of the lemma.
 \xbox
 \end{proof}
