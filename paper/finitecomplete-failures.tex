@@ -138,16 +138,37 @@ any selected minimal hitting set $H\in\text{MINHIT}(P/s)$ has a non-empty inters
 each of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ will never block when offered events from $H$, and the test terminates with PASS event $\omega$. Note that this argument requires that $Q$ is free of livelocks, because otherwise the PASS-events might not become visible, due to unbounded sequences of hidden events performed by $Q$. Note further, that this proof did not refer in any way to the size of $Q$'s normalised transition graph, so the test suite is sound for {\it all} non-divergent CSP process refining $P$.
 
 To prove exhaustiveness, consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$. This non-conformance can be caused in two possible ways.
-\begin{enumerate}
-\item $\trc(Q)\not\subseteq \trc(P)$
-\item There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
+\begin{description}
+\item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
+\item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
 of $\minaccs(Q/s)$, such that 
 (see Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb})).
-\[
+\begin{equation}
+\label{eq:accsnotcontained}
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
-\] 
-\end{enumerate}
+\end{equation} 
+\end{description}
 It has to be shown for each of the two possibilities that at least one test execution of some $(Q\parallel[\Sigma] U(k))$ with $k\le nm$ ends with the FAIL event $\dag$.
+
+For the first case, consider a  trace $s.e\in\trc(Q)$ such that $s\in\trc(P)$, but 
+$s.e\not\in\trc(P)$. Then $s$ is also a trace of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. From the construction of $G$ described there, we know that $G$ has at most $nm$ reachable states, because $G(P)$ has $n$ states, and $G(Q)$ has at most $m$ states. Suppose that $G/s = (n_P,n_Q)$. Applying Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace $u\in\trc(G)$ of length $\#u\le nm-1$. Now the construction of the transition function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test $U_F(nm)$ accepts all traces of $P$ up to length $nm$, $u$ is also a trace of this test, and, by construction, $U_F(nm)/u = U_F(nm,u)$. Since $s.e\not\in\trc(P)$,
+$e$ is an element of $\Sigma-[P/u]^0$. Therefore, $U_F(nm,u)$ can only execute its first branch (\ref{eq:ufa}), so that the test FAILS with event $\dag$. Again, the assumption of non-divergence of Q is needed for this conclusion.
+
+For the Case~2, we note that trace $s$ is again a trace of the product graph $G$. Therefore, $G/s$ can again be reached by a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length
+$\#u\le nm-1$. Consider test $U_F(\# u)$ which satisfies $U_F(\# u)/u = U_F(\#u,u)$. This
+test may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd}) only: 
+Assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has at least one non-empty minimal acceptance, so the guard condition $([P/s]^0 = \varnothing)$ of branch
+ (\ref{eq:ufb}) evaluates to $\isf$ for $U_F(\#u,u)$. Moreover, 
+ the guard condition $(\#s < n)$
+for branch (\ref{eq:ufc}) evaluates to $\isf$ for $U_F(\#u,u)$, too. 
+If branch (\ref{eq:ufa}) is executed, the test always fails. If branch (\ref{eq:ufd})
+is executed, the test fails for the execution where a minimal hitting set 
+$H\in\text{MINHIT}(P/u)$ is chosen by $U_F(\#u,u)$ which has an empty intersection
+with the minimal acceptance $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of such an $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a consequence, there exists 
+a test execution   where $Q/u$ selects acceptance $A_Q$ and  $U_F(\#u,u)$ 
+selects $H$. This execution deadlocks in 
+process state $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot 
+produce the PASS event $\omega$; this  means that the test fails. This concludes the proof.
 \xbox
 \end{proof}
 
