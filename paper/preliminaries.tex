@@ -137,7 +137,7 @@ that contained in its maximal refusals.
  \end{figure}
 % .......................................................................................
 
-\begin{example}{ex:a}
+\begin{example}\label{ex:a}
 Consider the CSP process $P$ defined below, and that the set of events
 $\Sigma$ is $\{a,b,c\}$.
 \begin{eqnarray*}
@@ -261,14 +261,15 @@ instead, sets are checked with respect to containment in a maximal refusal.
 \label{sec:hit}
 % =========================================================================
 
-When testing for failures refinement, it will become apparent that the main idea of the underlying test strategy can be based on solving a \emph{hitting set problem}. Given a collection of finite sets $C = \{ A_1,\dots,A_n\}$ that are each subsets of a universe $\Sigma$, a \emph{hitting set} $H\subseteq\Sigma$ is a set satisfying
+When testing for failures refinement, it will become apparent that the main idea of the underlying test strategy can be based on solving a \emph{hitting set problem}. Given a collection of finite sets $C = \{ A_1,\dots,A_n\}$, such that each $A_i$ is a   
+subset of a universe $\Sigma$, a \emph{hitting set} $H\subseteq\Sigma$ is a set satisfying
 \begin{equation}
 \label{eq:hit}
-\forall A\in C: H\cap C \neq\varnothing.
+\forall A\in C: H\cap A \neq\varnothing.
 \end{equation}
 
 A \emph{minimal hitting set} is a hitting set which cannot be further reduced without losing 
-the characteristinc property (\ref{eq:hit}). The problem of determining minimal hitting sets is known to be NP-hard~\cite{Book1975-BOOKRM}, but we will see below that it reduces 
+the characteristic property (\ref{eq:hit}). The problem of determining minimal hitting sets is known to be NP-hard~\cite{Book1975-BOOKRM}, but we will see below that it reduces 
 the effort of testing for failures refinement from a factor of $2^\Sigma$ to a factor that equals the number of minimal hitting sets.
 
 For testing in the failures model, the following lemmas about hitting sets are required.
@@ -277,12 +278,12 @@ For testing in the failures model, the following lemmas about hitting sets are r
 \label{lemma:hseta}
 Let $P, Q$ be two finite-state CSP processes satisfying $P\lessdet_T Q$. 
 For each $s\in\trc(P)$,
-let $\text{MINHIT}(P/s)$ denote the
+let $\text{minHit}(P/s)$ denote the
 collection of all minimal hitting sets of $\minaccs(P/s)$. 
 Then the following statements are equivalent.
 \begin{enumerate}
 \item $P\lessdet_F Q$
-\item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{MINHIT}(P/s)$, $H$ is
+\item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{minHit}(P/s)$, $H$ is
 a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
 \end{enumerate}
 \end{lemma}
@@ -295,9 +296,9 @@ states that
 \exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
 \]
 Therefore,
-$H \in  \text{MINHIT}(P/s)$ not only implies $H\cap A_P\neq\varnothing$ for all minimal
+$H \in  \text{minHit}(P/s)$ not only implies $H\cap A_P\neq\varnothing$ for all minimal
 acceptances $A_P$, but also
-$H\cap A_Q\neq\varnothing$ for every minimal acceptance $A_Q$, because $A_P\subseteq A_Q$ for at least one $A_P$. As a consequence, each $H \in  \text{MINHIT}(P/s)$ is also a hitting set for $\minaccs(G(Q)/s)$.
+$H\cap A_Q\neq\varnothing$ for every minimal acceptance $A_Q$, because $A_P\subseteq A_Q$ for at least one $A_P$. As a consequence, each $H \in  \text{minHit}(P/s)$ is also a hitting set for $\minaccs(G(Q)/s)$.
  
 To prove ``$2 \Rightarrow 1$'',
 assume $P\lessdet_T Q$, but $P\not\lessdet_F Q$. According to Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}), there exists $s\in\trc(P)\cap \trc(Q)$ such that 
@@ -305,15 +306,16 @@ assume $P\lessdet_T Q$, but $P\not\lessdet_F Q$. According to Lemma~\ref{lemma:t
 \exists A_Q\in\minaccs(G(Q)/s): \forall A_P\in\minaccs(G(P)/s): A_P\not\subseteq A_Q 
 \qquad (*)
 \]
+Let $A$ be such a set $A_Q$ fulfilling (*).
 Define 
 \[
-\overline H = \bigcup\{ A_P \setminus A_Q~|~A_P\in\minaccs(G(P)/s) \}.
+\overline H = \bigcup\{ A_P \setminus A~|~A_P\in\minaccs(G(P)/s) \}.
 \]
-Since $A_P \setminus A_Q \neq\varnothing$ for all $A_P$ because of (*), $\overline H$ is a hitting set
+Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*), $\overline H$ is a hitting set
 of $\minaccs(G(P)/s)$ which has an  empty intersection with $A_Q$. Minimising 
 $\overline H$ induces the existence
-of a minimal hitting set $H\in \text{MINHIT}(P/s)$ which is {\it not} a hitting set of 
-of $\minaccs(G(Q)/s)$. This completes the proof of the lemma.
+of a minimal hitting set $H\in \text{minHit}(P/s)$ which is {\it not} a hitting set  
+of $\minaccs(G(Q)/s)$, a contradiction to Assumption~2. This completes the proof of the lemma.
 \xbox
 \end{proof}
 

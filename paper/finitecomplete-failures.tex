@@ -22,7 +22,8 @@ Let $P$ be a CSP process with normalised transition graph $G(P)$,
 such that all states in $N$ are reachable.
 Let $V\subseteq\Sigma^*$ be a finite prefix-closed set of
 sequences of events. Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is,
-$|t(\ii n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences from $V$, extended by an event of $\Sigma$.
+$|t(\ii n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences from $V$, 
+extended by any event of $\Sigma$.
 Then $G(P)$ reaches at least $(k+1)$ nodes under $V\cup V.\Sigma$.
 \end{lemma}
 \begin{proof}
@@ -30,8 +31,9 @@ Suppose that $n'\in (N - t(\ii n,V))$.  Since all nodes in $N$ are reachable, th
 a trace $s$ such that $G(P)/s = n'$. Decompose $s = s_1.e.s_2$ with $s_i\in\Sigma^*, e\in\Sigma$, such that $G(P)/s_1 \in t(\ii n,V)$ and $G(P)/s_1.e \not\in t(\ii n,V)$. Such a decomposition always exists, because $V$ is prefix-closed and therefore contains the empty trace $\varepsilon$. Note, however, that it is not necessarily the case that $s_1\in V$.
 
 Since $G(P)$ reaches $G(P)/s_1$ under $V$, there exists a trace $u\in V$ such that
-$\ol n = G(P)/u = G(P)/s_1$. Since $s = s_1.e.s_2$ is a trace of $P$ and $n = G(P)/s_1$,
-$(\ol u,e)$ is in the domain of $t$, therefore,  
+$\ol n = G(P)/u = G(P)/s_1$. Since $s = s_1.e.s_2$ is a trace of $P$ and 
+$\ol n = G(P)/s_1$,
+$(\ol n,e)$ is in the domain of $t$. Therefore,  
 $n = G(P)/u.e = G(P)/s_1.e \not\in t(\ii n,V)$ is a well-defined node
 of $N$ which is not contained in $t(\ii n,V)$. Since $u.e\in V\cup V.\Sigma$,
 $G(P)$ reaches at least the additional node $n$ under $V\cup V.\Sigma$. This completes the proof.
@@ -54,91 +56,93 @@ $G(P)$ reaches at least the additional node $n$ under $V\cup V.\Sigma$. This com
 % ==========================================================================
 \subsection{Test Cases for Verifying CSP Failures Refinement}
 
-For a given reference process $P$ and for each $n\ge 0$, 
+For a given reference process $P$ and for each integer $p\ge 0$, 
 we define a CSP test process as follows. 
 \begin{eqnarray}
-U_F(n) & = & U_F(n,\varepsilon)
+U_F(p) & = & U_F(p,\varepsilon)
 \\
-U_F(n,s) & = & \big( e:(\Sigma - [P/s]^0) \then \dag\then \Stop \big)
+U_F(p,s) & = & \big( e:(\Sigma - [P/s]^0) \then \efail\then \Stop \big)
 \label{eq:ufa}
 \\ & & \extchoice \nonumber
-\\ & & ([P/s]^0 = \varnothing)    \&   \big( \omega \then \Stop \big)
+\\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
 \label{eq:ufb}
 \\ & & \extchoice \nonumber
-\\ & & (\#s < n) \& \big( e:[P/s]^0 \then U_F(n,s.e) \big)
+\\ & & (\#s < p) \& \big( e:[P/s]^0 \then U_F(p,s.e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (\#s = n) \& \big( \sqcap_{H\in\text{MINHIT}(P/s)} ( e:H \then \omega \then\Stop   )  \big)
+\\ & & (\#s = p) \& \big( \sqcap_{H\in\text{minHit}(P/s)} ( e:H \then \epass \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 
-A test is performed by running $U_F(n)$ concurrently with any SUT process $Q$
+A test is performed by running $U_F(p)$ concurrently with any SUT process $Q$
 that operates on the same alphabet as $P$, synchronising over
 alphabet $\Sigma$. Therefore, a test execution is any trace of the concurrent process
 \[
-Q\parallel[\Sigma] U_F(n).
+Q\parallel[\Sigma] U_F(p).
 \]
-It is assumed that the events $\dag$ and $\omega$ denoting FAIL and PASS of the test execution, respectively, are events outside $\Sigma$.
-Since we assume that $Q$ is free of livelocks, it is guaranteed that each test execution terminates after some $s\in\trc(P)$ with length $(n+1)$ at the latest. 
-The test is \emph{passed} by the SUT (we write $Q\ \pass\ U(n)$) if and only if {\it every} execution of $Q\parallel[\Sigma] U_F(n)$ terminates with PASS event $\omega$. This can also be  expressed by means of a trace equivalence relation:
+It is assumed that the events $\efail$ and $\epass$ denoting FAIL and PASS of the test execution, respectively, are events outside $\Sigma$.
+Since we assume that $Q$ is free of livelocks, it is guaranteed that each test execution terminates after some $s\in\trc(P)$ with length $(p+1)$ at the latest. 
+The test is \emph{passed} by the SUT (we write $Q\ \pass\ U_F(p)$) if and only if {\it every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with PASS event $\epass$. This can also be  expressed by means of a failures refinement relation:
 \[
-Q\ \pass\ U(n) \equiv (\omega\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(n)) \hide \Sigma  
+Q\ \pass\ U_F(p) \equiv (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma  
 \]
-This type of pass relation is often called \emph{must test}, because every test execution must end with the PASS event $\omega$ \cite{Hennessy:1988:ATP:50497}. Note that it
-is necessary to use the failures refinement relation in this condition, and not the trace refinement relation: process $(Q\parallel[\Sigma] U_F(n)) \hide \Sigma$ may have  the same visible traces $\varepsilon, \omega$ as the ``Test Passed Process'' $(\omega\then\Stop)$. However,
-the former may nondeterministically refuse $\omega$, due to a deadlock occurring when
-a faulty SUT processes executes concurrently with $U_F(n,s)$ executing branch (\ref{eq:ufd}). This is explained further in the next paragraphs.
+This type of pass relation is often called \emph{must test}, because every test execution must end with the $\epass$-event \cite{Hennessy:1988:ATP:50497}. Note that it
+is necessary to use the failures refinement relation in this condition, and not the trace refinement relation: process $(Q\parallel[\Sigma] U_F(p)) \hide \Sigma$ may have  the same visible traces $\varepsilon, \epass$ as the ``Test Passed Process'' $(\epass\then\Stop)$. However,
+the former may nondeterministically refuse $\epass$, due to a deadlock occurring when
+a faulty SUT process executes concurrently with $U_F(p,s)$ executing branch (\ref{eq:ufd}),
+because $\#s = p$. This is explained further in the next paragraphs.
 
 
-Intuitively speaking, $U_F(n)$ is able to perform any trace $s$ of $P$, 
-up to a length of $n$. If, after having already run through $s\in\trc(P)$ with $\#s < n$,
+Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, 
+up to a length of $p$. 
+If, after having already run through $s\in\trc(P)$ with $\#s < p$,
 an event is accepted by the SUT which is outside the initials of $P/s$, the test 
-immediately terminates with FAIL-event $\dag$. This is handled by the first operand of the
-external choice in sub-process $U(n,s)$.
+immediately terminates with FAIL-event $\efail$. This is handled by the first operand of the
+external choice in sub-process $U_F(p,s)$.
 
 If $P/s$ is the STOP-process, this is revealed by its initials being empty. In this case, the test may terminate 
-successfully (second operand of the external choice in $U(n,s)$). Note that at the same time, any (now illegal) event of the alphabet is also accepted by the test.
+successfully (second operand of the external choice in $UF(p,s)$). Note that at the same time, any (now illegal) event of the alphabet is also accepted by the test.
 Therefore,
 if the SUT would still accept an event in a state where $P/s$ is supposed to have stopped, there exists a test execution which terminates with FAIL by choosing the first
 operand of the external choice.
 
-If the length of $s$ is still less than $n$, the test accepts any event from the initials
-$[P/s]^0$ and continues recursively as sub-process $U(n,s.e)$ (third operand of the external choice). A test of this type is called \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts its consecutive behaviour to the event selected by the SUT.
+If the length of $s$ is still less than $p$, the test accepts any event from the initials
+$[P/s]^0$ and continues recursively as sub-process $U(p,s.e)$ (third operand of the external choice). A test of this type is called \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts its consecutive behaviour to the event selected by the SUT.
  
 After having  run successfully 
-through a trace of length $n$, the test changes its behaviour:
+through a trace of length $p$, the test changes its behaviour:
 instead of offering {\it all} legal events from $[P/s]^0$ to the SUT, 
 it nondeterministically chooses 
 a minimal hitting set of $\minaccs(P/s)$ and only offers the events contained in this set.
 If the SUT refuses to engage into any of these events, this reveals a violation of the
 failures refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept
-at least one event of each minimal hitting set in $\text{MINHIT}(P/s)$. Therefore, the test
-only terminates with success $\omega$, if such an event is accepted by the SUT.
+at least one event of each minimal hitting set in $\text{minHit}(P/s)$. Therefore, the test
+only terminates with success $\epass$, if such an event is accepted by the SUT.
 
 After this informal explanation of tests representing adaptive test cases, we are ready to prove the main theorem of this paper.
 
 \begin{theorem}
 Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ 
-whose normalised transition graph $G(P)$ has $n$ states. Define fault domain ${\cal D}$ as
+whose normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal D}$ as
 the set of all divergence-free CSP processes over alphabet $\Sigma$, whose transition graph
-has at most $m$ states with $m \ge n$. 
+has at most $q$ states with $q \ge p$. 
 Then the test suite 
 \[
-\TS_F = \{ U_F(k)~|~0 \le k \le nm  \}
+\TS_F = \{ U_F(k)~|~0 \le k < pq  \}
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
 \begin{proof}
 To prove soundness of $\TS_F$, suppose that $Q\in{\cal D} \wedge P\lessdet_F Q$. Then
 $\trc(Q)\subseteq \trc(P)$, and Lemma~\ref{lemma:hseta} implies that 
-for all traces $s$ of $Q$, every $H\in\text{MINHIT}(P/s)$ is a 
+for all traces $s$ of $Q$, every $H\in\text{minHit}(P/s)$ is a 
     hitting set for $\minaccs(Q/s)$. As a consequence, when running in parallel
-with $Q$, any adaptive test $U_F(n)$ will always enter the branches 
+with $Q$, any adaptive test $U_F(p)$ will always enter the branches 
 (\ref{eq:ufb}), (\ref{eq:ufc}),  or (\ref{eq:ufd}) of the external choice construction
-for $U_F(n,s)$. Branch (\ref{eq:ufb}) always leads to a PASS verdict, branch (\ref{eq:ufc})
+for $U_F(p,s)$. Branch (\ref{eq:ufb}) always leads to a PASS verdict, branch (\ref{eq:ufc})
 always to test continuation without a verdict. For the last branch, we note that 
-any selected minimal hitting set $H\in\text{MINHIT}(P/s)$ has a non-empty intersection with
-each of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ will never block when offered events from $H$, and the test terminates with PASS event $\omega$. Note that this argument requires that $Q$ is free of livelocks, because otherwise the PASS-events might not become visible, due to unbounded sequences of hidden events performed by $Q$. Note further, that this proof did not refer in any way to the size of $Q$'s normalised transition graph, so the test suite is sound for {\it all} non-divergent CSP process refining $P$.
+any selected minimal hitting set $H\in\text{minHit}(P/s)$ has a non-empty intersection with
+each of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ will never block when offered events from $H$, and the test terminates with PASS event $\epass$. Note that this argument requires that $Q$ is free of livelocks, because otherwise the PASS-events might not become visible, due to unbounded sequences of hidden events performed by $Q$. Note further, that this proof did not refer in any way to the size of $Q$'s normalised transition graph, so the test suite is sound for {\it all} non-divergent CSP process refining $P$.
 
 To prove exhaustiveness, consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$. This non-conformance can be caused in two possible ways.
 \begin{description}
@@ -151,27 +155,28 @@ of $\minaccs(Q/s)$, such that
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
 \end{equation} 
 \end{description}
-It has to be shown for each of the two possibilities that at least one test execution of some $(Q\parallel[\Sigma] U(k))$ with $k\le nm$ ends with the FAIL event $\dag$.
+It has to be shown for each of the two possibilities that at least one test execution of some $(Q\parallel[\Sigma] U(k))$ with $k < pq$ ends with the FAIL event $\efail$.
 
 For the first case, consider a  trace $s.e\in\trc(Q)$ such that $s\in\trc(P)$, but 
-$s.e\not\in\trc(P)$. Then $s$ is also a trace of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. From the construction of $G$ described there, we know that $G$ has at most $nm$ reachable states, because $G(P)$ has $n$ states, and $G(Q)$ has at most $m$ states. Suppose that $G/s = (n_P,n_Q)$. Applying Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace $u\in\trc(G)$ of length $\#u\le nm-1$. Now the construction of the transition function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test $U_F(nm)$ accepts all traces of $P$ up to length $nm$, $u$ is also a trace of this test, and, by construction, $U_F(nm)/u = U_F(nm,u)$. Since $s.e\not\in\trc(P)$,
-$e$ is an element of $\Sigma-[P/u]^0$. Therefore, $U_F(nm,u)$ can only execute its first branch (\ref{eq:ufa}), so that the test FAILS with event $\dag$. Again, the assumption of non-divergence of Q is needed for this conclusion.
+$s.e\not\in\trc(P)$. Then $s$ is also a trace of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. From the construction of $G$ described there, we know that $G$ has at most $pq$ reachable states, because $G(P)$ has $p$ states, and $G(Q)$ has at most $q$ states. Suppose that $G/s = (n_P,n_Q)$. Applying Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test $U_F(pq-1)$ accepts all traces of $P$ up to length $pq$, $u$ is also a trace of this test, and, by construction, $U_F(pq-1)/u = U_F(pq-1,u)$. Since $s.e\not\in\trc(P)$,
+$e$ is an element of $\Sigma-[P/u]^0$. Therefore, in at least one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa}) with this event $e$, so that the test fails with event $\efail$. Again, the assumption of non-divergence of Q is needed for this conclusion.
 
 For the Case~2, we note that trace $s$ is again a trace of the product graph $G$. Therefore, $G/s$ can again be reached by a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length
-$\#u\le nm-1$. Consider test $U_F(\# u)$ which satisfies $U_F(\# u)/u = U_F(\#u,u)$. This
-test may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd}) only: 
+$\#u < pq$. Consider test $U_F(\# u)$ which satisfies $U_F(\# u)/u = U_F(\#u,u)$, because
+it always performs branch (\ref{eq:ufc}) until the trace $u$ has been completely processed. $U_F(\#u,u)$
+  may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd}) only: 
 Assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has at least one non-empty minimal acceptance, so the guard condition $([P/s]^0 = \varnothing)$ of branch
  (\ref{eq:ufb}) evaluates to $\isf$ for $U_F(\#u,u)$. Moreover, 
- the guard condition $(\#s < n)$
+ the guard condition $(\#s < p)$
 for branch (\ref{eq:ufc}) evaluates to $\isf$ for $U_F(\#u,u)$, too. 
 If branch (\ref{eq:ufa}) is executed, the test always fails. If branch (\ref{eq:ufd})
 is executed, the test fails for the execution where a minimal hitting set 
-$H\in\text{MINHIT}(P/u)$ is chosen by $U_F(\#u,u)$ which has an empty intersection
+$H\in\text{minHit}(P/u)$ is chosen by $U_F(\#u,u)$ which has an empty intersection
 with the minimal acceptance $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of such an $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a consequence, there exists 
 a test execution   where $Q/u$ selects acceptance $A_Q$ and  $U_F(\#u,u)$ 
 selects $H$. This execution deadlocks in 
 process state $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot 
-produce the PASS event $\omega$; this  means that the test fails. This concludes the proof.
+produce the pass event $\epass$; this  means that the test fails. This concludes the proof.
 \xbox
 \end{proof}
 
