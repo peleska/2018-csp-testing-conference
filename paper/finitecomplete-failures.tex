@@ -59,16 +59,16 @@ we define a CSP test process as follows.
 \begin{eqnarray}
 U_F(n) & = & U_F(n,\varepsilon)
 \\
-U_F(n,s) & = & \big( e:(\Sigma - [P/s]^0) \then \dag\then \Skip \big)
+U_F(n,s) & = & \big( e:(\Sigma - [P/s]^0) \then \dag\then \Stop \big)
 \label{eq:ufa}
 \\ & & \extchoice \nonumber
-\\ & & ([P/s]^0 = \varnothing)    \&   \big( \omega \then \Skip \big)
+\\ & & ([P/s]^0 = \varnothing)    \&   \big( \omega \then \Stop \big)
 \label{eq:ufb}
 \\ & & \extchoice \nonumber
 \\ & & (\#s < n) \& \big( e:[P/s]^0 \then U_F(n,s.e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (\#s = n) \& \big( \sqcap_{H\in\text{MINHIT}(P/s)} ( e:H \then \omega \then\Skip   )  \big)
+\\ & & (\#s = n) \& \big( \sqcap_{H\in\text{MINHIT}(P/s)} ( e:H \then \omega \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 
@@ -82,9 +82,12 @@ It is assumed that the events $\dag$ and $\omega$ denoting FAIL and PASS of the 
 Since we assume that $Q$ is free of livelocks, it is guaranteed that each test execution terminates after some $s\in\trc(P)$ with length $(n+1)$ at the latest. 
 The test is \emph{passed} by the SUT (we write $Q\ \pass\ U(n)$) if and only if {\it every} execution of $Q\parallel[\Sigma] U_F(n)$ terminates with PASS event $\omega$. This can also be  expressed by means of a trace equivalence relation:
 \[
-Q\ \pass\ U(n) \equiv  (Q\parallel[\Sigma] U_F(n)) \hide \Sigma =_T (\omega\then\Skip)
+Q\ \pass\ U(n) \equiv (\omega\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(n)) \hide \Sigma  
 \]
-This type of pass relation is often called \emph{must test}, because every test execution must end with the PASS event $\omega$ \cite{Hennessy:1988:ATP:50497}.
+This type of pass relation is often called \emph{must test}, because every test execution must end with the PASS event $\omega$ \cite{Hennessy:1988:ATP:50497}. Note that it
+is necessary to use the failures refinement relation in this condition, and not the trace refinement relation: process $(Q\parallel[\Sigma] U_F(n)) \hide \Sigma$ may have  the same visible traces $\varepsilon, \omega$ as the ``Test Passed Process'' $(\omega\then\Stop)$. However,
+the former may nondeterministically refuse $\omega$, due to a deadlock occurring when
+a faulty SUT processes executes concurrently with $U_F(n,s)$ executing branch (\ref{eq:ufd}). This is explained further in the next paragraphs.
 
 
 Intuitively speaking, $U_F(n)$ is able to perform any trace $s$ of $P$, 

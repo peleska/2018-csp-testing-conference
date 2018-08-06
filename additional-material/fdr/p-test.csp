@@ -1,0 +1,100 @@
+transparent normal
+
+A = {a,b,c}
+
+channel a,b,c, pass, fail
+
+TEST_PASSED = pass -> STOP
+
+P = a -> ( Q |~| R )
+
+Q = a -> P [] c -> P
+    
+R = c -> R [] b -> P  
+
+
+Z = a -> ( Q1 |~| R1 ) 
+
+Q1 = a -> Z [] c -> Z
+    
+R1 = c -> R2 [] b -> Z 
+R2 = c -> R3 [] b -> Z
+R3 = c -> R4 [] b -> Z
+R4 = c -> R |~| b -> Z
+
+-- Initials of P as map from node numbers to sets of events
+initials(0) = {a}
+initials(1) = {a,b,c}
+initials(2) = {a,b,c}
+initials(3) = {b,c}
+
+
+-- transition function of G(P)
+t(0,a) = 2
+t(1,a) = 2
+t(1,b) = 0
+t(1,c) = 3
+t(2,a) = 0
+t(2,b) = 0
+t(2,c) = 1
+t(3,b) = 0
+t(3,c) = 3
+
+-- Minimal hitting sets of nodes
+minhit(0) = { {a} }
+minhit(1) = { {a,c}, {a,b} }
+minhit(2) = { {c}, {a,b} }
+minhit(3) = { {c}, {b} }
+
+
+
+U_F(max) = U1(max,0,0)
+
+U1(max,k,n) = 
+  ([] e : diff(A,initials(n)) @ e -> fail -> STOP )
+  []
+  (empty(initials(n))) & (pass -> STOP)
+  []
+  (k < max) & ([] e : initials(n) @ e -> U1(max,k+1,t(n,e)))
+  []
+  (k == max) & ( |~| H : minhit(n) @ ([] e : H @ e -> pass -> STOP ))
+
+
+TEST(p) = ( Z [| A  |] U_F(p) ) \ A
+
+assert TEST_PASSED [F= TEST(0)
+
+assert TEST_PASSED [F= TEST(1)
+
+assert TEST_PASSED [F= TEST(2)
+
+assert TEST_PASSED [F= TEST(3)
+
+assert TEST_PASSED [F= TEST(4)
+
+assert TEST_PASSED [F= TEST(5)
+
+assert TEST_PASSED [F= TEST(6)
+
+assert TEST_PASSED [F= TEST(7)
+
+assert TEST_PASSED [F= TEST(8)
+
+assert TEST_PASSED [F= TEST(9)
+
+assert TEST_PASSED [F= TEST(10)
+
+assert TEST_PASSED [F= TEST(11)
+
+assert TEST_PASSED [F= TEST(12)
+
+assert TEST_PASSED [F= TEST(13)
+
+assert TEST_PASSED [F= TEST(14)
+
+assert TEST_PASSED [F= TEST(15)
+
+assert TEST_PASSED [F= TEST(16)
+
+assert P [F= Z
+
