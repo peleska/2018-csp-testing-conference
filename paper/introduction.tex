@@ -59,16 +59,14 @@ in one-one-correspondence to a node of the normalised transition graph.
 Inspired by the way that fault-domains are specified for finite state
 machines, we define them here as the set of CSP processes whose
 normalised transition graphs do not exceed the size of the reference model's
-graph by more than a give constant.
+graph by more than a given constant.
 
-Our main contributions in this paper consist in the proof that 
+The main contribution of this paper consists in the proof that 
 for fault domains of the described type, finite, complete
-    test suite generation methods can be given for verifying (1)~trace
-    equivalence, (2)~trace refinement, (3)~failures equivalence, and
-    (4)~failures refinement.
-    
+    test suite generation methods can be given for testing against the conformance relations 
+    trace refinement and failures refinement. 
 The existence of -- possibly infinite -- complete test suites has been established for process algebras in general and  for CSP in particular by several authors, 
-e.g.~\cite{Hennessy:1988:ATP:50497,Schneider:1995:OST:203471.203475,DBLP:conf/fm/PeleskaS96,peleska1997a,DBLP:conf/pts/CavalcantiS17}. To our best knowledge, however, this article is the first to present {\it finite}, complete test suites associated with this class of fault domains.
+e.g.~\cite{Hennessy:1988:ATP:50497,Schneider:1995:OST:203471.203475,DBLP:conf/fm/PeleskaS96,peleska1997a,DBLP:conf/pts/CavalcantiS17}. To our best knowledge, however, this article is the first to present {\it finite}, complete test suites associated with this class of fault domains and conformance relations.
 
 It should be noted that the presented results are of a theoretical nature: despite being finite, the resulting test suite size will still be too large to be applied in practice to real-world problems.
 We discuss a number of promising options how the test suite size can be reduced to become practically applicable.

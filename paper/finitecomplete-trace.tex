@@ -3,5 +3,60 @@
 \label{sec:finitecomplete}
 % ==========================================================================
 
+For establishing trace refinement, the following class of adaptive test cases will be used; again, they are defined for integers $p \ge 0$.
+
+
+\begin{eqnarray}
+U_T(p) & = & U_T(p,\varepsilon)
+\\
+U_T(p,s) & = & \big( e:(\Sigma - [P/s]^0) \then \efail\then \Stop \big)
+\label{eq:ufa}
+\\ & & \extchoice \nonumber
+\\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
+\label{eq:ufb}
+\\ & & \extchoice \nonumber
+\\ & & (\#s < p) \& \big( e:[P/s]^0 \then U_T(p,s.e) \big)
+\label{eq:ufc}
+\\ & & \extchoice \nonumber
+\\ & & (\#s = p) \& \big( \epass\then \Stop  \big)
+\label{eq:ufd}
+\end{eqnarray}
+
+
+The difference between adaptive tests $U_T(p)$ for trace refinement and
+$U_F(p)$ for failures refinement consists in the fact that the former do not ``probe''
+the SUT with respect to minimal sets of events to be accepted without blocking. 
 
 % ==========================================================================
+The existence of complete, finite test suites is expressed in analogy to Theorem~\ref{th:failurestest}. A noteworthy difference consists in the fact that
+the complete suite for trace refinement just needs the single adaptive test case 
+$U_T(pq-1)$, while the complete failures test suite required the execution of 
+$\{ U_F(0),\dots,U_F(pq-1)\}$. The reason for this is that $U_T(pq-1)$ identifies trace
+errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes for erroneous
+acceptances at the end of each trace of length $(pq -1)$.
+
+\begin{theorem}\label{th:tracetest}
+Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ 
+whose normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal D}$ as
+the set of all divergence-free CSP processes over alphabet $\Sigma$, whose transition graph
+has at most $q$ states with $q \ge p$. 
+Then the test suite 
+\[
+\TS_T = \{ U_T(pq-1)   \}
+\]
+is complete with respect to ${\cal F} = (P,\lessdet_T,{\cal D})$.
+\xbox
+\end{theorem}
+
+We skip the proof of Theorem~\ref{th:tracetest}, since it is just a simplified version of 
+the proof of Theorem~\ref{th:failurestest}.
+
+
+
+
+
+
+
+
+
+
