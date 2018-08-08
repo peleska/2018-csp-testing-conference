@@ -101,13 +101,13 @@ immediately terminates with FAIL-event $\efail$. This is handled by the first op
 external choice in sub-process $U_F(p,s)$.
 
 If $P/s$ is the STOP-process, this is revealed by its initials being empty. In this case, the test may terminate 
-successfully (second operand of the external choice in $UF(p,s)$). Note that at the same time, any (now illegal) event of the alphabet is also accepted by the test.
+successfully (second operand of the external choice in $U_F(p,s)$). Note that at the same time, any (now illegal) event of the alphabet is also accepted by the test.
 Therefore,
 if the SUT would still accept an event in a state where $P/s$ is supposed to have stopped, there exists a test execution which terminates with FAIL by choosing the first
 operand of the external choice.
 
 If the length of $s$ is still less than $p$, the test accepts any event from the initials
-$[P/s]^0$ and continues recursively as sub-process $U(p,s.e)$ (third operand of the external choice). A test of this type is called \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts its consecutive behaviour to the event selected by the SUT.
+$[P/s]^0$ and continues recursively as sub-process $U_F(p,s.e)$ (third operand of the external choice). A test of this type is called \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts its consecutive behaviour to the event selected by the SUT.
  
 After having  run successfully 
 through a trace of length $p$, the test changes its behaviour:
@@ -155,10 +155,11 @@ of $\minaccs(Q/s)$, such that
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
 \end{equation} 
 \end{description}
-It has to be shown for each of the two possibilities that at least one test execution of some $(Q\parallel[\Sigma] U(k))$ with $k < pq$ ends with the FAIL event $\efail$.
+It has to be shown for each of the two possibilities that at least one test execution of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the FAIL event $\efail$ or without giving any verdict. The latter case is also interpreted   as FAIL, since then  
+$(\epass\then\Stop)$ is no longer refined by the test execution in the failures model.
 
 For the first case, consider a  trace $s.e\in\trc(Q)$ such that $s\in\trc(P)$, but 
-$s.e\not\in\trc(P)$. Then $s$ is also a trace of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. From the construction of $G$ described there, we know that $G$ has at most $pq$ reachable states, because $G(P)$ has $p$ states, and $G(Q)$ has at most $q$ states. Suppose that $G/s = (n_P,n_Q)$. Applying Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test $U_F(pq-1)$ accepts all traces of $P$ up to length $pq$, $u$ is also a trace of this test, and, by construction, $U_F(pq-1)/u = U_F(pq-1,u)$. Since $s.e\not\in\trc(P)$,
+$s.e\not\in\trc(P)$. Then $s$ is also a trace of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. From the construction of $G$ described there, we know that $G$ has at most $pq$ reachable states, because $G(P)$ has $p$ states, and $G(Q)$ has at most $q$ states. Suppose that $G/s = (n_P,n_Q)$. Applying Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test $U_F(pq-1)$ accepts all traces of $P$ up to length $pq-1$, $u$ is also a trace of this test, and, by construction, $U_F(pq-1)/u = U_F(pq-1,u)$. Since $s.e\not\in\trc(P)$,
 $e$ is an element of $\Sigma-[P/u]^0$. Therefore, in at least one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa}) with this event $e$, so that the test fails with event $\efail$. Again, the assumption of non-divergence of Q is needed for this conclusion.
 
 For the Case~2, we note that trace $s$ is again a trace of the product graph $G$. Therefore, $G/s$ can again be reached by a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length
