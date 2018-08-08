@@ -10,16 +10,16 @@ For establishing trace refinement, the following class of adaptive test cases wi
 U_T(p) & = & U_T(p,\varepsilon)
 \\
 U_T(p,s) & = & \big( e:(\Sigma - [P/s]^0) \then \efail\then \Stop \big)
-\label{eq:ufa}
+\label{eq:uta}
 \\ & & \extchoice \nonumber
 \\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
-\label{eq:ufb}
+\label{eq:utb}
 \\ & & \extchoice \nonumber
 \\ & & (\#s < p) \& \big( e:[P/s]^0 \then U_T(p,s.e) \big)
-\label{eq:ufc}
+\label{eq:utc}
 \\ & & \extchoice \nonumber
 \\ & & (\#s = p) \& \big( \epass\then \Stop  \big)
-\label{eq:ufd}
+\label{eq:utd}
 \end{eqnarray}
 
 

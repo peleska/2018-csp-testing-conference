@@ -1,18 +1,17 @@
-digraph {
+digraph g {
 
 rankdir="LR"
-
-Node_0[shape=doublecircle,label="Node_0\l{b,c}\l"];
+Node_0[shape=doublecircle,label="Node_0\lminAcc:\l{a}\l"];
 Node_0 -> Node_2[label="a"];
-Node_2[label="Node_2\l{a}\l{b}\l"];
+Node_2[label="Node_2\lminAcc:\l{a,c}\l{c,b}\l"];
 Node_2 -> Node_0[label="a"];
 Node_2 -> Node_1[label="c"];
 Node_2 -> Node_0[label="b"];
-Node_1[label="Node_1\l{b,c}\l{a}\l"];
+Node_1[label="Node_1\lminAcc:\l{a}\l{c,b}\l"];
 Node_1 -> Node_2[label="a"];
 Node_1 -> Node_3[label="c"];
 Node_1 -> Node_0[label="b"];
-Node_3[label="Node_3\l{a}\l"];
+Node_3[label="Node_3\lminAcc:\l{c,b}\l"];
 Node_3 -> Node_3[label="c"];
 Node_3 -> Node_0[label="b"];
 
