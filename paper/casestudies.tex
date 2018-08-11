@@ -45,9 +45,61 @@ U_F^1(p,k,n) & = & \big( e:(\Sigma - \text{initials}(n)) \then \efail\then \Stop
 \end{eqnarray}
 
 
+
+% .....................................................................................
+ \begin{figure}
+ %%\hspace*{-40mm}
+ \begin{center}
+\includegraphics[width=\textwidth]{z_acc.pdf}
+\end{center}
+%%\vspace*{-10mm}
+\caption{Normalised transition graph of faulty implementation $Z$  from Example~\ref{ex:uf1tests}.}
+ \label{fig:tgZ}
+ \end{figure}
+% .......................................................................................
+
+
+
 \begin{example}
 \label{ex:uf1tests}
+Consider the following erroneous implementation $Z$ of process $P$ from Example~\ref{ex:a}.
+\begin{eqnarray*}
+Z & = & a \then (Q_1 \intchoice R_1(r_{max},0))
+\\
+Q_1 & = & a\then Z \extchoice c\then Z
+\\
+R_1(r_{max},k) & = & (k < r_{max}) \& \big( c\then R_1(r_{max},k+1)\extchoice b\then Z  \big)
+\\ & & \extchoice
+\\ & & (k = r_{max}) \& \big( c\then R_1(r_{max},r_{max})\intchoice b\then Z  \big)
+\end{eqnarray*}
+It is easy to see (and can be checked with FDR4) that $Z$ is trace-equivalent to $P$. While $k < r_{max}$, process $Z$ also accepts the same sets of events as $P$. If, however,
+sub-process $R_1(r_{max},k)$ runs through several recursions until condition 
+$k = r_{max}$ is fulfilled, the process uses internal choice instead of external choice, and so this process state   no longer refines   the corresponding process state $R$ of the reference process $P$ in the failures model. For $r_{max} = 3$,   the
+normalised transition graph of $Z$ is displayed in Fig.~\ref{fig:tgZ}.
 
+Running the test $U_F^1(k)$ against $Z$ for $k=0,\dots,20$ ($G(P)$ has $p = 4$ states
+and $G(Z)$ has $q=5$, so $pq=20$ is an upper bound for the test depth to be used 
+according to Theorem~\ref{th:failurestest}), tests $U_F^1(0),\dots, U_F^1(3)$ are passed by $Z$, but $Z$ fails $U_F^1(4)$, because after  execution trace
+\[
+s = a.c.c.c, \qquad\text{(note that $G(Z)/s = \text{Node\_3}$ according to Fig.~\ref{fig:tgZ})},
+\]
+it may be the case that   $Z$  
+only accepts $\{b\}$ due to internal choice and $U_F^1(4)$ 
+-- also due to internal choice -- 
+only accepts
+the minimal hitting set $\{ c \}$ in union with the event $a\in (\Sigma - [P/s]^0)$. 
+As
+a consequence, $(Z\parallel[\Sigma] U_F^1(4))/s$ deadlocks for this execution, 
+and the pass-event cannot be
+produced. Another failing execution would be the situation where $Z/s$ choses to
+accept only $\{c \}$, while $U_F^1(4))/s$ choses to accept only $\{a,b\}$.
+
+Therefore, 
+\[
+(\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F^1(4)),
+\]
+and the test fails.
+\xbox
 \end{example}
  
  

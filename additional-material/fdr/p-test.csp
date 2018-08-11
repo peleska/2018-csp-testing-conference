@@ -2,6 +2,8 @@ transparent normal
 
 A = {a,b,c}
 
+rmax = 3
+
 channel a,b,c, pass, fail
 
 TEST_PASSED = pass -> STOP
@@ -13,14 +15,17 @@ Q = a -> P [] c -> P
 R = c -> R [] b -> P  
 
 
-Z = a -> ( Q1 |~| R1 ) 
+Z = a -> ( Q1 |~| R1(rmax,0) ) 
 
 Q1 = a -> Z [] c -> Z
     
-R1 = c -> R2 [] b -> Z 
-R2 = c -> R3 [] b -> Z
-R3 = c -> R4 [] b -> Z
-R4 = c -> R |~| b -> Z
+R1(rmax,k) = 
+         (k < rmax) & (c -> R1(rmax,k+1) [] b -> Z)
+         []
+         (k == rmax) & (c -> R1(rmax,rmax) |~| b -> Z)
+
+R2 = c -> R2 [] b -> Z
+ 
 
 -- Initials of P as map from node numbers to sets of events
 initials(0) = {a}
@@ -96,5 +101,17 @@ assert TEST_PASSED [F= TEST(15)
 
 assert TEST_PASSED [F= TEST(16)
 
+assert TEST_PASSED [F= TEST(17)
+
+assert TEST_PASSED [F= TEST(18)
+
+assert TEST_PASSED [F= TEST(19)
+
+assert TEST_PASSED [F= TEST(20)
+
+
 assert P [F= Z
+
+assert P [T= Z
+assert Z [T= P
 
