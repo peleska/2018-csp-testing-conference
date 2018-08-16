@@ -9,13 +9,13 @@ will be used; again, they are defined for integers $p \ge 0$.
 \begin{eqnarray}
 U_T(p) & = & U_T(p,\varepsilon)
 \\
-U_T(p,s) & = & \big( e:(\Sigma - [P/s]^0) \then \efail\then \Stop \big)
+U_T(p,s) & = & \big(\Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop \big)
 \label{eq:uta}
 \\ & & \extchoice \nonumber
 \\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
 \label{eq:utb}
 \\ & & \extchoice \nonumber
-\\ & & (\#s < p) \& \big( e:[P/s]^0 \then U_T(p,s.e) \big)
+\\ & & (\#s < p) \& \big(\Extchoice e:[P/s]^0 @ e \then U_T(p,s.e) \big)
 \label{eq:utc}
 \\ & & \extchoice \nonumber
 \\ & & (\#s = p) \& \big( \epass\then \Stop  \big)
