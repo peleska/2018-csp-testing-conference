@@ -41,38 +41,39 @@ decades. Industrial success has also been reported.
 
 \subsubsection*{Contributions}
 
-This paper presents complete black-box test suites for software and systems modelled using the {\it Communicating Sequential Processes (CSP)} process 
-algebra~\cite{Hoare:1985:CSP:3921,Roscoe:1997:TPC:550448}. This process algebra has been widely used for the specification and verification of communicating 
-concurrent control systems, many of these applications have been described in the monograph~\cite{Roscoe2010} and the references 
-contained there. 
+This paper presents complete black-box test suites for software and systems
+modelled using the {\it Communicating Sequential Processes (CSP)} process
+algebra~\cite{Hoare:1985:CSP:3921,Roscoe:1997:TPC:550448}. This process
+algebra has been widely used for the specification and verification of
+communicating concurrent control systems. Many of these applications have
+been described in~\cite{Roscoe2010} and in the references there.
 
-The complete testing theory presented here applies to 
-CSP processes that are
+The complete testing theory presented here applies to CSP processes that are
 divergence-free\footnote{The assumption of divergence freedom is usually
 applied in black-box testing, since it cannot distinguish between divergence
 and deadlock.} and interpreted both in the trace and the failures semantics.
-Our results complement work published 
-in~\cite{DBLP:conf/pts/CavalcantiS17}. There, fault domains are specified as
-collections of processes refining a  ``most general'' fault domain member.
-With that concept, complete test suites may be finite or infinite. This gives
-important insight into the theory of fault-domain testing for CSP, but we are
-particularly interested in {\it finite} suites when it comes to practical
-application. While~\cite{DBLP:conf/pts/CavalcantiS17} requires additional
-criteria to select tests from infinite test suites, here, we further restrict
-fault domains using a graph representation of processes used in model
-checking to obtain test suites that are finite.
+Our results complement work published in~\cite{DBLP:conf/pts/CavalcantiS17}.
+There, fault domains are specified as collections of processes refining a
+``most general'' fault domain member. With that concept, complete test suites
+may be finite or infinite. This gives important insight into the theory of
+fault-domain testing for CSP, but we are particularly interested in {\it
+finite} suites when it comes to practical application.
+While~\cite{DBLP:conf/pts/CavalcantiS17} may require additional criteria to
+select tests from still infinite test suites, here, we further restrict fault
+domains using a graph representation of processes used in model checking to
+obtain test suites that are finite.
 
 Our complementary approach to the definition of CSP fault domains is
 presented in this paper. We observe that every finite-state CSP process can
-be semantically represented as a finite normalised transition graph, whose
-edges are labelled by the events the process engages in, and whose nodes are
-labelled by minimal acceptances or, alternatively, maximal
+be represented as a finite normalised transition graph, whose edges are
+labelled by the events the process engages in, and whose nodes are labelled
+by minimal acceptances or, alternatively, maximal
 refusals~\cite{Roscoe:1994:CME:197600}. The maximal refusals express the
 degree of nondeterminism present in a given process state that is in
 one-one-correspondence to a node of the normalised transition graph. Inspired
-by the way that fault-domains are specified for finite state machines (FSMs), we
-define them as the set of CSP processes whose normalised transition graphs do
-not exceed the size of the reference model's graph by more than a given
+by the way that fault-domains are specified for finite state machines (FSMs),
+we define them as the set of CSP processes whose normalised transition graphs
+do not exceed the size of the reference model's graph by more than a given
 constant.
 
 The main contribution of this paper is the proof that for fault domains of
@@ -83,11 +84,15 @@ established for process algebras, and for CSP in particular, by several
 authors~\cite{Hennessy:1988:ATP:50497,Schneider:1995:OST:203471.203475,DBLP:conf/fm/PeleskaS96,peleska1997a,DBLP:conf/pts/CavalcantiS17}.
 To the best of our knowledge, however, this article is the first to present
 {\it finite}, complete test suites associated with this class of fault
-domains and conformance relations. Moreover, our result is not a simple transcription of
-existing knowledge  about finite, complete test suites for finite state machines:
-the capabilities of CSP to express nondeterminism in a more fine-grained way than it is possible for FSMs requires a more complex approach to testing systems for conformity in the failures-model than it is required for model-based testing against nondeterministic FSMs, as published, for example, in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}.
+domains and conformance relations.
 
-
+Moreover, our result is not a simple transcription of existing knowledge
+about finite, complete test suites for finite state machines: the
+capabilities of CSP to express nondeterminism in a more fine-grained way than
+it is possible for FSMs requires a more complex approach to testing systems
+for conformity in the failures-model than it is required for model-based
+testing against nondeterministic FSMs, as published, for example,
+in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}.
 
 It should be noted that the presented results are of a theoretical
 nature:~despite being finite, the resulting test suite size will still be too

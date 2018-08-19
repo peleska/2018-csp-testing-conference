@@ -27,7 +27,7 @@ U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop
 \end{eqnarray}
 %
 A test is performed by running $U_F(p)$ concurrently with any SUT process $Q$
-\fixme{alcc: add an example?}\fxnote{jp: I think that the following explanations, together with examples in Section~\ref{sec:case}, suffice.} that operates on the same alphabet as $P$,
+%\fixme{alcc: add an example?}\fxnote{jp: I think that the following explanations, together with examples in Section~\ref{sec:case}, suffice.} that operates on the same alphabet as $P$,
 synchronising over alphabet $\Sigma$. Therefore, a test execution is any
 trace of the concurrent process
 \[
@@ -113,12 +113,12 @@ Test suite $\TS_F$ generated from CSP process $P$, as specified in Theorem~\ref{
 every CSP process $Q$ satisfying $P\lessdet_F Q$.
 \end{lemma}
 \begin{proof}
-Suppose that $P\lessdet_F Q$. Then 
-$\trc(Q)\subseteq \trc(P)$. Therefore, when running in parallel with $Q$, any
-adaptive test $U_F(p)$ will always enter the branches (\ref{eq:ufb}),
-(\ref{eq:ufc}),  or (\ref{eq:ufd}) of the external choice construction for
-$U_F(p,s)$. Branch~(\ref{eq:ufa}) can never be entered in the prallel execution of $Q$ and
-$U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
+Suppose that $P\lessdet_F Q$. In this case, in particular, $\trc(Q)\subseteq
+\trc(P)$. Therefore, when running in parallel with $Q$, any adaptive test
+$U_F(p)$ always enters the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or
+(\ref{eq:ufd}) of the external choice construction for $U_F(p,s)$.
+Branch~(\ref{eq:ufa}) can never be entered in the parallel execution of $Q$
+and $U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
 
 Moreover,  Lemma~\ref{lemma:hseta}
 implies that for all traces $s\in\trc(Q)$, every $H$ in $\text{minHit}(P/s)$ is
@@ -129,21 +129,19 @@ non-empty intersection with each of the minimal acceptances of $Q/s$. As a
 consequence, $Q/s$ never blocks when offered events from $H$, and the test
 terminates with PASS event $\epass$. Note that this argument requires that
 $Q$ is free of livelocks, because otherwise the PASS-events might not become
-visible, due to unbounded sequences of hidden events performed by $Q$. 
+visible, due to unbounded sequences of hidden events performed by $Q$.
 %Note
 %further, that this proof did not refer in any way to the size of $Q$'s
 %normalised transition graph, so the test suite is sound for {\it all}
-%non-divergent CSP process refining $P$. 
-\fixme{alcc: Soundness does not
-depend on the fault domain. I would have it as a separate theorem.}
-\fxnote{jp: this is a good idea, I have split the proof of the main theorem in 2 lemmas.}
+%non-divergent CSP process refining $P$.
+%\fixme{alcc: Soundness does not
+%depend on the fault domain. I would have it as a separate theorem.}
+%\fxnote{jp: this is a good idea, I have split the proof of the main theorem in 2 lemmas.}
 \xbox
 \end{proof}
 
-
-
 \begin{lemma}\label{lemma:mainfexhaustive}
-Test suite $\TS_F$ specified im Theorem~\ref{th:failurestest} is exhaustive for the fault 
+Test suite $\TS_F$ specified im Theorem~\ref{th:failurestest} is exhaustive for the fault
 model specified there.
 \end{lemma}
 \begin{proof}
@@ -165,28 +163,26 @@ FAIL event $\efail$ or without giving any verdict. The latter case is also
 interpreted  as FAIL, since then the process $\epass\then\Stop$ is no longer
 failures-refined by the test execution.
 
-For Case~1, consider a  trace $s.e\in\trc(Q)$ such that
-$s\in\trc(P)$, but $s.e\not\in\trc(P)$. Such a trace always exists because
-$\varepsilon$ is a trace of every process. In this case, $s$ is also a trace
-of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}.
-Suppose that $G/s = (n_P,n_Q)$.
-The length of $s$ is not known, but 
-from the construction of $G$,  we know that $G$ has at most
-$pq$ reachable states, because $G(P)$ has $p$ states, and $G(Q)$ has at most
-$q$ states.  Applying
-Lemma~\ref{lemma:reachproduc} implies that $(n_P,n_Q)$ can be reached by a trace
+For Case~1, consider a  trace $s.e\in\trc(Q)$ such that $s\in\trc(P)$, but
+$s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is a
+trace of every process. In this case, $s$ is also a trace of the product
+graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. Suppose that
+$G/s = (n_P,n_Q)$. The length of $s$ is not known, but from the construction
+of $G$,  we know that $G$ has at most $pq$ reachable states, because $G(P)$
+has $p$ states, and $G(Q)$ has at most $q$ states. By
+Lemma~\ref{lemma:reachproduc}, $(n_P,n_Q)$ can be reached by a trace
 $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition
 function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test
 $U_F(pq-1)$ accepts all traces of $P$ up to length $pq-1$, $u$ is also a
 trace of this test, and, by construction, $U_F(pq-1)/u = U_F(pq-1,u)$. Since
-$s.e\not\in\trc(P)$, $e$ is an element of $\Sigma-[P/u]^0$. Therefore, in at
-least one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa})
-with this event $e$, so that the test fails with event $\efail$. Again, the
-assumption of non-divergence of Q is needed for this conclusion. \fixme{alcc:
-I didn't see how Lemma 3 is being applied here. Also, given the definition of
-the test as a process, I'm not sure why you need to make the argument using
-graph product.}
-\fxnote{jp: I do hope that this is now clearer from the new structure of the lemmas}
+$s.e\not\in\trc(P)$, $e$ is an element of $\Sigma-[P/u]^0$. So, in at least
+one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa}) with
+this event $e$, so that the test fails. Again, the
+assumption of non-divergence of Q is needed for this conclusion. %\fixme{alcc:
+%I didn't see how Lemma 3 is being applied here. Also, given the definition of
+%the test as a process, I'm not sure why you need to make the argument using
+%graph product.}
+%\fxnote{jp: I do hope that this is now clearer from the new structure of the lemmas}
 
 For   Case~2, we note that trace $s$ is again a trace of the product graph
 $G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
