@@ -37,11 +37,21 @@ with nodes $N$, initial node $\ii n\in N$, and process alphabet $\Sigma$. The
 partial \emph{transition function} $t$ maps a node $n$ and an event
 $e\in\Sigma$ to its successor node $t(n,e)$. If $(n,e)$ is in the domain of
 $t$, then there is a transition from $n$ with label $e$. Normalisation of
-$G(P)$ is reflected by the fact that $t$ is a function.
+$G(P)$ is reflected by the fact that $t$ is a function. The graph construction
+described in~\cite{Roscoe:1994:CME:197600} implies that all nodes $n$ in $N$ are reachable 
+by a sequence of edges labelled by $e_1\dots e_k$ and connecting states 
+$\ii n,n_1,\dots,n_{k-1},n$, such that
+\[
+n_1 = t(\ii n,e_1), \quad n_i = t(n_{i-1},e_i),\ i = 2,\dots,k-1,\quad
+n= t(n_{k-1},e_k).
+\]
 
-A finite sequence of events $s\in\Sigma^*$ is a \emph{trace} of $P$, if there
+A finite sequence of events $s\in\Sigma^*$ is a \emph{trace} of $P$, if and only if 
+there
 is a path through $G(P)$ starting  at $\ii n$ whose edge labels coincide with
-$s$. The set of traces of $P$ is denoted by $\trc(P)$. If $s\in\trc(P)$, then
+$s$. The set of traces of $P$ is denoted by $\trc(P)$. We use the analgous notation
+$\trc(G(P))$ for the set of finite, initialised paths through $G(P)$, each path represented by its finite sequence of edge labels.
+If $s\in\trc(P)$, then
 the process corresponding to $P$ after having executed $s$ is denoted by
 $P/s$. Since $G(P)$ is normalised, there is a unique node reached by applying
 the events from $s$ one by one, starting in $\ii n$. Therefore, $G(P)/s$  is
@@ -138,10 +148,16 @@ acceptances by means of maximal refusals. In this case,
 (\ref{eq:accinitials}) and (\ref{eq:accsubset}) are consequences of this
 definition and the fact that refusals are subset-closed. \fixme{alcc: are you
 sure? (4) does not talk about Acc. Is this important?}
+\fixme{jp: I'm sure and I can prove this. However, we don't need this fact, so I suggest to
+removed it.}
 
-Every node of a normalised transition graph can alternatively be labelled
+Exploiting formulas (\ref{eq:accref},\ref{eq:accinitials},\ref{eq:accsubset}),
+every node of a normalised transition graph can alternatively be labelled
 with their minimal acceptances, and this information is equivalent to that
-contained in the maximal refusals. This is the representation used by FDR.
+contained in the maximal refusals. Since process states $P/s$ are equivalently expressed
+by states $G(P)/s$ of $P$'s normalised transition graph, we also write
+$\minaccs(G(P)/s)$ and $\maxrefs(G(P)/s)$ to denote the minimal acceptences and maximal refusals, respectively, labelling graph state $G(P)/s$ and note 
+that $\minaccs(G(P)/s) = \minaccs(P/s)$ and $\maxrefs(G(P)/s) = \maxrefs(P/s)$.
 
 % .....................................................................................
  \begin{figure}[t]
@@ -193,6 +209,8 @@ Refinement relations between finite-state CSP processes $P, Q$ can be be
 expressed by means of their normalised transition graphs in the following
 way. \fixme{alcc: trc was defined for P, not G(P) and this lemma is used
 later for trc(P). So, we need to be clearer as to what we mean.}
+\fxnote{jp: I have now introduced notation $\trc(G(P))$ above, so I think that the
+statement of the lemma is now sufficiently clear.}
 %
 \begin{lemma}
   \label{lemma:tgtrcref}
@@ -215,6 +233,56 @@ later for trc(P). So, we need to be clearer as to what we mean.}
   \xbox
 \end{lemma}
 %
+
+
+Given a finite-state CSP process $P$ and its normalised transition graph
+\[
+G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
+\]
+suppose that $V\subseteq\Sigma^*$ is a
+prefix-closed set  of sequences of events. By $t(\ii n,V)$ we denote the set
+\[
+t(\ii n,V) = \{ n\in N~|~\exists s\in V: s\in\trc(P)\wedge G(P)/s = n \}
+\]
+of nodes in $N$ that are reachable in $G(P)$ by applying traces of $V$.
+The following lemma specifies a simple construction method for such sets $V$ reaching 
+{\it every} node of $N$.
+
+\begin{lemma}
+\label{lemma:extendV} Let $P$ be a CSP process with normalised transition
+graph $G(P)$. \fixme{alcc: can a
+normalised graph for a process have states that are unreachable?}
+\fxnote{jp: You are rights: all states in G(P) are reachable by construction of the graph -- I have added this information to the section introducing the graphs.}
+Let
+$V\subseteq\Sigma^*$ be a finite prefix-closed set of sequences of events.
+Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is, $|t(\ii
+n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences from $V$, extended
+by any event of $\Sigma$. Then $G(P)$ reaches at least $(k+1)$ nodes under
+$V\cup V.\Sigma$.
+\end{lemma}
+\begin{proof}
+Suppose that $n'\in (N - t(\ii n,V))$.  Since all nodes in $N$ are reachable,
+there exists a trace $s$ such that $G(P)/s = n'$. Decompose $s = s_1.e.s_2$
+with $s_i\in\Sigma^*, e\in\Sigma$, such that $G(P)/s_1 \in t(\ii n,V)$ and
+$G(P)/s_1.e \not\in t(\ii n,V)$. Such a decomposition always exists, because
+$V$ is prefix-closed and therefore contains the empty trace $\varepsilon$.
+Note, however, that it is not necessarily the case that $s_1\in V$.
+
+Since $G(P)$ reaches $G(P)/s_1$ under $V$, there exists a trace $u\in V$ such
+that $G(P)/u = G(P)/s_1 = \ol n$. Since $s = s_1.e.s_2$ is a trace of $P$ and
+$G(P)/s_1 = \ol n$, then $(\ol n,e)$ is in the domain of $t$. So, $ G(P)/u.e
+= G(P)/s_1.e = n$ is a well-defined node of $N$ not contained in $t(\ii
+n,V)$. Since $u.e\in V\cup V.\Sigma$, $G(P)$ reaches at least the additional
+node $n$ under $V\cup V.\Sigma$. This completes the proof. \xbox
+\end{proof}
+\fixme{alcc: Explain the structure of the section? Can the above result be in
+a section, rather than the introduction of the section?}
+\fxnote{jp: I have moved this lemma now to the section on preliminaries, this should make the main section on the finite complete test suite easier to read.}
+
+
+
+
+
 For proving our main theorems, it is necessary to consider the \emph{product}
 of normalised transition graphs. We need this only for the investigation of
 corresponding traces in reference processes and processes for SUTs.
@@ -236,6 +304,22 @@ G_1\times G_2 & = & (N_1\times N_2,(\ii n_1,\ii n_2), t:(N_1\times N_2)\times\Si
 t((n_1,n_2),e) & = & (t_1(n_1,e),t_2(n_2,e))\ \text{for $((n_1,n_2),e)\in\dom~t$}
 \end{eqnarray}
 
+The following lemma will be used in the proof of our main theorem. 
+\begin{lemma}\label{lemma:reachproduc}
+If $G_1$ has $p$ states and $G_2$ has $q$ states, then every reachable state
+$(n_1,n_2)$ of the product graph $G_1\times G_2$ can be reached by a trace 
+%%%$s\in\trc(G_1)\cap \trc(G_2)$  we don't need this
+of maximal length $(pq-1)$.
+\end{lemma}
+\begin{proof}
+The product graph $G_1\times G_2$ has at most $pq$ states. The empty trace $\varepsilon$
+reaches its initial state $(\ii n_1,\ii n_2)$. Applying Lemma~\ref{lemma:extendV}
+$(pq-1)$ times with $V=\{\varepsilon \}$ implies that $G_1\times G_2$ reaches
+all of its reachable states (there are at most $pq$ of them) under 
+$V' = V \cup V.\Sigma\cup\dots \cup V.\Sigma^{(pq-1)}$. The maximal length of traces in
+$V'$ is $(pq-1)$.
+\xbox
+\end{proof}
 
 % =========================================================================
 
@@ -250,7 +334,7 @@ subsets. For practical applications, the subset closure is never constructed
 in an explicit way; instead, sets are checked with respect to containment in
 a maximal refusal.
 
-@todo
+@todo 
 
 %The maximal refusals in each process state $P/s$
 % are the complements of
@@ -301,6 +385,7 @@ Then the following statements are equivalent.
 \begin{enumerate}
 \item $P\lessdet_F Q$ \fixme{Note that if traces refinement is already
     given, this is conf.}
+    \fxnote{jp: sorry, I do not understand what you are saying here}
 \item For all $s\in\trc(P)\cap \trc(Q)$ and $H \in  \text{minHit}(P/s)$, $H$ is
 a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
 \end{enumerate}
@@ -334,12 +419,14 @@ Define
 Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*),
 $\overline H$ is a hitting set of $\minaccs(G(P)/s)$ which has an  empty
 intersection with $A_Q$. \fixme{alcc: minaccs is used for P above.}
+\fxnote{jp: Above Example 1, I have now introduced the notation $\minaccs(G(P)/s)$ and
+$\maxrefs(G(P)/s)$.}
 Minimising $\overline H$ induces the existence of a minimal hitting set $H\in
 \text{minHit}(P/s)$ which is {\it not} a hitting set of $\minaccs(G(Q)/s)$, a
 contradiction to Assumption~2. This completes the proof of the lemma. \xbox
 \end{proof}
 %
-This result is used in the sequel in Section~\ref{}.
+This result is used in the sequel in Section~\ref{sec:finitecompletefails}.
 
 %\begin{lemma}
 %\label{lemma:hsetb}

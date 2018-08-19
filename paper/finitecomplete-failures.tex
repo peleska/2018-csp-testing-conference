@@ -3,44 +3,6 @@
 \label{sec:finitecompletefails}
 % ==========================================================================
 
-Given a finite-state CSP process $P$ and its normalised transition graph
-\[
-G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
-\]
-suppose that $V\subseteq\Sigma^*$ is a
-prefix-closed set  of sequences of events. By $t(\ii n,V)$ we denote the set
-\[
-t(\ii n,V) = \{ n\in N~|~\exists s\in V: s\in\trc(P)\wedge G(P)/s = n \}
-\]
-of nodes in $N$ that are reachable in $G(P)$ by applying traces of $V$.
-
-\begin{lemma}
-\label{lemma:extendV} Let $P$ be a CSP process with normalised transition
-graph $G(P)$, such that all states in $N$ are reachable. \fixme{alcc: can a
-normalised graph for a process have states that are unreachable?} Let
-$V\subseteq\Sigma^*$ be a finite prefix-closed set of sequences of events.
-Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is, $|t(\ii
-n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences from $V$, extended
-by any event of $\Sigma$. Then $G(P)$ reaches at least $(k+1)$ nodes under
-$V\cup V.\Sigma$.
-\end{lemma}
-\begin{proof}
-Suppose that $n'\in (N - t(\ii n,V))$.  Since all nodes in $N$ are reachable,
-there exists a trace $s$ such that $G(P)/s = n'$. Decompose $s = s_1.e.s_2$
-with $s_i\in\Sigma^*, e\in\Sigma$, such that $G(P)/s_1 \in t(\ii n,V)$ and
-$G(P)/s_1.e \not\in t(\ii n,V)$. Such a decomposition always exists, because
-$V$ is prefix-closed and therefore contains the empty trace $\varepsilon$.
-Note, however, that it is not necessarily the case that $s_1\in V$.
-
-Since $G(P)$ reaches $G(P)/s_1$ under $V$, there exists a trace $u\in V$ such
-that $G(P)/u = G(P)/s_1 = \ol n$. Since $s = s_1.e.s_2$ is a trace of $P$ and
-$G(P)/s_1 = \ol n$, then $(\ol n,e)$ is in the domain of $t$. So, $ G(P)/u.e
-= G(P)/s_1.e = n$ is a well-defined node of $N$ not contained in $t(\ii
-n,V)$. Since $u.e\in V\cup V.\Sigma$, $G(P)$ reaches at least the additional
-node $n$ under $V\cup V.\Sigma$. This completes the proof. \xbox
-\end{proof}
-\fixme{alcc: Explain the structure of the section? Can the above result be in
-a section, rather than the introduction of the section?}
 
 % ==========================================================================
 \subsection{Test Cases for Verifying CSP Failures Refinement}
@@ -65,7 +27,7 @@ U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop
 \end{eqnarray}
 %
 A test is performed by running $U_F(p)$ concurrently with any SUT process $Q$
-\fixme{alcc: add an example?} that operates on the same alphabet as $P$,
+\fixme{alcc: add an example?}\fxnote{jp: I think that the following explanations, together with examples in Section~\ref{sec:case}, suffice.} that operates on the same alphabet as $P$,
 synchronising over alphabet $\Sigma$. Therefore, a test execution is any
 trace of the concurrent process
 \[
@@ -123,7 +85,12 @@ failures refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT shou
 at least one event of each minimal hitting set in $\text{minHit}(P/s)$. Therefore, the test
 only terminates with success $\epass$, if such an event is accepted by the SUT.
 
-After this informal explanation of tests representing adaptive test cases, we are ready to prove the main theorem of this paper.
+
+
+% =========================================================================
+\subsection{A Finite Complete Test Suite}
+
+After the informal explanation of tests representing adaptive test cases, we are ready to state the main theorem of this paper.
 
 \begin{theorem}\label{th:failurestest}
 Let $P$ be a divergence-free CSP process over alphabet $\Sigma$
@@ -136,27 +103,51 @@ Then the test suite
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
+
+
+The proof of the theorem follows from the following lemmas. The first states that test
+suite $\TS_F$ is sound, the second states that the suite is also exhaustive.
+
+\begin{lemma}\label{lemma:mainfsound}
+Test suite $\TS_F$ generated from CSP process $P$, as specified in Theorem~\ref{th:failurestest}, is passed by
+every CSP process $Q$ satisfying $P\lessdet_F Q$.
+\end{lemma}
 \begin{proof}
-To prove soundness of $\TS_F$, suppose that $Q\in{\cal D} \wedge P\lessdet_F
-Q$. In this case, $\trc(Q)\subseteq \trc(P)$, and Lemma~\ref{lemma:hseta}
-implies that for all traces $s$ of $Q$, every $H$ in $\text{minHit}(P/s)$ is
-a hitting set for $\minaccs(Q/s)$. So, when running in parallel with $Q$, any
+Suppose that $P\lessdet_F Q$. Then 
+$\trc(Q)\subseteq \trc(P)$. Therefore, when running in parallel with $Q$, any
 adaptive test $U_F(p)$ will always enter the branches (\ref{eq:ufb}),
 (\ref{eq:ufc}),  or (\ref{eq:ufd}) of the external choice construction for
-$U_F(p,s)$. Branch (\ref{eq:ufb}) leads always to a PASS verdict, and branch
+$U_F(p,s)$. Branch~(\ref{eq:ufa}) can never be entered in the prallel execution of $Q$ and
+$U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
+
+Moreover,  Lemma~\ref{lemma:hseta}
+implies that for all traces $s\in\trc(Q)$, every $H$ in $\text{minHit}(P/s)$ is
+a hitting set for $\minaccs(Q/s)$. Branch (\ref{eq:ufb}) leads always to a PASS verdict, and branch
 (\ref{eq:ufc}) to test continuation without a verdict. For the last branch,
 we note that any selected minimal hitting set $H\in\text{minHit}(P/s)$ has a
 non-empty intersection with each of the minimal acceptances of $Q/s$. As a
 consequence, $Q/s$ never blocks when offered events from $H$, and the test
 terminates with PASS event $\epass$. Note that this argument requires that
 $Q$ is free of livelocks, because otherwise the PASS-events might not become
-visible, due to unbounded sequences of hidden events performed by $Q$. Note
-further, that this proof did not refer in any way to the size of $Q$'s
-normalised transition graph, so the test suite is sound for {\it all}
-non-divergent CSP process refining $P$. \fixme{alcc: Soundness does not
+visible, due to unbounded sequences of hidden events performed by $Q$. 
+%Note
+%further, that this proof did not refer in any way to the size of $Q$'s
+%normalised transition graph, so the test suite is sound for {\it all}
+%non-divergent CSP process refining $P$. 
+\fixme{alcc: Soundness does not
 depend on the fault domain. I would have it as a separate theorem.}
+\fxnote{jp: this is a good idea, I have split the proof of the main theorem in 2 lemmas.}
+\xbox
+\end{proof}
 
-To prove exhaustiveness, consider a process $Q\in{\cal D}$ with
+
+
+\begin{lemma}\label{lemma:mainfexhaustive}
+Test suite $\TS_F$ specified im Theorem~\ref{th:failurestest} is exhaustive for the fault 
+model specified there.
+\end{lemma}
+\begin{proof}
+Consider a process $Q\in{\cal D}$ with
 $P\not\lessdet_F Q$. This non-conformance can be caused in two possible ways.
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
@@ -174,14 +165,16 @@ FAIL event $\efail$ or without giving any verdict. The latter case is also
 interpreted  as FAIL, since then the process $\epass\then\Stop$ is no longer
 failures-refined by the test execution.
 
-For the first case, consider a  trace $s.e\in\trc(Q)$ such that
+For Case~1, consider a  trace $s.e\in\trc(Q)$ such that
 $s\in\trc(P)$, but $s.e\not\in\trc(P)$. Such a trace always exists because
 $\varepsilon$ is a trace of every process. In this case, $s$ is also a trace
 of the product graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}.
-From the construction of $G$ described there, we know that $G$ has at most
+Suppose that $G/s = (n_P,n_Q)$.
+The length of $s$ is not known, but 
+from the construction of $G$,  we know that $G$ has at most
 $pq$ reachable states, because $G(P)$ has $p$ states, and $G(Q)$ has at most
-$q$ states. Suppose that $G/s = (n_P,n_Q)$. Applying
-Lemma~\ref{lemma:extendV} implies that this state can be reached by a trace
+$q$ states.  Applying
+Lemma~\ref{lemma:reachproduc} implies that $(n_P,n_Q)$ can be reached by a trace
 $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition
 function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test
 $U_F(pq-1)$ accepts all traces of $P$ up to length $pq-1$, $u$ is also a
@@ -193,9 +186,11 @@ assumption of non-divergence of Q is needed for this conclusion. \fixme{alcc:
 I didn't see how Lemma 3 is being applied here. Also, given the definition of
 the test as a process, I'm not sure why you need to make the argument using
 graph product.}
+\fxnote{jp: I do hope that this is now clearer from the new structure of the lemmas}
 
-For the Case~2, we note that trace $s$ is again a trace of the product graph
-$G$. Therefore, $G/s$ can again be reached by a trace
+For   Case~2, we note that trace $s$ is again a trace of the product graph
+$G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
+we know that the state   $G/s$ can   be reached by a trace
 $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. Consider test $U_F(\#
 u)$, which satisfies $U_F(\# u)/u = U_F(\#u,u)$, because it always performs
 branch (\ref{eq:ufc}) until the trace $u$ has been completely processed.
