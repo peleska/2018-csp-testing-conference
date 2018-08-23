@@ -52,6 +52,8 @@ minhit(2) = { {c}, {a,b} }
 minhit(3) = { {c}, {b} }
 
 
+U = U_F(5)
+
 
 U_F(max) = U1(max,0,0)
 
