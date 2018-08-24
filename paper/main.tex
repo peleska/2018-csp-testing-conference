@@ -1,4 +1,3 @@
-
 %%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This is the LaTeX source for the instructions to authors using
@@ -15,244 +14,211 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 \documentclass[runningheads,a4paper]{llncs}
 
 \usepackage[cmex10]{amsmath}
 \usepackage{amssymb}
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
-
+%
 \usepackage{url}
-\urldef{\mailsa}\path|{peleska,huang}@uni-bremen.de| 
+\urldef{\mailsa}\path|{peleska,huang}@uni-bremen.de|
 \urldef{\mailsb}\path|ana.cavalcanti@york.ac.uk|
 \urldef{\mailsc}\path|adenilso@icmc.usp.br|
 
-
-  
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 
-\usepackage{float}
-\usepackage{lscape}
-\usepackage{lscape}
-
-\usepackage[linesnumbered,lined,boxed]{algorithm2e}
+%\usepackage{float}
+%\usepackage{lscape}
+%\usepackage{lscape}
+%
+%\usepackage[linesnumbered,lined,boxed]{algorithm2e}
 \usepackage[draft]{fixme}
-
+%
 \usepackage{zed-csp}
-
-
-
-\DeclareMathSymbol{\B}{\mathalpha}{AMSb}{"42}
-\DeclareMathSymbol{\I}{\mathalpha}{AMSb}{"49}
-\DeclareMathSymbol{\N}{\mathalpha}{AMSb}{"4E}
-\DeclareMathSymbol{\Pwr}{\mathalpha}{AMSb}{"50}
-\DeclareMathSymbol{\Q}{\mathalpha}{AMSb}{"51}
-\DeclareMathSymbol{\R}{\mathalpha}{AMSb}{"52}
-\DeclareMathSymbol{\Z}{\mathalpha}{AMSb}{"5A}
-\DeclareMathSymbol{\Sol}{\mathalpha}{AMSb}{"53}
-
-\newcommand{\obsv}[1]{{\cal O}(#1)}
-\newcommand{\ctrl}[1]{{\cal C}(#1)}
-\newcommand{\vdot}[1]{\stackrel{.}{#1}}
-
-\newcommand{\HS}{{\mathcal H}}
-
-\newcommand{\Interval}{\I}
-
-\newcommand{\ist}{\mbox{{\tt true}}}
+%
+%\DeclareMathSymbol{\B}{\mathalpha}{AMSb}{"42}
+%\DeclareMathSymbol{\I}{\mathalpha}{AMSb}{"49}
+%\DeclareMathSymbol{\N}{\mathalpha}{AMSb}{"4E}
+%\DeclareMathSymbol{\Pwr}{\mathalpha}{AMSb}{"50}
+%\DeclareMathSymbol{\Q}{\mathalpha}{AMSb}{"51}
+%\DeclareMathSymbol{\R}{\mathalpha}{AMSb}{"52}
+%\DeclareMathSymbol{\Z}{\mathalpha}{AMSb}{"5A}
+%\DeclareMathSymbol{\Sol}{\mathalpha}{AMSb}{"53}
+%
+%\newcommand{\obsv}[1]{{\cal O}(#1)}
+%\newcommand{\ctrl}[1]{{\cal C}(#1)}
+%\newcommand{\vdot}[1]{\stackrel{.}{#1}}
+%
+%\newcommand{\HS}{{\mathcal H}}
+%
+%\newcommand{\Interval}{\I}
+%
+%\newcommand{\ist}{\mbox{{\tt true}}}
 \newcommand{\isf}{\mbox{{\tt false}}}
-\newcommand{\emptytrace}{\langle~\rangle}
-\newcommand{\abegin}{\mathbf{begin}}
-\newcommand{\aend}{\mathbf{end}}
-\newcommand{\alet}{\mathbf{let}}
-\newcommand{\aendlet}{\mathbf{endlet}}
-\newcommand{\ain}{\mathbf{in}}
-\newcommand{\afor}{\mathbf{for}}
-\newcommand{\adownto}{\mathbf{downto}}
-\newcommand{\aforall}{\mathbf{foreach}}
-\newcommand{\awhile}{\mathbf{while}}
-\newcommand{\ado}{\mathbf{do}}
-\newcommand{\aod}{\mathbf{od}}
-\newcommand{\aenddo}{\mathbf{enddo}}
-\newcommand{\aif}{\mathbf{if}}
-\newcommand{\afi}{\mathbf{fi}}
-\newcommand{\athen}{\mathbf{then}}
-\newcommand{\aelse}{\mathbf{else}}
-\newcommand{\aelseif}{\mathbf{elseif}}
-\newcommand{\aendif}{\mathbf{endif}}
-\newcommand{\ainout}{\mathbf{inout}}
-\newcommand{\awhere}{\mathbf{where}}
-\newcommand{\areturn}{\mathbf{return}}
-\newcommand{\aout}{\mathbf{out}}
-\newcommand{\aprocedure}{\mathbf{procedure}}
-\newcommand{\afunction}{\mathbf{function}}
-\newcommand{\abreak}{\mathbf{break}}
-\newcommand{\Sup}[1]{\overline{#1}}
-\newcommand{\Inf}[1]{\underline{#1}}
-
-
-\newcommand{\taba}{\hspace*{3mm}}
-\newcommand{\tabb}{\hspace*{6mm}}
+%\newcommand{\emptytrace}{\langle~\rangle}
+%\newcommand{\abegin}{\mathbf{begin}}
+%\newcommand{\aend}{\mathbf{end}}
+%\newcommand{\alet}{\mathbf{let}}
+%\newcommand{\aendlet}{\mathbf{endlet}}
+%\newcommand{\ain}{\mathbf{in}}
+%\newcommand{\afor}{\mathbf{for}}
+%\newcommand{\adownto}{\mathbf{downto}}
+%\newcommand{\aforall}{\mathbf{foreach}}
+%\newcommand{\awhile}{\mathbf{while}}
+%\newcommand{\ado}{\mathbf{do}}
+%\newcommand{\aod}{\mathbf{od}}
+%\newcommand{\aenddo}{\mathbf{enddo}}
+%\newcommand{\aif}{\mathbf{if}}
+%\newcommand{\afi}{\mathbf{fi}}
+%\newcommand{\athen}{\mathbf{then}}
+%\newcommand{\aelse}{\mathbf{else}}
+%\newcommand{\aelseif}{\mathbf{elseif}}
+%\newcommand{\aendif}{\mathbf{endif}}
+%\newcommand{\ainout}{\mathbf{inout}}
+%\newcommand{\awhere}{\mathbf{where}}
+%\newcommand{\areturn}{\mathbf{return}}
+%\newcommand{\aout}{\mathbf{out}}
+%\newcommand{\aprocedure}{\mathbf{procedure}}
+%\newcommand{\afunction}{\mathbf{function}}
+%\newcommand{\abreak}{\mathbf{break}}
+%\newcommand{\Sup}[1]{\overline{#1}}
+%\newcommand{\Inf}[1]{\underline{#1}}
+%
+%\newcommand{\taba}{\hspace*{3mm}}
+%\newcommand{\tabb}{\hspace*{6mm}}
 \newcommand{\tabc}{\hspace*{9mm}}
 \newcommand{\tabd}{\hspace*{12mm}}
-\newcommand{\tabe}{\hspace*{15mm}}
-\newcommand{\tabf}{\hspace*{18mm}}
-
-\newcommand{\gca}[1]{{{#1}^{\vartriangleright}}}
-\newcommand{\gcb}[1]{{{#1}^{\vartriangleleft}}}
-\newcommand{\gclr}{{{\vartriangleleft\atop\longleftarrow}\atop
-                   {\longrightarrow\atop\vartriangleright}}}
-
-
-
-\newcommand{\Nat}{{\mathbb N}}
-\newcommand{\Real}{{\mathbb R}}
-
-\newcommand{\trans}{\longrightarrow}
-\newcommand{\transp}{\longrightarrow_{\power}}
-\newcommand{\transl}{\longrightarrow_{L}}
-\newcommand{\transg}{\longrightarrow_{G}}
-\newcommand{\transcfg}[1]{\stackrel{#1}{\longrightarrow}_{CFG}}
-\newcommand{\isdefd}{=_{\mbox{\footnotesize def}}}
-\newcommand{\equivdef}{\equiv_{\mbox{\footnotesize def}}}
-\newcommand{\mitem}{\mbox{\em M-Item}}
-\newcommand{\currt}{\hat{t}}
-
-
-\newcommand{\sigmaa}{\sigma_A}
-\newcommand{\strictimplies}{\stackrel{\bullet}{\Rightarrow}}
-
-\newcommand{\trl}{/\!/}
-
-
-\newcommand{\q}{\textbf{q}}
-
-
-\newcommand{\eqc}[2]{[#1;#2]}
-
-
-\newcommand{\vest}{V_{\text{\sl est}}}
-\newcommand{\vmax}{V_{\text{\sl MRSP}}}
-\newcommand{\wout}{\mathsf{W}}
-\newcommand{\eout}{\mathsf{EB}}
-\newcommand{\areb}{\mathsf{allowRevokeEB}}
-\newcommand{\sbia}{\mathsf{SBAvailable}}
-\newcommand{\sbz}{\mathsf{sb}_0}
-\newcommand{\ticmd}{\mathsf{TICmd}}
-\newcommand{\dmicmd}{\mathsf{DMICmd}}
-
-\newcommand{\sob}{\mathsf{speedOnBoard}}
-\newcommand{\std}{\mathsf{speedToDriver}}
-\newcommand{\pstd}{\mathsf{permittedSpeedToDriver}}
-\newcommand{\csmsw}{\mathsf{csmSwitch}}
-\newcommand{\sbicmd}{\mathsf{sbiCmd}}
-\newcommand{\sbidisplay}{\mathsf{DMIdisplaySBI}}
-
-
-\newcommand{\dvw}{\mathsf{dV}_{\mathsf{warning}}}
-\newcommand{\dvs}{\mathsf{dV}_{\mathsf{sbi}}}
-\newcommand{\dve}{\mathsf{dV}_{\mathsf{ebi}}}
-
- 
-\newcommand{\calcw}{\mathsf{dV\_warning(float)}}
-\newcommand{\calcs}{\mathsf{dV\_sbi(float)}}
-\newcommand{\calce}{\mathsf{dV\_ebi(float)}}
-\newcommand{\calcstd}{\mathsf{calc\_speed\_to\_driver()}}
-\newcommand{\calcpstd}{\mathsf{calc\_permitted\_speed\_to\_driver()}}
-\newcommand{\calcsob}{\mathsf{calc\_speed\_onboard()}}
-
+%\newcommand{\tabe}{\hspace*{15mm}}
+%\newcommand{\tabf}{\hspace*{18mm}}
+%
+%\newcommand{\gca}[1]{{{#1}^{\vartriangleright}}}
+%\newcommand{\gcb}[1]{{{#1}^{\vartriangleleft}}}
+%\newcommand{\gclr}{{{\vartriangleleft\atop\longleftarrow}\atop
+%                   {\longrightarrow\atop\vartriangleright}}}
+%
+%\newcommand{\Nat}{{\mathbb N}}
+%\newcommand{\Real}{{\mathbb R}}
+%
+%\newcommand{\trans}{\longrightarrow}
+%\newcommand{\transp}{\longrightarrow_{\power}}
+%\newcommand{\transl}{\longrightarrow_{L}}
+%\newcommand{\transg}{\longrightarrow_{G}}
+%\newcommand{\transcfg}[1]{\stackrel{#1}{\longrightarrow}_{CFG}}
+%\newcommand{\isdefd}{=_{\mbox{\footnotesize def}}}
+%\newcommand{\equivdef}{\equiv_{\mbox{\footnotesize def}}}
+%\newcommand{\mitem}{\mbox{\em M-Item}}
+%\newcommand{\currt}{\hat{t}}
+%\newcommand{\sigmaa}{\sigma_A}
+%\newcommand{\strictimplies}{\stackrel{\bullet}{\Rightarrow}}
+%\newcommand{\trl}{/\!/}
+%\newcommand{\q}{\textbf{q}}
+%\newcommand{\eqc}[2]{[#1;#2]}
+%\newcommand{\vest}{V_{\text{\sl est}}}
+%\newcommand{\vmax}{V_{\text{\sl MRSP}}}
+%\newcommand{\wout}{\mathsf{W}}
+%\newcommand{\eout}{\mathsf{EB}}
+%\newcommand{\areb}{\mathsf{allowRevokeEB}}
+%\newcommand{\sbia}{\mathsf{SBAvailable}}
+%\newcommand{\sbz}{\mathsf{sb}_0}
+%\newcommand{\ticmd}{\mathsf{TICmd}}
+%\newcommand{\dmicmd}{\mathsf{DMICmd}}
+%
+%\newcommand{\sob}{\mathsf{speedOnBoard}}
+%\newcommand{\std}{\mathsf{speedToDriver}}
+%\newcommand{\pstd}{\mathsf{permittedSpeedToDriver}}
+%\newcommand{\csmsw}{\mathsf{csmSwitch}}
+%\newcommand{\sbicmd}{\mathsf{sbiCmd}}
+%\newcommand{\sbidisplay}{\mathsf{DMIdisplaySBI}}
+%
+%
+%\newcommand{\dvw}{\mathsf{dV}_{\mathsf{warning}}}
+%\newcommand{\dvs}{\mathsf{dV}_{\mathsf{sbi}}}
+%\newcommand{\dve}{\mathsf{dV}_{\mathsf{ebi}}}
+%
+%
+%\newcommand{\calcw}{\mathsf{dV\_warning(float)}}
+%\newcommand{\calcs}{\mathsf{dV\_sbi(float)}}
+%\newcommand{\calce}{\mathsf{dV\_ebi(float)}}
+%\newcommand{\calcstd}{\mathsf{calc\_speed\_to\_driver()}}
+%\newcommand{\calcpstd}{\mathsf{calc\_permitted\_speed\_to\_driver()}}
+%\newcommand{\calcsob}{\mathsf{calc\_speed\_onboard()}}
+%
 \newcommand{\trc}{\text{trc}}
-\newcommand{\qtrc}{\text{qtraces}}
-\newcommand{\iotrc}{\text{L}}
-
-
-%\newtheorem{definition}{Definition}
-%\newtheorem{property}{Property}
-%\newtheorem{lemma}{Lemma}
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{corollary}{Corollary}
-%\newtheorem{property}{Property}
-
-%\newtheorem{note}{Note}[section]
-
-
-
-        
+%\newcommand{\qtrc}{\text{qtraces}}
+%\newcommand{\iotrc}{\text{L}}
+%
+%
+%%\newtheorem{definition}{Definition}
+%%\newtheorem{property}{Property}
+%%\newtheorem{lemma}{Lemma}
+%%\newtheorem{theorem}{Theorem}
+%%\newtheorem{corollary}{Corollary}
+%%\newtheorem{property}{Property}
+%
+%%\newtheorem{note}{Note}[section]
+%
 \newcommand{\xbox}{\unskip\nobreak\hfil\penalty50
       \hskip2em\hbox{}\nobreak\hfil$\Box$%
       \parfillskip=0pt\finalhyphendemerits=0 \par%
-      
+
       \medskip
       \parfillskip=0pt plus 1fil
 }
-      
-\newcommand{\dontshow}[1]{}    
-\newcommand{\annot}[1]{\textbf{\textcolor{red}{#1}}}  
-
-
-\newcommand{\modelsf}{\models_{\text{F}}}
-
-\newcommand{\ta}{\mathbf{A}}
-\newcommand{\te}{\mathbf{E}}
-\newcommand{\tx}{\mathbf{X}}
-\newcommand{\tf}{\mathbf{F}}
-\newcommand{\tg}{\mathbf{G}}
-\newcommand{\tu}{\mathbf{U}}
-\newcommand{\tr}{\mathbf{R}}
-\newcommand{\tw}{\mathbf{W}}
-
-\newcommand{\ttu}[1]{\mathbf{U}^{#1}}
-\newcommand{\ttg}[1]{\mathbf{G}^{#1}}
-\newcommand{\ttf}[1]{\mathbf{F}^{#1}}
-
-
-
-
+%
+%\newcommand{\dontshow}[1]{}
+%\newcommand{\annot}[1]{\textbf{\textcolor{red}{#1}}}
+%\newcommand{\modelsf}{\models_{\text{F}}}
+%
+%\newcommand{\ta}{\mathbf{A}}
+%\newcommand{\te}{\mathbf{E}}
+%\newcommand{\tx}{\mathbf{X}}
+%\newcommand{\tf}{\mathbf{F}}
+%\newcommand{\tg}{\mathbf{G}}
+%\newcommand{\tu}{\mathbf{U}}
+%\newcommand{\tr}{\mathbf{R}}
+%\newcommand{\tw}{\mathbf{W}}
+%
+%\newcommand{\ttu}[1]{\mathbf{U}^{#1}}
+%\newcommand{\ttg}[1]{\mathbf{G}^{#1}}
+%\newcommand{\ttf}[1]{\mathbf{F}^{#1}}
+%
 \newcommand{\epass}{{\text{\it pass}}}
- \newcommand{\efail}{{\text{\it fail}}}
-
-
+\newcommand{\efail}{{\text{\it fail}}}
+%
 \newcommand{\pass}{\underline{\text{pass}}}
- \newcommand{\tfail}{\underline{\text{fail}}}
- 
-\newcommand{\xpass}[1]{{#1}_\text{pass}}
-\newcommand{\xfail}[1]{{#1}_\text{fail}}
-
-\newcommand{\tc}{{\text{TC}}}
+% \newcommand{\tfail}{\underline{\text{fail}}}
+%
+%\newcommand{\xpass}[1]{{#1}_\text{pass}}
+%\newcommand{\xfail}[1]{{#1}_\text{fail}}
+%
+%\newcommand{\tc}{{\text{TC}}}
 \newcommand{\TS}{{\text{TS}}}
 \newcommand{\ii}[1]{\underline{#1}}
-\newcommand{\inc}{\,{\rm I}\,}
-
-
-\newcommand{\scov}{\text{SCOV}}
-\newcommand{\after}{\text{-after-}}
-\newcommand{\reduction}{\preceq}
-
-
-\newcommand{\ps}{\le_s}
-\newcommand{\pss}[1]{\stackrel{#1}{\ps}}
-
-
-\newcommand{\pe}{\sim_s}
-\newcommand{\pes}[1]{\stackrel{#1}{\pe}}
+%\newcommand{\inc}{\,{\rm I}\,}
+%
+%\newcommand{\scov}{\text{SCOV}}
+%\newcommand{\after}{\text{-after-}}
+%\newcommand{\reduction}{\preceq}
+%
+%\newcommand{\ps}{\le_s}
+%\newcommand{\pss}[1]{\stackrel{#1}{\ps}}
+%
+%\newcommand{\pe}{\sim_s}
+%\newcommand{\pes}[1]{\stackrel{#1}{\pe}}
 \newcommand{\ol}{\overline}
-\newcommand{\diag}{\mathbf{diag}}
-\newcommand{\primem}{\mathbf{prime}}
-
-
-\newcommand{\ltl}{\text{\tt LTL}}
-
-
+%\newcommand{\diag}{\mathbf{diag}}
+%\newcommand{\primem}{\mathbf{prime}}
+%
+%\newcommand{\ltl}{\text{\tt LTL}}
+%
 \newcommand{\accs}{\text{Acc}}
 \newcommand{\minaccs}{\text{minAcc}}
-
+%
 \newcommand{\refs}{\text{Ref}}
 \newcommand{\maxrefs}{\text{maxRef}}
-\newcommand{\failure}{{\text {\rm failures}}}
-
-
+%\newcommand{\failure}{{\text {\rm failures}}}
 
 % ===========================================================================
 \begin{document}
@@ -279,7 +245,6 @@ Ana Cavalcanti\inst{1} \and  Wen-ling Huang\inst{2} \and Jan Peleska\inst{2}
 %
 \authorrunning{Cavalcanti, Huang, Peleska, and Simao}
 
-
 \institute{
 University of York,
 United Kingdom\\
@@ -289,13 +254,11 @@ University of Bremen,
 Germany\\
 \mailsa
 \and
-University of S{\~a}o Paulo, 
+University of S{\~a}o Paulo,
 Brazil\\
 \mailsc}
 
- 
-\maketitle 
-
+\maketitle
 
 % =================================================================================
 \begin{abstract}
@@ -303,11 +266,9 @@ Brazil\\
 \end{abstract}
 \keywords{Model-based testing, CSP, Trace Refinement, Failures Refinement, Complete Test Suites}
 
-
 \input{introduction}
 
 \input{preliminaries}
-
 
 \input{finitecomplete-failures}
 
@@ -318,7 +279,7 @@ Brazil\\
 \input{related}
 
 \input{conclusion}
-   
+
 
 % =====================================================================================
 \bibliographystyle{splncs03}
@@ -326,5 +287,3 @@ Brazil\\
 
 % =====================================================================================
 \end{document}
-
- 

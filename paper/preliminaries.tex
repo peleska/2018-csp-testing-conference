@@ -3,26 +3,119 @@
 \label{section:preliminaries}
 % =========================================================================
 
-
+In this section we present the background material for our work.
 
 % =========================================================================
 \subsection{CSP and Refinement}
 
+First, we introduce the CSP notation and refinement notions. We then discuss
+a graph-based semantics for finite-state CSP processes.
+
 % =========================================================================
+\subsubsection*{CSP}
+\label{section:CSP}
 
-\subsubsection*{Communicating Sequential Processes} @todo
-\fxwarning{alcc: I can make this small contribution.}
+CSP is a process algebra for refinement. Using CSP, we model both systems and
+their components using processes. There are characterised by their patterns
+of interactions, modelled by synchronous, instantaneous, and atomic events.
 
-Throughout this paper, the alphabet of CSP processes $P$ is denoted by $\Sigma$.
-Since we are only considering ``classical'' CSP processes, the alphabet is always finite.
+A prefixing operator $e \then P$ defines a process that is ready to engage in
+the event $e$, pending agreement of its environment to synchronising. After
+$e$ occurs, the process behaves as defined by $P$. The environment can be
+other processes, in parallel, or the environment of a system as a whole.
 
-\begin{itemize}
-  \item traces and failures model
-  \item refinement and equivalence
-\end{itemize}
+Two forms of choice support branching behaviour. An external choice $P
+\extchoice Q$ between processes $P$ and $Q$ offers to the environment the
+initial events of $P$ and $Q$. Once synchronisation takes place, the process
+that offered this event is chosen and the other is discarded. In an internal
+choice $P \intchoice Q$, the environment does not have an opportunity to
+interfere:~the choice is made by the process itself.
 
-The FDR tool~\cite{fdr} supports model checking and semantic analyses of CSP
-processes.
+\begin{example}
+  We consider the processes $P$, $Q$, and $R$ below. $P$ is initially
+  ready to engage in the event $a$, and then makes a choice to
+  behave as $Q$ or $R$.
+  \begin{eqnarray*}
+  P & = & a \then (Q\intchoice R)
+  \\
+  Q & = & a \then P \extchoice c \then P
+  \\
+  R & = & b \then P \extchoice c \then R
+  \end{eqnarray*}
+  $Q$, for instance, offers to the environment the choice to engage in $a$
+  again or $c$. In both cases, afterwards, we have a recursion back to $P$.
+  In $R$, if $b$ is chosen, we also have a recursion back to $P$. If $c$ is
+  chosen, the recursion is to $R$.
+  \xbox
+\end{example}
+%
+Iterated forms $\Extchoice i: I @ P(i)$ and $\Intchoice i: I @ P(i)$ of the
+external and internal choice operators allow us to define a choice over a
+collection of processes $P(i)$.
+
+There are several parallelism operators. A widely used form of parallelism $P
+\parallel[cs] Q$ defines a process in which the behaviour is characterised by
+those of $P$ and $Q$ in parallel, synchronising on the events in the set
+$cs$. Other forms of parallelism can be defined using this operator.
+
+Interactions that are not supposed to be visible to the environment can be
+hidden. The operator $P \ H$ defines a process that behaves as $P$, with the
+interactions modelled by events in the set $H$ hidden. Frequently, hiding in
+used in conjunction with parallelism, so that communications in a network of
+parallel processes used just to coordinate them are affected
+by the environment.
+
+A rich collection of process operators allow us to define networks of
+parallel processes in a concise and elegant way, and reason about safety,
+liveness, and divergences.  A comprehensive account of the notation is given
+in~\cite{Roscoe2010}.
+
+A distinctive feature of CSP is its treatment of refinement~(as opposed to
+bisimulation), which is convenient for reasoning about program correctness,
+due to its treatment of nondeterminism and divergence.  A variety of semantic
+models capture different notions of refinement. The simplest model
+characterises a process by its possible traces:~sequence of events in which
+it can engage.  We say that a process $P$ is trace-refined by another process
+$Q$, written $P \lessdet_T Q$, if the set $traces(Q)$ of traces of $Q$ is
+contained in the set $traces(P)$ of traces of $P$.
+
+In fact, in every model, subset containment is used to define refinement. The
+model we focus here first is the failures model, which captures both
+sequences of interactions and deadlock behaviour. A failure of a process $P$
+is a pair $(t,X)$ containing a trace $t$ of $P$ and a refusal:~a set $X$ of
+events in which $P$ may refuse to engage, having engaged in the events of
+$t$. The failures model of a process $P$ records all its failures in a set
+$failures(P)$.
+
+Failures refinement, $\lessdet_F$, is defined by set containment, but can
+also be expressed in terms of traces refinement and another conformance
+relation called $conf$ and defined below. The set $Ref(P,t)$ used in this
+definition, and also specified below, contains the refusals of $P$ after the
+trace $t$.
+%
+\begin{displaymath}
+  Q\ conf\ P \defs \forall t: traces(P) \cap traces(Q) @ Ref(Q,t)
+  \subseteq Ref(P,t)
+  \\ %
+  \mbox{where } Ref(P,t) \defs \{~X | (t,X) \in failures(P)~\}
+\end{displaymath}
+%
+Conformance according to $conf$ requires that no new deadlocks are introduced
+in an implementation. The theorem below, proved in~\cite{CG07}, establishes
+that failures refinement amounts to traces refinement and $conf$.
+%
+\begin{theorem}
+  $(P \lessdet_F Q) \iff (P \lessdet_T Q \land Q\ conf\ P)$
+  \label{thm:fref-tref-conf}
+\end{theorem}
+%
+Process equivalence in each model is given simply by mutual refinement.
+
+Throughout this paper, the alphabet of the processes, that is the set of
+events that are in scope, is denoted by $\Sigma$. Since we are only
+considering ``classical'' CSP processes, the alphabet is always finite. The
+FDR tool~\cite{fdr} supports model checking and semantic analyses of
+finite-state CSP processes.
 
 % =========================================================================
 \subsubsection*{Normalised Transition Graphs for CSP Processes}
@@ -46,17 +139,17 @@ n_1 = t(\ii n,e_1), \quad n_i = t(n_{i-1},e_i),\ i = 2,\dots,k-1,\quad
 n= t(n_{k-1},e_k).
 \]
 %
-A finite sequence of events $s\in\Sigma^*$ is a \emph{trace} of $P$, if and only if
-there
-is a path through $G(P)$ starting  at $\ii n$ whose edge labels coincide with
-$s$. The set of traces of $P$ is denoted by $\trc(P)$. We use the analgous notation
-$\trc(G(P))$ for the set of finite, initialised paths through $G(P)$, each path represented by its finite sequence of edge labels.
-If $s\in\trc(P)$, then
-the process corresponding to $P$ after having executed $s$ is denoted by
-$P/s$. Since $G(P)$ is normalised, there is a unique node reached by applying
-the events from $s$ one by one, starting in $\ii n$. Therefore, $G(P)/s$  is
-also well defined. By $[n]^0$ we denote the \emph{initials} of $n$:~the set
-of events occurring as labels in any outgoing transitions.
+A finite sequence of events $s\in\Sigma^*$ is a \emph{trace} of $P$, if and
+only if there is a path through $G(P)$ starting  at $\ii n$ whose edge labels
+coincide with $s$. The set of traces of $P$ is denoted by $\trc(P)$. We use
+the analgous notation $\trc(G(P))$ for the set of finite, initialised paths
+through $G(P)$, each path represented by its finite sequence of edge labels.
+If $s\in\trc(P)$, then the process corresponding to $P$ after having executed
+$s$ is denoted by $P/s$. Since $G(P)$ is normalised, there is a unique node
+reached by applying the events from $s$ one by one, starting in $\ii n$.
+Therefore, $G(P)/s$  is also well defined. By $[n]^0$ we denote the
+\emph{initials} of $n$:~the set of events occurring as labels in any outgoing
+transitions.
 $$
 [n]^0 = \{ e\in\Sigma~|~(n,e)\in\dom~t \}
 $$
@@ -174,23 +267,17 @@ labelling graph state $G(P)/s$ and note that $\minaccs(G(P)/s) =
 % .......................................................................................
 
 \begin{example}\label{ex:a}
-Consider the CSP process $P$ defined below, and $\Sigma = \{a,b,c\}$.
-\begin{eqnarray*}
-P & = & a \then (Q\intchoice R)
-\\
-Q & = & a \then P \extchoice c \then P
-\\
-R & = & b \then P \extchoice c \then R
-\end{eqnarray*}
-Its transition graph $G(P)$ is shown in Fig.~\ref{fig:tga}. Process state
-$P/\langle\rangle$ is represented there as Node\_0, with $\{ a\}$ as the
-only minimal acceptance, since $a$ can never be refused, and no other events are
-accepted. Having engaged into $a$, the transition emanating from Node\_0
-leads to Node\_2 representing  the process state $P/a = Q\intchoice R$. The
-internal choice operator induces several minimal acceptances derived from $Q$ and
-$R$. Since these processes accept their initial events in external choice,
-$Q\intchoice R$ induces minimal acceptance sets $\{a,c\}$ and
-$\{b,c\}$. Note that event $c$ can never be refused, since it is contained in each minimal acceptance set.
+Consider the CSP process $P$ in Example~\ref{example:CSP}. Its transition
+graph $G(P)$ is shown in Fig.~\ref{fig:tga}. Process state $P/\langle\rangle$
+is represented there as Node\_0, with $\{ a\}$ as the only minimal
+acceptance, since $a$ can never be refused, and no other events are accepted.
+Having engaged into $a$, the transition emanating from Node\_0 leads to
+Node\_2 representing  the process state $P/a = Q\intchoice R$. The internal
+choice operator induces several minimal acceptances derived from $Q$ and $R$.
+Since these processes accept their initial events in external choice,
+$Q\intchoice R$ induces minimal acceptance sets $\{a,c\}$ and $\{b,c\}$. Note
+that event $c$ can never be refused, since it is contained in each minimal
+acceptance set.
 
 Having engaged into $c$, the next process state is represented by Node\_1.
 Due to normalisation, there is only a single transition satisfying
@@ -234,7 +321,18 @@ way. %\fixme{alcc: trc was defined for P, not G(P) and this lemma is used
   \end{eqnarray}
   \xbox
 \end{lemma}
-\fixme{alcc: I'll write an explanation of these results.}
+%
+Traces refinement is, as already explained, characterised by subset inclusion
+of sets of traces, here defined in terms of the normalised graph of a
+process. In~(\ref{eq:failrefa}), we have a result similar to
+Theorem~\ref{thm:fref-tref-conf}, but rely on the fact that refusal sets are
+subset closed. In other words, if a process may refuse to engage in all
+events in a set $X$, then it can refuse to engage in all events of subsets of
+$X$. So, in considering $conf$, it is enough to consider maximal refusals.
+Finally, (\ref{eq:failrefb}) captures the same result using acceptances,
+rather than refusals, which as already observed, can be calculated by taking
+the complement of refusals. So, acceptances of $Q$ are required to have a
+corresponding larger set of acceptances in $P$.
 
 Given a finite-state CSP process $P$ and its normalised transition graph
 \[
