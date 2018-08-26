@@ -41,7 +41,7 @@ after some $s\in\trc(P)$ with length $(p+1)$ at the latest. The test is
 every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with PASS event
 $\epass$. This can also be  expressed by means of a failures refinement.
 \[
-Q\ \pass\ U_F(p) \equiv (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma
+Q\ \pass\ U_F(p) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma
 \]
 This type of pass relation is often called \emph{must test}, because every
 test execution must end with the $\epass$
@@ -88,7 +88,23 @@ only terminates with success $\epass$, if such an event is accepted by the SUT.
 
 
 % =========================================================================
-\subsection{A Finite Complete Test Suite}
+\subsection{Fault Models and Complete Test Suites}
+
+A \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a reference process
+$P$, a conformance relation $\sqsubseteq \in \{\lessdet_T, \lessdet_F\}$, and a fault domain 
+${\cal D}$ which is a set of CSP processes over $P$'s alphabet that may or may not conform to $P$.
+
+A test suite $\TS$ is called \emph{complete} with respect to fault model ${\cal F}$,
+if and only of the following conditions are fulfilled.
+\begin{description}
+\item[1.~Soundness] If $P \sqsubseteq Q$, then $Q$ passes all tests in $\TS$.
+\item[2.~Exhaustiveness] If $P \not\sqsubseteq Q$ and $Q\in{\cal D}$, 
+then $Q$ fails at least one test in $\TS$.
+\end{description} 
+
+
+% =========================================================================
+\subsection{A Finite Complete Test Suite for Failures Refinement}
 
 After the informal explanation of tests representing adaptive test cases, we are ready to state the main theorem of this paper.
 
@@ -105,7 +121,7 @@ is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
 
 
-The proof of the theorem follows from the following lemmas. The first states that test
+The proof of the theorem follows from the two lemmas below. The first states that test
 suite $\TS_F$ is sound, the second states that the suite is also exhaustive.
 
 \begin{lemma}\label{lemma:mainfsound}
@@ -113,16 +129,19 @@ Test suite $\TS_F$ generated from CSP process $P$, as specified in Theorem~\ref{
 every CSP process $Q$ satisfying $P\lessdet_F Q$.
 \end{lemma}
 \begin{proof}
-Suppose that $P\lessdet_F Q$. In this case, in particular, $\trc(Q)\subseteq
-\trc(P)$. Therefore, when running in parallel with $Q$, any adaptive test
-$U_F(p)$ always enters the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or
+Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $P\ conf\ Q$ 
+according to (\ref{eq:failconf}). 
+Since   $\trc(Q)\subseteq
+\trc(P)$,   any adaptive test
+$U_F(p)$ running in parallel with $Q$ will always enter the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or
 (\ref{eq:ufd}) of the external choice construction for $U_F(p,s)$.
 Branch~(\ref{eq:ufa}) can never be entered in the parallel execution of $Q$
 and $U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
 
 Moreover,  Lemma~\ref{lemma:hseta}
-implies that for all traces $s\in\trc(Q)$, every $H$ in $\text{minHit}(P/s)$ is
-a hitting set for $\minaccs(Q/s)$. Branch (\ref{eq:ufb}) leads always to a PASS verdict, and branch
+implies that for all traces $s\in\trc(Q)\cap\trc(P)$, every $H$ in $\text{minHit}(P/s)$ is
+a hitting set for $\minaccs(Q/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,s)$ 
+leads always to a PASS verdict, and branch
 (\ref{eq:ufc}) to test continuation without a verdict. For the last branch,
 we note that any selected minimal hitting set $H\in\text{minHit}(P/s)$ has a
 non-empty intersection with each of the minimal acceptances of $Q/s$. As a
@@ -146,7 +165,9 @@ model specified there.
 \end{lemma}
 \begin{proof}
 Consider a process $Q\in{\cal D}$ with
-$P\not\lessdet_F Q$. This non-conformance can be caused in two possible ways.
+$P\not\lessdet_F Q$, According to (\ref{eq:failconf}),  
+this non-conformance can be caused in two possible ways corresponding to the cases $P\not\lessdet_T Q$ and 
+$\neg(P\ conf\ Q)$, respectively:
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
 \item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
