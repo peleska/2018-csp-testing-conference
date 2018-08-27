@@ -1,16 +1,7 @@
-In this paper, new contributions to testing Communicating Sequential
-Processes (CSP) are presented, with focus on the generation of complete,
-finite test suites. A test suite is complete if it can uncover every
-conformance violation of the system under test with respect to a reference
-model. Both reference models and implementation behaviours are represented as
-CSP processes. As conformance relation, we consider trace equivalence and
-refinement, as well as failures equivalence and refinement.
-Complete black-box test suites here rely on the fact that the SUT's true
-behaviour is represented by a member of a fault-domain, that is, a collection
-of CSP processes that may or may not conform to the reference model. We
-define fault domains by bounding the number of excessive states occurring in
-a fault domain member's representation as a normalised transition graph, when
-comparing it to the number of states present in the graph of the reference
-model. This notion of fault domains is quite close to the way they are
-defined for finite state machines, and these fault domains guarantee the
-existence of {\it finite} complete test suites.
+In this paper, two new contributions for model-based testing  
+with   Communicating Sequential Processes (CSP) are presented. 
+For a given CSP process representing the reference model, test suites 
+checking the conformance relations 
+trace refinement and  failures refinement are constructed, and their finiteness
+and completeness (i.e. capability to uncover conformity violations) is proven. While complete test suites for CSP processes have been previously investigated by several authors, a sufficient condition for their finiteness is presented here for the first time. Moreover, an optimal technique for
+testing the admissibility of an implementation's nondeterministic behaviour is described. 
