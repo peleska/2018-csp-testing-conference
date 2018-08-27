@@ -7,6 +7,10 @@
 % ==========================================================================
 \subsection{Test Cases for Verifying CSP Failures Refinement}
 
+In the domain of process algebras, test cases are typically represented 
+by processes interacting concurrently with the SUT 
+process~\cite{Hennessy:1988:ATP:50497}. They synchronise with the SUT over its visible events and use some additional events outside the SUT's alphabet to express whether the test execution  passed or failed. %%%, or if no verdict could be obtained.
+
 For a given reference process $P$ and for each integer $p\ge 0$, we define a
 CSP test process for failures refinement as shown below.
 %
@@ -26,8 +30,7 @@ U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop
 \label{eq:ufd}
 \end{eqnarray}
 %
-A test is performed by running $U_F(p)$ concurrently with any SUT process $Q$
-%\fixme{alcc: add an example?}\fxnote{jp: I think that the following explanations, together with examples in Section~\ref{sec:case}, suffice.} that operates on the same alphabet as $P$,
+A test is performed by running $U_F(p)$ concurrently with any SUT process $Q$,
 synchronising over alphabet $\Sigma$. Therefore, a test execution is any
 trace of the concurrent process
 \[
@@ -53,6 +56,10 @@ Process'' $(\epass\then\Stop)$. However, the former may nondeterministically
 refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(p,s)$ executing branch (\ref{eq:ufd}),
 because $\#s = p$. This is explained further in the next paragraphs.
+
+Observe that the number of possible executions of $Q\parallel[\Sigma] U_F(p)$ is finite,
+because the number of traces $s$ with maximal length $(p+1)$ is finite and the 
+sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and $\text{minHit}(P/s)$ are finite.
 
 Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
 a length $p$. If, after having already run through $s\in\trc(P)$ with $\#s <
