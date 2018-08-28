@@ -20,13 +20,13 @@ U_F(p) & = & U_F(p,\varepsilon)
 U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop \big)
 \label{eq:ufa}
 \\ & & \extchoice \nonumber
-\\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
+\\ & & (\minaccs(P/s) = \{ \varnothing \})    \&   \big( \epass \then \Stop \big)
 \label{eq:ufb}
 \\ & & \extchoice \nonumber
 \\ & & (\#s < p) \& \big( \Extchoice e:[P/s]^0 @ e \then U_F(p,s.e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (\#s = p) \& \big( \sqcap_{H\in\text{minHit}(P/s)} ( \Extchoice e:H @ e \then \epass \then\Stop   )  \big)
+\\ & & (\#s = p ) \& \big( \Intchoice_{H\in\minhits(P/s)} ( \Extchoice e:H @ e \then \epass \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 %
@@ -39,9 +39,9 @@ Q\parallel[\Sigma] U_F(p).
 It is assumed that the events $\efail$ and $\epass$, denoting FAIL and PASS
 of the test execution, are events outside $\Sigma$. Since we assume that $Q$
 is free of livelocks, it is guaranteed that each test execution terminates
-after some $s\in\trc(P)$ with length $(p+1)$ at the latest. The test is
+after some $s\in\trc(Q)$ with length $(p+1)$ and consecutive $\epass$ or $\efail$ event at the latest. The test is
 \emph{passed} by the SUT (written $Q\ \pass\ U_F(p)$) if, and only if, {\it
-every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with PASS event
+every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with   event
 $\epass$. This can also be  expressed by means of a failures refinement.
 \[
 Q\ \pass\ U_F(p) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma
@@ -59,22 +59,25 @@ because $\#s = p$. This is explained further in the next paragraphs.
 
 Observe that the number of possible executions of $Q\parallel[\Sigma] U_F(p)$ is finite,
 because the number of traces $s$ with maximal length $(p+1)$ is finite and the 
-sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and $\text{minHit}(P/s)$ are finite.
+sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and $\minhits(P/s)$ are finite. Further recall
+that $\minhits(P/s)$ may be empty, so that operand (\ref{eq:ufd})
+of the external choice construct  defaults to $\Stop$. In this case, however, 
+$\minaccs(P/s) = \{\varnothing\}$ applies, 
+so the test will execute branch (\ref{eq:ufb}) and
+terminate with $\epass$.
 
 Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
-a length $p$. If, after having already run through $s\in\trc(P)$ with $\#s <
-p$, an event is accepted by the SUT that is outside the initials of $P/s$,
+a length $p$. If, after having already run through $s\in\trc(P)$ with 
+$\#s \le p$, an event is accepted by the SUT that is outside the initials of $P/s$,
 the test immediately terminates with FAIL-event $\efail$. This is handled by
 the branch (\ref{eq:ufa}) of the external choice in the process $U_F(p,s)$
 defined above.
 
-If $P/s$ is the $STOP$ process, this is revealed by its initials being empty.
+If $P/s$ is the $\Stop$ process or has $\Stop$ as an internal choice, 
+this is revealed by $\varnothing$ being  its only minimal acceptance. 
 In this case, the test may terminate successfully (branch (\ref{eq:ufb}) of
-the external choice in $U_F(p,s)$). Note that at the same time, any (illegal)
-event of the alphabet is also accepted by the test in branch~(\ref{eq:ufa}).
-So, if the SUT accepts an event in a state where $P/s$ is supposed to have
-stopped, there exists a test execution that terminates with FAIL by choosing
-the first branch of the external choice.
+the external choice in $U_F(p,s)$). 
+
 
 If the length of $s$ is still less than $p$, the test accepts any event from
 the initials $[P/s]^0$ and continues recursively as $U_F(p,s.e)$ in
@@ -83,21 +86,24 @@ it accepts any legal behaviour of the SUT and adapts its consecutive
 behaviour to the event selected by the SUT.
 
 After having  run successfully
-through a trace of length $p$, the test changes its behaviour:
+through a trace of length $p$, and if $\minaccs(P/s)\neq\{\varnothing\}$ so that
+als $\minhits(P/s)\neq\varnothing$,
+the test changes its behaviour:
 instead of offering {\it all} legal events from $[P/s]^0$ to the SUT,
 it nondeterministically chooses
 a minimal hitting set of $\minaccs(P/s)$ and only offers the events contained in this set.
 If the SUT refuses to engage into any of these events, this reveals a violation of the
 failures refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept
-at least one event of each minimal hitting set in $\text{minHit}(P/s)$. Therefore, the test
-only terminates with success $\epass$, if such an event is accepted by the SUT.
+at least one event of each minimal hitting set in $\minhits(P/s)$. Therefore, the test
+only terminates with  $\epass$, if such an event is accepted by the SUT.
 
 
 
 % =========================================================================
 \subsection{Fault Models and Complete Test Suites}
 
-A \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a reference process
+A CSP 
+\emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a reference process
 $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T, \lessdet_F\}$, and a fault domain 
 ${\cal D}$ which is a set of CSP processes over $P$'s alphabet that may or may not conform to $P$.
 
@@ -136,6 +142,7 @@ Test suite $\TS_F$ generated from CSP process $P$, as specified in Theorem~\ref{
 every CSP process $Q$ satisfying $P\lessdet_F Q$.
 \end{lemma}
 \begin{proof}
+{\bf Step~1.}
 Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $P\ conf\ Q$ 
 according to (\ref{eq:failconf}). 
 Since   $\trc(Q)\subseteq
@@ -145,29 +152,23 @@ $U_F(p)$ running in parallel with $Q$ will always enter the branches (\ref{eq:uf
 Branch~(\ref{eq:ufa}) can never be entered in the parallel execution of $Q$
 and $U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
 
+{\bf Step~2.}
 Moreover,  Lemma~\ref{lemma:hseta}
-implies that for all traces $s\in\trc(Q)\cap\trc(P)$, every $H$ in $\text{minHit}(P/s)$ is
+implies that for all traces $s\in\trc(Q)\cap\trc(P)$, every $H$ in $\minhits(P/s)$ is
 a hitting set for $\minaccs(Q/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,s)$ 
 leads always to a PASS verdict, and branch
 (\ref{eq:ufc}) to test continuation without a verdict. For the last branch,
-we note that any selected minimal hitting set $H\in\text{minHit}(P/s)$ has a
+we note that any selected minimal hitting set $H\in\minhits(P/s)$ has a
 non-empty intersection with each of the minimal acceptances of $Q/s$. As a
 consequence, $Q/s$ never blocks when offered events from $H$, and the test
 terminates with PASS event $\epass$. Note that this argument requires that
-$Q$ is free of livelocks, because otherwise the PASS-events might not become
+$Q$ is free of livelocks, because otherwise the $\epass$-events might not become
 visible, due to unbounded sequences of hidden events performed by $Q$.
-%Note
-%further, that this proof did not refer in any way to the size of $Q$'s
-%normalised transition graph, so the test suite is sound for {\it all}
-%non-divergent CSP process refining $P$.
-%\fixme{alcc: Soundness does not
-%depend on the fault domain. I would have it as a separate theorem.}
-%\fxnote{jp: this is a good idea, I have split the proof of the main theorem in 2 lemmas.}
 \xbox
 \end{proof}
 
 \begin{lemma}\label{lemma:mainfexhaustive}
-Test suite $\TS_F$ specified im Theorem~\ref{th:failurestest} is exhaustive for the fault
+Test suite $\TS_F$ specified in Theorem~\ref{th:failurestest} is exhaustive for the fault
 model specified there.
 \end{lemma}
 \begin{proof}
@@ -187,7 +188,7 @@ of $\minaccs(Q/s)$, such that
 \end{description}
 It has to be shown for each of the two possibilities that at least one test
 execution of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the
-FAIL event $\efail$ or without giving any verdict. The latter case is also
+   $\efail$-event or without giving any verdict. The latter case is also
 interpreted  as FAIL, since then the process $\epass\then\Stop$ is no longer
 failures-refined by the test execution.
 
@@ -207,11 +208,7 @@ $s.e\not\in\trc(P)$, $e$ is an element of $\Sigma-[P/u]^0$. So, in at least
 one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa}) with
 this event $e$, so that the test fails. Again, the
 assumption of non-divergence of Q is needed for this conclusion. %\fixme{alcc:
-%I didn't see how Lemma 3 is being applied here. Also, given the definition of
-%the test as a process, I'm not sure why you need to make the argument using
-%graph product.}
-%\fxnote{jp: I do hope that this is now clearer from the new structure of the lemmas}
-
+ 
 For   Case~2, we note that trace $s$ is again a trace of the product graph
 $G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
 we know that the state   $G/s$ can   be reached by a trace
@@ -220,19 +217,20 @@ u)$, which satisfies $U_F(\# u)/u = U_F(\#u,u)$, because it always performs
 branch (\ref{eq:ufc}) until the trace $u$ has been completely processed.
 $U_F(\#u,u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
 only:~assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has
-at least one non-empty minimal acceptance, so the guard condition $([P/s]^0 =
-\varnothing)$ of branch (\ref{eq:ufb}) evaluates to $\isf$ for $U_F(\#u,u)$.
+at least one non-empty minimal acceptance, so the guard condition 
+$(\minaccs(P/s) = \{ \varnothing \})$ 
+of branch (\ref{eq:ufb}) evaluates to $\isf$ for $U_F(\#u,u)$.
 Moreover, the guard condition $(\#s < p)$ for branch (\ref{eq:ufc}) evaluates
 to $\isf$ for $U_F(\#u,u)$, too. If branch (\ref{eq:ufa}) is executed, the
 test always fails. If branch (\ref{eq:ufd}) is executed, the test fails for
-the execution where a minimal hitting set $H\in\text{minHit}(P/u)$ is chosen
+the execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen
 by $U_F(\#u,u)$ that has an empty intersection with the minimal acceptance
 $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of such an
 $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a consequence, there
 exists a test execution   where $Q/u$ selects acceptance $A_Q$ and
 $U_F(\#u,u)$ selects $H$. This execution deadlocks in process state
-$(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the pass event
-$\epass$; this  means that the test fails. This concludes the proof. \xbox
+$(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event; 
+this  means that the test fails and concludes the proof. \xbox
 \end{proof}
 
 

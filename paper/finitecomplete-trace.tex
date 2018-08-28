@@ -4,7 +4,7 @@
 % ==========================================================================
 
 For establishing trace refinement, the following class of adaptive test cases
-will be used; again, they are defined for integers $p \ge 0$.
+will be used for a given reference process $P$ and  integers $p \ge 0$.
 %
 \begin{eqnarray}
 U_T(p) & = & U_T(p,\varepsilon)
@@ -12,7 +12,7 @@ U_T(p) & = & U_T(p,\varepsilon)
 U_T(p,s) & = & \big(\Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop \big)
 \label{eq:uta}
 \\ & & \extchoice \nonumber
-\\ & & ([P/s]^0 = \varnothing)    \&   \big( \epass \then \Stop \big)
+\\ & & (\minaccs(P/s) = \{ \varnothing \})   \&   \big( \epass \then \Stop \big)
 \label{eq:utb}
 \\ & & \extchoice \nonumber
 \\ & & (\#s < p) \& \big(\Extchoice e:[P/s]^0 @ e \then U_T(p,s.e) \big)
@@ -48,6 +48,10 @@ suite
 is complete with respect to ${\cal F} = (P,\lessdet_T,{\cal D})$.
 \xbox
 \end{theorem}
-%
-We skip the proof of Theorem~\ref{th:tracetest}, since it is just a
-simplified version of the proof of Theorem~\ref{th:failurestest}.
+\begin{proof}
+The theorem follows directly  
+from Step~1 in the proof of Lemma~\ref{lemma:mainfsound} and
+Case~1 in the proof of Lemma~\ref{lemma:mainfexhaustive}.
+\xbox
+\end{proof}
+ 

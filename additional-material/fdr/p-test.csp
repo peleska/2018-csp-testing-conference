@@ -25,7 +25,9 @@ R1(rmax,k) =
          (k == rmax) & (c -> R1(rmax,rmax) |~| b -> Z)
 
 R2 = c -> R2 [] b -> Z
- 
+
+--X = STOP |~| ([] e : {a,b} @ e -> STOP ) |~| ([] e : {b,c} @ e -> STOP )
+X =   ([] e : {a,b} @ e -> STOP ) |~| ([] e : {a,b,c} @ e -> STOP )
 
 -- Initials of P as map from node numbers to sets of events
 initials(0) = {a}

@@ -10,32 +10,32 @@ Instead, we calculate the following auxiliary functions from $P$'s transition
 graph.
 %
 \begin{eqnarray*}
-\text{initials} & : & N \fun \power (\Sigma)
+\text{\it initials} & : & N \fun \power (\Sigma)
 \\
-\text{minHit} & : & N \fun \power\power(\Sigma)
+\minhits & : & N \fun \power\power(\Sigma)
 \end{eqnarray*}
 %
-In a state $n = G(P)/s$, the set $\text{initials(n)}$ equals the events
-labelling outgoing edges of $n$, so  $\text{initials(n)} = [P/s]^0$. Function
-$\text{minHit}$ maps $n$ to the set of all minimal hitting sets associated
-with the minimal acceptances of $n$, so $\text{minHit}(n) =
-\text{minHit}(P/s)$. Using the transition function $t$ and the above
+In a state $n = G(P)/s$, the set $\text{\it initials}(n)$ equals the events
+labelling outgoing edges of $n$, so  $\text{\it initials}(n) = [P/s]^0$. Function
+$\minhits$ maps $n$ to the set of all minimal hitting sets associated
+with the minimal acceptances of $n$, so $\minhits(n) =
+\minhits(P/s)$. Using the transition function $t$ and the above
 functions, $U_F(p)$ can be re-written as the failures-equivalent CSP process
 below.
 %
 \begin{eqnarray}
 U_F^1(p) & = & U_F^1(p,0,\ii n)
 \\
-U_F^1(p,k,n) & = & \big(\Extchoice e:(\Sigma - \text{initials}(n)) @ e \then \efail\then \Stop \big)
+U_F^1(p,k,n) & = & \big(\Extchoice e:(\Sigma - \text{\it initials}(n)) @ e \then \efail\then \Stop \big)
 \label{eq:xufa}
 \\ & & \extchoice \nonumber
-\\ & & (\text{initials}(n) = \varnothing)    \&   \big( \epass \then \Stop \big)
+\\ & & (\minhits(n) = \varnothing)    \&   \big( \epass \then \Stop \big)
 \label{eq:xufb}
 \\ & & \extchoice \nonumber
-\\ & & (k < p) \& \big(\Extchoice e:\text{initials}(n) @ e \then U_F^1(p,(k+1),t(n,e)) \big)
+\\ & & (k < p) \& \big(\Extchoice e:\text{\it initials}(n) @ e \then U_F^1(p,(k+1),t(n,e)) \big)
 \label{eq:xufc}
 \\ & & \extchoice \nonumber
-\\ & & (k = p) \& \big( \sqcap_{H\in\text{minHit}(n)} (\Extchoice e:H @ e \then \epass \then\Stop ) \big)
+\\ & & (k = p) \& \big( \sqcap_{H\in\minhits(n)} (\Extchoice e:H @ e \then \epass \then\Stop ) \big)
 \label{eq:xufd}
 \end{eqnarray}
 
@@ -89,7 +89,7 @@ and $U_F^1(4)$ -- also due to internal choice -- accepts only the minimal
 hitting set $\{ c \}$ and the event $a\in (\Sigma - [P/s]^0)$. So,
 $(Z\parallel[\Sigma] U_F^1(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
-$\{c \}$, while $U_F^1(4))/s$ choses to accept only $\{a,b\}$. Therefore,
+$\{c \}$, while $U_F^1(4)/s$ choses to accept only $\{a,b\}$. Therefore,
 \[
 (\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F^1(4)),
 \]
