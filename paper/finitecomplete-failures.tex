@@ -235,9 +235,39 @@ this  means that the test fails and concludes the proof. \xbox
 
 
 
+% ==========================================================================
+\subsection{Complexity Considerations}
+\label{sec:complexity}
 
+As can be seen from the specification of the test cases $U_F(k)$, the number of 
+executions ending in a $\epass$-event corresponds to the number $\ell$ of traces $s$ 
+of $P$ with length less or equal $p$, multiplied by the number $h$ of minimal hitting sets in
+$\minhits(P/s)$. The first factor 
+has worst-case upper bound $\ell\le |\Sigma|^p$.
+Given a set $\minaccs(P/s) = \{ A_1,\dots, A_a \}$ of   minimal acceptances,
+the cardinality $h$ of $\minhits(P/s)$ is maximal for the case where all $A_i$ are disjoint.
+In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^a|A_i|$. This yields a worst-case upper bound $h\le 2^{\frac{|\Sigma|}{2}}$. This is better than the upper bound $(2^{|\Sigma|}-1)$
+resulting from the tests suggested in~\cite{Hennessy:1988:ATP:50497}, where {\it every}
+non-empty 
+subset of $\Sigma$ whose events cannot be completely refused in a given process state
+has to be checked during test executions. This improvement becomes more significant for process states where the number of minimal acceptances is small. In the best case, where
+ $\minaccs(P/s) = \{ A_1  \}$, we just have $|A_1|$ minimal hitting sets (each consisting of a single element) to test, while the tests from~\cite{Hennessy:1988:ATP:50497} 
+ require $(2^{|A_1|}-1)$ sets to be checked. From Lemma~\ref{lemma:hseta} we know that 
+ the worst-case bound $h\le 2^{\frac{|\Sigma|}{2}}$ cannot be further improved, since 
+the full collection of minimal hitting sets needs to be checked in order to verify
+the $conf$ relation.
 
+Summarising, the number of executions involved in one adaptive test $U_F(k)$ is bounded
+by $|\Sigma|^k\cdot 2^{\frac{|\Sigma|}{2}}$. According to Theorem~\ref{th:failurestest},
+we need to execute these test for $k = 0,\dots,pq$; this results in a worst-case bound
+of (we use the formula for the sum of the geometric progression here)
+\[
+    2^{\frac{|\Sigma|}{2}}\cdot\big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),
+    \quad\text{or, asymptotically,}\quad O(2^{(\frac{|\Sigma|}{2} + pq)}).
+\]
 
+It is discussed in Section~\ref{sec:conc} that the term $pq$ occurring in this bound can be significantly reduced by using more complex test cases that need not execute {\it all} 
+traces of $P$ with length less or equal to $pq$.
 
 
 
