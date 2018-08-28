@@ -241,31 +241,59 @@ this  means that the test fails and concludes the proof. \xbox
 
 As can be seen from the specification of the test cases $U_F(k)$, the number of 
 executions ending in a $\epass$-event corresponds to the number $\ell$ of traces $s$ 
-of $P$ with length less or equal $p$, multiplied by the number $h$ of minimal hitting sets in
+of $P$ with length equal to\footnote{In this estimation, we disregard 
+the case where the test
+terminates earlier due to entering branch (\ref{eq:ufb}).} $k$, 
+multiplied by the number $h$ of minimal hitting sets in
 $\minhits(P/s)$. The first factor 
-has worst-case upper bound $\ell\le |\Sigma|^p$.
+has worst-case upper bound $\ell\le |\Sigma|^k$.
+
+
+
 Given a set $\minaccs(P/s) = \{ A_1,\dots, A_a \}$ of   minimal acceptances,
 the cardinality $h$ of $\minhits(P/s)$ is maximal for the case where all $A_i$ are disjoint.
-In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^a|A_i|$. This yields a worst-case upper bound $h\le 2^{\frac{|\Sigma|}{2}}$. This is better than the upper bound $(2^{|\Sigma|}-1)$
-resulting from the tests suggested in~\cite{Hennessy:1988:ATP:50497}, where {\it every}
-non-empty 
-subset of $\Sigma$ whose events cannot be completely refused in a given process state
-has to be checked during test executions. This improvement becomes more significant for process states where the number of minimal acceptances is small. In the best case, where
- $\minaccs(P/s) = \{ A_1  \}$, we just have $|A_1|$ minimal hitting sets (each consisting of a single element) to test, while the tests from~\cite{Hennessy:1988:ATP:50497} 
- require $(2^{|A_1|}-1)$ sets to be checked. From Lemma~\ref{lemma:hseta} we know that 
- the worst-case bound $h\le 2^{\frac{|\Sigma|}{2}}$ cannot be further improved, since 
+In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^a|A_i|$. To find an upper bound for $h$, 
+we need to solve the constrained optimisation problem
+\[
+\text{maximise}\ \prod_{i=1}^a|A_i| \ \text{under constraint}\ \sum_{i=1}^a|A_i| = |\Sigma|
+\wedge \bigwedge_{i=1}^a |A_i| > 0
+\]
+For fixed $a$, this can be solved using Lagrange multipliers, but there is no 
+closed expression for the maximum value to be achieved when the $|A_i|$ 
+and $a$ are considered as 
+unknown variables. Therefore, we only note that $h=|\minhits(P/s)|$ is significantly smaller
+than $2^{|\Sigma|}$, because for every $H\in  \minhits(P/s)$, all of its true subsets and true supersets are {\it not} contained in $\minhits(P/s)$. This leaves us with an estimate
+for the worst-case upper bound of $h\cdot |\Sigma|^k$ with $h\ll 2^{|\Sigma|}$.
+According to Theorem~\ref{th:failurestest},
+we need to execute these test for $k = 0,\dots,(pq-1)$; this results in a worst-case bound
+of (we use the formula for the sum of the geometric progression here)
+\[
+h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
+ \text{or, asymptotically,}\  O(h\cdot2^{(pq-1)}), 
+ \  \text{with}\ h\ll 2^{|\Sigma|}.
+\]
+
+From Lemma~\ref{lemma:hseta} we know that 
+ the worst-case bound $h\ll 2^{|\Sigma|}$ cannot be further improved, since 
 the full collection of minimal hitting sets needs to be checked in order to verify
 the $conf$ relation.
 
-Summarising, the number of executions involved in one adaptive test $U_F(k)$ is bounded
-by $|\Sigma|^k\cdot 2^{\frac{|\Sigma|}{2}}$. According to Theorem~\ref{th:failurestest},
-we need to execute these test for $k = 0,\dots,pq$; this results in a worst-case bound
-of (we use the formula for the sum of the geometric progression here)
-\[
-    2^{\frac{|\Sigma|}{2}}\cdot\big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),
-    \quad\text{or, asymptotically,}\quad O(2^{(\frac{|\Sigma|}{2} + pq)}).
-\]
 
+
+
+The authors of~\cite{Hennessy:1988:ATP:50497} and \cite{DBLP:conf/icfem/CavalcantiG07} 
+suggest to test {\it every}
+non-empty 
+subset of $\Sigma$ whose events cannot be completely refused in a given process state
+of the reference model; this leads to a worst-case estimate of $2^{|\Sigma|}$
+for the number of different sets to be offered to the SUT in the last step of 
+the test execution, so our approach reduces the number of test executions in comparison
+ to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}. 
+
+
+
+
+ 
 It is discussed in Section~\ref{sec:conc} that the term $pq$ occurring in this bound can be significantly reduced by using more complex test cases that need not execute {\it all} 
 traces of $P$ with length less or equal to $pq$.
 
