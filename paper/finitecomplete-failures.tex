@@ -43,9 +43,12 @@ after some $s\in\trc(Q)$ with length $(p+1)$ and consecutive $\epass$ or $\efail
 \emph{passed} by the SUT (written $Q\ \pass\ U_F(p)$) if, and only if, {\it
 every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with   event
 $\epass$. This can also be  expressed by means of a failures refinement.
-\[
+%
+\begin{equation}
+\label{eq:passF}
 Q\ \pass\ U_F(p) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma
-\]
+\end{equation}
+%
 This type of pass relation is often called \emph{must test}, because every
 test execution must end with the $\epass$
 event~\cite{Hennessy:1988:ATP:50497}. Note that it is necessary to use the

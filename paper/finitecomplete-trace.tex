@@ -35,6 +35,16 @@ $U_T(pq-1)$, while failures refinement required the execution of $\{
 U_F(0),\dots,U_F(pq-1)\}$. The reason for this is that $U_T(pq-1)$ identifies
 trace errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes
 for erroneous acceptances at the end of each trace of length $(pq -1)$.
+Since $U_T(pq-1)$ never blocks any $Q$-event before terminating, the pass 
+criterion can be based on trace refinement instead of failures refinement
+as required in (\ref{eq:passF}).
+%
+\begin{equation}
+\label{eq:passT}
+Q\ \pass\ U_T(p) \defs (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(p)) \hide \Sigma
+\end{equation}
+%
+
 
 \begin{theorem}\label{th:tracetest}
 Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ whose
