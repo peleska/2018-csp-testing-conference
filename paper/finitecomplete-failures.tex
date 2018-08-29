@@ -253,31 +253,86 @@ has worst-case upper bound $\ell\le |\Sigma|^k$.
 
 
 
-Given a set $\minaccs(P/s) = \{ A_1,\dots, A_a \}$ of   minimal acceptances,
-the cardinality $h$ of $\minhits(P/s)$ is maximal for the case where all $A_i$ are disjoint.
-In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^a|A_i|$. To find an upper bound for $h$, 
-we need to solve the constrained optimisation problem
-\[
-\text{maximise}\ \prod_{i=1}^a|A_i| \ \text{under constraint}\ \sum_{i=1}^a|A_i| = |\Sigma|
-\wedge \bigwedge_{i=1}^a |A_i| > 0
-\]
-For fixed $a$, this can be solved using Lagrange multipliers, but there is no 
-closed expression for the maximum value to be achieved when the $|A_i|$ 
-and $a$ are considered as 
-unknown variables. Therefore, we only note that $h=|\minhits(P/s)|$ is significantly smaller
-than $2^{|\Sigma|}$, because for every $H\in  \minhits(P/s)$, all of its true subsets and true supersets are {\it not} contained in $\minhits(P/s)$. This leaves us with an estimate
-for the worst-case upper bound of $h\cdot |\Sigma|^k$ with $h\ll 2^{|\Sigma|}$.
+Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal acceptances,
+the cardinality $h$ of $\minhits(P/s)$ is maximal for the case where all $A_i$ are disjoint. In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^\alpha|A_i|$. 
+To find an upper bound for $h$, we prove the following lemma.
+
+
+\begin{lemma}\label{lemma:minhitmax}
+Let $n\ge 2$ be any positive integer.
+We call a sequence $a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$, a partion of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$.
+Define
+$$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
+Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
+\alpha\in \mathbf{N}\big\}$$
+\end{lemma}
+\begin{proof}
+Let $n\ge 2$.
+Obviously, 
+\begin{equation}\label{eq:1} 
+   n\le p(n).
+\end{equation}
+We show that
+$p(n)$ is associated with a unique partition  $b_1\le b_2\le \ldots\le  b_{\beta}$ of $n$ with $b_i\in \{2,3\}, i=1,\dots,\beta$. We denote this partition  by $\pi(n)$. 
+To prove its existence, 
+let $a_1, \ldots , a_{\alpha}$ be an {\it arbitrary} partition of $n$. 
+Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then from~(\ref{eq:1}) we have 
+$$
+\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}$$
+Hence, if we replace $a_j$ by $p(a_j)$, the new partition has a product which is
+ not less than the original partition $a_1, \ldots , a_{\alpha}$, but the value $a_j$
+ is now represented by smaller numbers. This process is repeated until there is a partition of $n$ with maximal product such that every term is $2$ or $3$.
+Since $6=2+2+2=3\cdot 3$ and $2^3< 3^2$, the number of $2$s in such maximal partition is less than $2$. This shows that $\pi(n)$ is uniquely determined.
+
+Let $a_1\le a_2\le \ldots\le  a_{\alpha}$ with $a_i\in \{2,3\}, i=1,\dots,\alpha$, be a partition of $n$ with maximal product. Let $k_1\le 2$ be the number of terms equal $2$ and $k_2$ be the number of terms equal $3$.
+Then $n=2k_1+3k_2$ and  $n\equiv 2k_1 (\mod 3)$ with $k_1\le 2$. Then 
+
+\begin{align*}
+k_1&=
+\begin{cases} 
+0 &\text{if}\,\, \exists k: n=3k\\ 
+2 &\text{if}\,\, \exists k: n=3k+1\\
+1 &\text{if}\,\, \exists k: n=3k+2
+\end{cases}\\
+ k_2&=
+ \begin{cases} 
+ k &\text{if}\,\, n=3k\\ 
+ k-1 &\text{if}\,\, n=3k+1\\
+ k &\text{if}\,\, n=3k+2\end{cases}
+\end{align*}
+% 
+ and  
+ $$
+ \prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}=
+ \begin{cases} 
+ 3^k &\text{if}\,\,  n=3k\\ 
+ 2^2\cdot 3^{k-1} &\text{if}\,\,   n=3k+1\\
+ 2\cdot 3^{k} &\text{if}\,\,  n=3k+2\end{cases}
+ $$
+ \xbox
+ \end{proof}
+%
+From Lemma~\ref{lemma:minhitmax}, we conclude that 
+$$h=\begin{cases} 
+3^{|\frac{\Sigma}{3}|} &\text{if}\,\, \exists k: |\Sigma|=3k\\ 
+2^2\cdot 3^{\frac{|\Sigma|-4}{3}} &\text{if}\,\, \exists k : |\Sigma| =3k+1\\
+2\cdot 3^{\frac{|\Sigma| - 2}{3}} &\text{if}\,\, \exists k: |\Sigma| =3k+2
+\end{cases}
+$$
+
+We not that $h$ is significantly smaller than $2^{|\Sigma|}$ -- this can also be intuitively motivated by the fact that  for every $H\in  \minhits(P/s)$, all of its true subsets and true supersets are {\it not} contained in $\minhits(P/s)$. 
+
 According to Theorem~\ref{th:failurestest},
-we need to execute these test for $k = 0,\dots,(pq-1)$; this results in a worst-case bound
+we need to execute the tests $U_F(k)$
+for $k = 0,\dots,(pq-1)$; this results in a worst-case bound
 of (we use the formula for the sum of the geometric progression here)
 \[
 h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
- \text{or, asymptotically,}\  O(h\cdot2^{(pq-1)}), 
- \  \text{with}\ h\ll 2^{|\Sigma|}.
-\]
+ \text{or, asymptotically,}\  O(3^{|\frac{\Sigma}{3}|}\cdot|\Sigma|^{(pq-1)}).
+ \]
 
 From Lemma~\ref{lemma:hseta} we know that 
- the worst-case bound $h\ll 2^{|\Sigma|}$ cannot be further improved, since 
+ the worst-case bound for $h$   cannot be further improved, since 
 the full collection of minimal hitting sets needs to be checked in order to verify
 the $conf$ relation.
 
@@ -288,7 +343,7 @@ The authors of~\cite{Hennessy:1988:ATP:50497} and \cite{DBLP:conf/icfem/Cavalcan
 suggest to test {\it every}
 non-empty 
 subset of $\Sigma$ whose events cannot be completely refused in a given process state
-of the reference model; this leads to a worst-case estimate of $2^{|\Sigma|}$
+of the reference model; this leads to a worst-case estimate of $2^{|\Sigma|}-1$
 for the number of different sets to be offered to the SUT in the last step of 
 the test execution, so our approach reduces the number of test executions in comparison
  to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}. 
