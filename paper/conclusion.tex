@@ -5,6 +5,40 @@
 
 % ==============================================================================
 \subsubsection*{Discussion of Adaptive Test Cases}
+The tests suggested 
+in~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07} were \emph{preset} in the
+sense that the trace to be executed was pre-defined for each test. As a consequence,
+the authors of~\cite{DBLP:conf/icfem/CavalcantiG07} introduced \emph{inconclusive}
+as a third test result, applicable to the situations where the intended trace
+of the execution was blocked, due to legal, but nondeterministic behaviour of the
+SUT. In contrast to that, 
+our test cases
+specified in Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
+adaptive. This has the advantage that test executions $(Q\parallel[\Sigma] U_F(p))$
+for failures refinement
+will never block before the final step specified by branch (\ref{eq:ufd}). As
+a consequence, we do not need inconclusive test results. It should be noted, however,
+that it is necessary for our test verdicts to recognise also deadlocks in the final
+test step and interpret 
+them as FAIL, as described in Section~\ref{sec:finitecompletefails}. In practice,
+this is realised by adding a timeout event to the testing environment which indicates
+deadlock situations. For real-time systems, this is an accepted technique, because
+the SUT has to respond within a pre-defined latency interval, otherwise its behaviour 
+is considered to be blocked and regarded as a failure. Our tests executions 
+$(Q\parallel[\Sigma] U_T(p))$ for trace refinement never block at all. The adaptive       
+behaviour of our test cases, however, induce the obligation to check that {\it all}
+possible executions have been performed before the test can be considered as passed.
+Typically, it is therefore assumed that a 
+\emph{complete testing assumption}~\cite{hierons_testing_2004} holds which means that
+every possible behaviour of the SUT has been performed after a finite number of
+test executions. 
+In practice, this is realised by executing each test several times, 
+recording the traces that have been performed, and using hardware or software coverage 
+analysers to determine whether all possible test execution behaviours of the SUT
+have been observed. Therefore, the application of adaptive test cases comes at the price
+of having to apply some grey-box testing techniques enabling us to decide whether
+all SUT behaviours have been observed.
+
 
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
