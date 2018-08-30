@@ -260,57 +260,43 @@ To find an upper bound for $h$, we prove the following lemma.
 
 \begin{lemma}\label{lemma:minhitmax}
 Let $n\ge 2$ be any positive integer.
-We call a sequence $a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$, a partion of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$.
+We call a sequence $0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$, a partion of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$.
 Define
 $$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
 Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
-\alpha\in \mathbf{N}\big\}$$
+\alpha\in \mathbb{N}\big\}.$$
 \end{lemma}
 \begin{proof}
 Let $n\ge 2$.
-Obviously, 
-\begin{equation}\label{eq:1} 
-   n\le p(n).
-\end{equation}
-We show that
-$p(n)$ is associated with a unique partition  $b_1\le b_2\le \ldots\le  b_{\beta}$ of $n$ with $b_i\in \{2,3\}, i=1,\dots,\beta$. We denote this partition  by $\pi(n)$. 
-To prove its existence, 
-let $a_1, \ldots , a_{\alpha}$ be an {\it arbitrary} partition of $n$. 
+Obviously, \begin{equation}\label{eq:1} n\le p(n).\end{equation}
+Define $\pi(n)$ to be the following partition  of $n$: 
+$$\pi(n)=\begin{cases} \underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k\\ 2,2,\underbrace{3,\ldots,3}_{k-1\text{ times}}  &\text{if}\,\, n=3k+1\\2,\underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k+2\end{cases}$$
+Then the product of the numbers in 
+$\pi(n)$ equals  $p(n)$. In the remainder of the proof
+we have to show that $p(n)$ is really maximal in the sense of the lemma.
+
+  
+Since the number of partitions of a given $n$ is finite, $\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$ exists. 
+
+
+Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with maximal product. Then,
+obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
 Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then from~(\ref{eq:1}) we have 
-$$
-\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}$$
-Hence, if we replace $a_j$ by $p(a_j)$, the new partition has a product which is
- not less than the original partition $a_1, \ldots , a_{\alpha}$, but the value $a_j$
- is now represented by smaller numbers. This process is repeated until there is a partition of $n$ with maximal product such that every term is $2$ or $3$.
-Since $6=2+2+2=3\cdot 3$ and $2^3< 3^2$, the number of $2$s in such maximal partition is less than $2$. This shows that $\pi(n)$ is uniquely determined.
-
+$$\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}.$$
+Hence we can replace $a_j$ by $\pi(a_j)$, and the new partition has  a product value
+which is not less then the original partition $a_1, \ldots , a_{\alpha}$. This process
+can be repeated, until every $a_i$ in the resulting partition is either 2 or 3.
+Hence there exists a partition of $n$ with maximal product, such that every term is $2$ or $3$.
+Since $6=2+2+2=3\cdot 3$ and $2^3< 3^2$, the number of $2$'s in such a maximal partition is less than $3$. 
 Let $a_1\le a_2\le \ldots\le  a_{\alpha}$ with $a_i\in \{2,3\}, i=1,\dots,\alpha$, be a partition of $n$ with maximal product. Let $k_1\le 2$ be the number of terms equal $2$ and $k_2$ be the number of terms equal $3$.
-Then $n=2k_1+3k_2$ and  $n\equiv 2k_1 (\mod 3)$ with $k_1\le 2$. Then 
+Every $n\ge 2$ can be represented by $n=2k_1+3k_2$, $n\equiv 2k_1 (\mod 3)$ with $k_1\le 2$, and $\prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}$. We have 
 
-\begin{align*}
-k_1&=
-\begin{cases} 
-0 &\text{if}\,\, \exists k: n=3k\\ 
-2 &\text{if}\,\, \exists k: n=3k+1\\
-1 &\text{if}\,\, \exists k: n=3k+2
-\end{cases}\\
- k_2&=
- \begin{cases} 
- k &\text{if}\,\, n=3k\\ 
- k-1 &\text{if}\,\, n=3k+1\\
- k &\text{if}\,\, n=3k+2\end{cases}
-\end{align*}
-% 
- and  
- $$
- \prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}=
- \begin{cases} 
- 3^k &\text{if}\,\,  n=3k\\ 
- 2^2\cdot 3^{k-1} &\text{if}\,\,   n=3k+1\\
- 2\cdot 3^{k} &\text{if}\,\,  n=3k+2\end{cases}
- $$
- \xbox
- \end{proof}
+\begin{align*}k_1&=\begin{cases} 0 &\text{if}\,\, n=3k\\ 2 &\text{if}\,\, n=3k+1\\1 &\text{if}\,\, n=3k+2\end{cases}\\
+ k_2&=\begin{cases} k &\text{if}\,\, n=3k\\ k-1 &\text{if}\,\, n=3k+1\\k &\text{if}\,\, n=3k+2\end{cases}\\
+\prod_{i=1}^{\alpha}a_i&=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}\end{align*}
+This proves the lemma.
+\xbox
+\end{proof}
 %
 From Lemma~\ref{lemma:minhitmax}, we conclude that 
 $$h=\begin{cases} 
