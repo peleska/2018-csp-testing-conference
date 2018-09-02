@@ -36,13 +36,15 @@ the concurrent process
 \[
 Q\parallel[\Sigma] U_F(p).
 \]
-It is assumed that the events $\efail$ and $\epass$, denoting FAIL and PASS
-of the test execution, are events outside $\Sigma$. Since we assume that $Q$
-is free of livelocks, it is guaranteed that each test execution terminates
-after some $s\in\trc(Q)$ with length $(p+1)$ and consecutive $\epass$ or $\efail$ event at the latest. The test is
+It is assumed that the events $\efail$ and $\epass$, indicating a verdict
+FAIL and PASS for the test execution, are not included in $\Sigma$. Since we
+assume that $Q$ is free of livelocks, it is guaranteed that each test
+execution terminates after some $s\in\trc(Q)$ with length $(p+1)$ and
+consecutive $\epass$ or $\efail$ event at the latest. The test is
 \emph{passed} by the SUT (written $Q\ \pass\ U_F(p)$) if, and only if, {\it
 every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with   event
-$\epass$. This can also be  expressed by means of a failures refinement.
+$\epass$. This can also be  expressed by means of a failures refinement as
+defined below.
 %
 \begin{equation}
 \label{eq:passF}
@@ -60,14 +62,14 @@ refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(p,s)$ executing branch (\ref{eq:ufd}),
 because $\#s = p$. This is explained further in the next paragraphs.
 
-Observe that the number of possible executions of $Q\parallel[\Sigma] U_F(p)$ is finite,
-because the number of traces $s$ with maximal length $(p+1)$ is finite and the
-sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and $\minhits(P/s)$ are finite. Further recall
-that $\minhits(P/s)$ may be empty, so that operand (\ref{eq:ufd})
-of the external choice construct  defaults to $\Stop$. In this case, however,
-$\minaccs(P/s) = \{\varnothing\}$ applies,
-so the test will execute branch (\ref{eq:ufb}) and
-terminate with $\epass$.
+We observe that the number of possible executions of $Q\parallel[\Sigma]
+U_F(p)$ is finite, because the number of traces $s$ with maximal length
+$(p+1)$ is finite and the sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and
+$\minhits(P/s)$ are finite. We further recall that $\minhits(P/s)$ may be
+empty, so that operand (\ref{eq:ufd}) of the external choice construct
+defaults to $\Stop$. In this case, however, $\minaccs(P/s) = \{\varnothing\}$
+applies, so the test executes the branch (\ref{eq:ufb}) and terminates with
+$\epass$.
 
 Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
 a length $p$. If, after having already run through $s\in\trc(P)$ with
@@ -88,27 +90,25 @@ branch~(\ref{eq:ufc}). A test of this type is called \emph{adaptive}, because
 it accepts any legal behaviour of the SUT and adapts its consecutive
 behaviour to the event selected by the SUT.
 
-After having  run successfully
-through a trace of length $p$, and if $\minaccs(P/s)\neq\{\varnothing\}$ so that
-als $\minhits(P/s)\neq\varnothing$,
-the test changes its behaviour:
-instead of offering {\it all} legal events from $[P/s]^0$ to the SUT,
-it nondeterministically chooses
-a minimal hitting set of $\minaccs(P/s)$ and only offers the events contained in this set.
-If the SUT refuses to engage into any of these events, this reveals a violation of the
-failures refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept
-at least one event of each minimal hitting set in $\minhits(P/s)$. Therefore, the test
-only terminates with  $\epass$, if such an event is accepted by the SUT.
-
-
+After having run through a trace of length $p$, and if
+$\minaccs(P/s)\neq\{\varnothing\}$ so that also
+$\minhits(P/s)\neq\varnothing$, the test changes its behaviour: instead of
+offering {\it all} legal events from $[P/s]^0$ to the SUT, it
+nondeterministically chooses a minimal hitting set of $\minaccs(P/s)$ and
+only offers the events contained in this set. If the SUT refuses to engage
+into any of these events, this reveals a violation of the failures
+refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT should
+accept at least one event of each minimal hitting set in $\minhits(P/s)$.
+Therefore, the test only terminates with  $\epass$, if such an event is
+accepted by the SUT.
 
 % =========================================================================
 \subsection{Fault Models and Complete Test Suites}
 
-A CSP
-\emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a reference process
-$P$, a conformance relation $\sqsubseteq \in \{\lessdet_T, \lessdet_F\}$, and a fault domain
-${\cal D}$ which is a set of CSP processes over $P$'s alphabet that may or may not conform to $P$.
+A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a
+reference process $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T,
+\lessdet_F\}$, and a fault domain ${\cal D}$ which is a set of CSP processes
+over $P$'s alphabet that may or may not conform to $P$.
 
 A test suite $\TS$ is called \emph{complete} with respect to fault model ${\cal F}$,
 if and only of the following conditions are fulfilled.
@@ -117,7 +117,8 @@ if and only of the following conditions are fulfilled.
 \item[2.~Exhaustiveness] If $P \not\sqsubseteq Q$ and $Q\in{\cal D}$,
 then $Q$ fails at least one test in $\TS$.
 \end{description}
-
+%
+In the next section, we establish the completeness of our test suite.
 
 % =========================================================================
 \subsection{A Finite Complete Test Suite for Failures Refinement}
@@ -125,60 +126,57 @@ then $Q$ fails at least one test in $\TS$.
 After the informal explanation of tests representing adaptive test cases, we are ready to state the main theorem of this paper.
 
 \begin{theorem}\label{th:failurestest}
-Let $P$ be a divergence-free CSP process over alphabet $\Sigma$
-whose normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal D}$ as
-the set of all divergence-free CSP processes over alphabet $\Sigma$, whose transition graph
-has at most $q$ states with $q \ge p$.
-Then the test suite
+Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ whose
+normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
+D}$ as the set of all divergence-free CSP processes over alphabet $\Sigma$,
+whose transition graph has at most $q$ states with $q \ge p$. Then the test
+suite
 \[
 \TS_F = \{ U_F(k)~|~0 \le k < pq  \}
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
-
-
-The proof of the theorem follows from the two lemmas below. The first states that test
-suite $\TS_F$ is sound, the second states that the suite is also exhaustive.
-
+%
+The proof of the theorem follows from the two lemmas below. The first states
+that test suite $\TS_F$ is sound, the second states that the suite is also
+exhaustive.
+%
 \begin{lemma}\label{lemma:mainfsound}
-Test suite $\TS_F$ generated from CSP process $P$, as specified in Theorem~\ref{th:failurestest}, is passed by
-every CSP process $Q$ satisfying $P\lessdet_F Q$.
+Test suite $\TS_F$ generated from CSP process $P$, as specified in
+Theorem~\ref{th:failurestest}, is passed by every CSP process $Q$ satisfying
+$P\lessdet_F Q$.
 \end{lemma}
 \begin{proof}
-{\bf Step~1.}
-Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $P\ conf\ Q$
-according to (\ref{eq:failconf}).
-Since   $\trc(Q)\subseteq
-\trc(P)$,   any adaptive test
-$U_F(p)$ running in parallel with $Q$ will always enter the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or
-(\ref{eq:ufd}) of the external choice construction for $U_F(p,s)$.
-Branch~(\ref{eq:ufa}) can never be entered in the parallel execution of $Q$
-and $U_F(p)$, because $[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
+{\bf Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $P\ conf\
+Q$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq \trc(P)$,
+any adaptive test $U_F(p)$ running in parallel with $Q$ will always enter the
+branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the external
+choice construction for $U_F(p,s)$. Branch~(\ref{eq:ufa}) can never be
+entered in the parallel execution of $Q$ and $U_F(p)$, because
+$[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
 
-{\bf Step~2.}
-Moreover,  Lemma~\ref{lemma:hseta}
-implies that for all traces $s\in\trc(Q)\cap\trc(P)$, every $H$ in $\minhits(P/s)$ is
-a hitting set for $\minaccs(Q/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,s)$
-leads always to a PASS verdict, and branch
-(\ref{eq:ufc}) to test continuation without a verdict. For the last branch,
-we note that any selected minimal hitting set $H\in\minhits(P/s)$ has a
-non-empty intersection with each of the minimal acceptances of $Q/s$. As a
-consequence, $Q/s$ never blocks when offered events from $H$, and the test
-terminates with PASS event $\epass$. Note that this argument requires that
-$Q$ is free of livelocks, because otherwise the $\epass$-events might not become
-visible, due to unbounded sequences of hidden events performed by $Q$.
-\xbox
+{\bf Step~2.} Also,  Lemma~\ref{lemma:hseta} implies that for all traces
+$s\in\trc(Q)\cap\trc(P)$, every $H$ in $\minhits(P/s)$ is a hitting set for
+$\minaccs(Q/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,s)$ leads always to a
+PASS verdict, and branch (\ref{eq:ufc}) to test continuation without a
+verdict. For the last branch, we note that any selected minimal hitting set
+$H\in\minhits(P/s)$ has a non-empty intersection with each of the minimal
+acceptances of $Q/s$. As a consequence, $Q/s$ never blocks when offered
+events from $H$, and the test terminates with PASS event $\epass$. Note that
+this argument requires that $Q$ is free of livelocks, because otherwise the
+$\epass$-events might not become visible, due to unbounded sequences of
+hidden events performed by $Q$. \xbox
 \end{proof}
-
+%
 \begin{lemma}\label{lemma:mainfexhaustive}
-Test suite $\TS_F$ specified in Theorem~\ref{th:failurestest} is exhaustive for the fault
-model specified there.
+Test suite $\TS_F$ specified in Theorem~\ref{th:failurestest} is exhaustive
+for the fault model specified there.
 \end{lemma}
 \begin{proof}
-Consider a process $Q\in{\cal D}$ with
-$P\not\lessdet_F Q$, According to (\ref{eq:failconf}),
-this non-conformance can be caused in two possible ways corresponding to the cases $P\not\lessdet_T Q$ and
-$\neg(P\ conf\ Q)$, respectively:
+Consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$, According to
+(\ref{eq:failconf}), this non-conformance can be caused in two possible ways
+corresponding to the cases $P\not\lessdet_T Q$ and $\neg(P\ conf\ Q)$,
+respectively:
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
 \item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
@@ -251,37 +249,42 @@ multiplied by the number $h$ of minimal hitting sets in
 $\minhits(P/s)$. The first factor
 has worst-case upper bound $\ell\le |\Sigma|^k$.
 
-
-
-Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal acceptances,
-the cardinality $h$ of $\minhits(P/s)$ is maximal for the case where all $A_i$ are disjoint. In this case,  $h=|\minhits(P/s)| = \prod_{i=1}^\alpha|A_i|$.
-To find an upper bound for $h$, we prove the following lemma.
-
-
+Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
+acceptances, the cardinality $h$ of $\minhits(P/s)$ is maximal for the case
+where all $A_i$ are disjoint. In this case,  $h=|\minhits(P/s)| =
+\prod_{i=1}^\alpha|A_i|$. To find an upper bound for $h$, we use the result
+that we prove in the following lemma.
+%
 \begin{lemma}\label{lemma:minhitmax}
-Let $n\ge 2$ be any positive integer.
-We call a sequence $0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$, a partion of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$.
-Define
+Let $n\ge 2$ be any positive integer. We call a sequence
+%
+$$0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$$,
+%
+a partition of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$. Define
+%
 $$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
 Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
 \alpha\in \mathbb{N}\big\}.$$
+%
 \end{lemma}
 \begin{proof}
-Let $n\ge 2$.
-Obviously, \begin{equation}\label{eq:1} n\le p(n).\end{equation}
-Define $\pi(n)$ to be the following partition  of $n$:
+Let $n\ge 2$. Obviously, \begin{equation}\label{eq:1} n\le
+p(n).\end{equation} Define $\pi(n)$ to be the following partition  of $n$:
+%
 $$\pi(n)=\begin{cases} \underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k\\ 2,2,\underbrace{3,\ldots,3}_{k-1\text{ times}}  &\text{if}\,\, n=3k+1\\2,\underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k+2\end{cases}$$
-Then the product of the numbers in
-$\pi(n)$ equals  $p(n)$. In the remainder of the proof
-we have to show that $p(n)$ is really maximal in the sense of the lemma.
+%
+Then the product of the numbers in $\pi(n)$ equals  $p(n)$. In the remainder
+of the proof we have to show that $p(n)$ is really maximal in the sense of
+the lemma.
 
-
-Since the number of partitions of a given $n$ is finite, $\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$ exists.
-
-
-Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with maximal product. Then,
-obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
-Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then from~(\ref{eq:1}) we have
+Since the number of partitions of a given $n$ is finite,
+%
+$$\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$$
+%
+exists. Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with
+maximal product. Then, obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
+Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then
+from~(\ref{eq:1}) we have
 $$\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}.$$
 Hence we can replace $a_j$ by $\pi(a_j)$, and the new partition has  a product value
 which is not less then the original partition $a_1, \ldots , a_{\alpha}$. This process
@@ -305,51 +308,35 @@ $$h=\begin{cases}
 2\cdot 3^{\frac{|\Sigma| - 2}{3}} &\text{if}\,\, \exists k: |\Sigma| =3k+2
 \end{cases}
 $$
+%
+We note that $h$ is significantly smaller than $2^{|\Sigma|}$ -- this can
+also be intuitively motivated by the fact that  for every $H\in
+\minhits(P/s)$, all of its true subsets and true supersets are {\it not}
+contained in $\minhits(P/s)$.
 
-We not that $h$ is significantly smaller than $2^{|\Sigma|}$ -- this can also be intuitively motivated by the fact that  for every $H\in  \minhits(P/s)$, all of its true subsets and true supersets are {\it not} contained in $\minhits(P/s)$.
-
-According to Theorem~\ref{th:failurestest},
-we need to execute the tests $U_F(k)$
-for $k = 0,\dots,(pq-1)$; this results in a worst-case bound
-of (we use the formula for the sum of the geometric progression here)
+From Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(k)$ for
+$k = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
+we use the formula for the sum of the geometric progression.
+%
 \[
 h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
  \text{or, asymptotically,}\  O(3^{|\frac{\Sigma}{3}|}\cdot|\Sigma|^{(pq-1)}).
  \]
+%
+From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$ 
+above cannot be further improved, since the full collection of minimal
+hitting sets needs to be checked to verify $conf$. The
+authors of~\cite{Hennessy:1988:ATP:50497} and
+\cite{DBLP:conf/icfem/CavalcantiG07} suggest to test {\it every} non-empty
+subset of $\Sigma$ whose events cannot be completely refused in a given
+process state of the reference model; this leads to a worst-case estimate of
+$2^{|\Sigma|}-1$ for the number of different sets to be offered to the SUT in
+the last step of the test execution, so our approach reduces the number of
+test executions in comparison
+to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
 
-From Lemma~\ref{lemma:hseta} we know that
- the worst-case bound for $h$   cannot be further improved, since
-the full collection of minimal hitting sets needs to be checked in order to verify
-the $conf$ relation.
-
-
-
-
-The authors of~\cite{Hennessy:1988:ATP:50497} and \cite{DBLP:conf/icfem/CavalcantiG07}
-suggest to test {\it every}
-non-empty
-subset of $\Sigma$ whose events cannot be completely refused in a given process state
-of the reference model; this leads to a worst-case estimate of $2^{|\Sigma|}-1$
-for the number of different sets to be offered to the SUT in the last step of
-the test execution, so our approach reduces the number of test executions in comparison
- to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
-
-
-
-
-
-It is discussed in Section~\ref{sec:conc} that the term $pq$ occurring in this bound can be significantly reduced by using more complex test cases that need not execute {\it all}
-traces of $P$ with length less or equal to $pq$.
-
-
-
-
-
-
-
-
-
-
-
+It is discussed in Section~\ref{sec:conc} that the term $pq$ occurring in
+this bound can be significantly reduced by using more complex test cases that
+need not execute {\it all} traces of $P$ with length less or equal to $pq$.
 
 % ==========================================================================

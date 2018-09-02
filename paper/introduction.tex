@@ -22,14 +22,14 @@ every  system under test (SUT) conforming to the reference model, and uncover
 every conformance violation, provided that the SUT behaviour is captured by a
 member of the fault domain.
 
-Generation methods for complete test suites have been developed for various
-formalisms. In this paper, we use \emph{Communicating Sequential Processes
-(CSP)}~\cite{Hoare:1985:CSP:3921,Roscoe2010}. This is a mature process
-algebra that has been shown to be well-suited for the description of reactive
-control systems in many publications over almost five decades. Many of these
-applications are described in~\cite{Roscoe2010} and in the references there.
-Industrial success has also been reported, see, for example,
-\cite{976937,DBLP:conf/prdc/ShiPK99,DBLP:conf/amast/ButhKPS97}.
+Generation techniques for complete test suites have been developed for
+various formalisms. Here, we tackle \emph{Communicating Sequential
+Processes~(CSP)}~\cite{Hoare:1985:CSP:3921,Roscoe2010}. This is a mature
+process algebra that has been shown to be well-suited for the description of
+reactive control systems in many publications over almost five decades. Many
+of these applications are described in~\cite{Roscoe2010} and in the
+references there. Industrial success has also been reported; see, for
+example, \cite{976937,DBLP:conf/prdc/ShiPK99,DBLP:conf/amast/ButhKPS97}.
 
 % ==================================================================================
 
@@ -52,20 +52,19 @@ restrict fault domains using a graph representation of processes (originally
 elaborated for model checking) to obtain finite test suites. \fixme{alcc: I
 think termination is not handled either?}
 
-Our complementary approach to the definition of CSP fault domains is
-presented in this paper. We observe that the failures semantics of
-every finite-state CSP process can
-be represented as a finite normalised transition graph, whose edges are
-labelled by the events the process engages in, and whose nodes are labelled
-by minimal acceptances or, alternatively, maximal
+Our approach to the definition of CSP fault domains is presented in this
+paper. We take advantage of results on model checking of CSP
+processes, where the failures semantics of a finite-state CSP process is
+represented as a finite normalised transition graph, whose edges are labelled
+by the events the process engages in, and whose nodes are labelled by minimal
+acceptances or, alternatively, maximal
 refusals~\cite{Roscoe:1994:CME:197600}. The maximal refusals express the
-degree of nondeterminism present in a given process state that is in
+degree of nondeterminism present in a process state that is in
 one-one-correspondence to a node of the normalised transition graph. Inspired
-by the way that fault-domains are specified for finite state machines (FSMs),
-we define them here as the set of CSP processes whose normalised transition graphs
-do not exceed the order (i.e.~the number of nodes)
-of the reference model's graph by more than a given
-constant.
+by the way fault-domains are specified for finite state machines (FSMs),
+we define them here as the set of CSP processes whose normalised transition
+graphs do not exceed the order (that is, the number of nodes) of the
+reference model's graph by more than a given constant.
 
 The main contribution of this paper is the construction of two test suites to
 verify the conformance relations \emph{trace refinement} and \emph{failures
@@ -85,8 +84,10 @@ capabilities of CSP to express nondeterminism in a more fine-grained way than
 it is possible for FSMs requires a more complex approach to testing systems
 for conformity in the failures-model than it is required for model-based
 testing against nondeterministic FSMs, as published, for example,
-in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}. We show that the approach to testing the admissibility of an SUT's nondeterministic behaviour is optimal in the
-sense that it cannot be established with fewer test cases.
+in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}. We show that the
+approach to testing the admissibility of an SUT's nondeterministic behaviour
+is optimal in the sense that it cannot be established with fewer test cases.
+\fixme{alcc: I did not understand this?}
 
 %It should be noted that the presented results are of a theoretical
 %nature:~despite being finite, the resulting test suite size will still be too
@@ -97,9 +98,13 @@ sense that it cannot be established with fewer test cases.
 % ==================================================================================
 
 \subsubsection*{Overview}
-In Section~\ref{section:preliminaries},
-we present the background material relevant to our work. In Section~\ref{sec:finitecompletefails}, finite complete test suites for verifying failures refinement are presented. Test suites checking trace refinement may be regarded as a simplified version of the former class, they are presented in Section~\ref{sec:finitecomplete}. A sample test suite is presented in Section~\ref{sec:case}. The results obtained are discussed in Section~\ref{sec:conc}.
-
-References to related work are given throughout the paper where appropriate.
+In Section~\ref{section:preliminaries}, we present the background material
+relevant to our work. In Section~\ref{sec:finitecompletefails}, finite
+complete test suites for verifying failures refinement are presented. Test
+suites checking trace refinement are a simplified version of the former
+class; they are presented in Section~\ref{sec:finitecomplete}. A sample test
+suite is presented in Section~\ref{sec:case}. Our results are discussed in
+Section~\ref{sec:conc}, where we also conclude. References to related work
+are given throughout the paper where appropriate.
 
 % ==================================================================================
