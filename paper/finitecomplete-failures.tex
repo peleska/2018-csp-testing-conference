@@ -3,6 +3,9 @@
 \label{sec:finitecompletefails}
 % ==========================================================================
 
+Here, we define our notion of tests for failures refinement, and then prove
+completeness of our suite. Finally, we study to complexity of our approach by
+identifying a bound on the number of tests we need in a complete suite.
 
 % ==========================================================================
 \subsection{Test Cases for Verifying CSP Failures Refinement}
@@ -96,11 +99,10 @@ $\minhits(P/s)\neq\varnothing$, the test changes its behaviour: instead of
 offering {\it all} legal events from $[P/s]^0$ to the SUT, it
 nondeterministically chooses a minimal hitting set of $\minaccs(P/s)$ and
 only offers the events contained in this set. If the SUT refuses to engage
-into any of these events, this reveals a violation of the failures
-refinement: according to Lemma~\ref{lemma:hseta}, a conforming SUT should
-accept at least one event of each minimal hitting set in $\minhits(P/s)$.
-Therefore, the test only terminates with  $\epass$, if such an event is
-accepted by the SUT.
+into any of these events, this reveals a violation of failures refinement:
+according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept at least
+one event of each minimal hitting set in $\minhits(P/s)$. Therefore, the test
+only terminates with  $\epass$, if such an event is accepted by the SUT.
 
 % =========================================================================
 \subsection{Fault Models and Complete Test Suites}
@@ -119,6 +121,7 @@ then $Q$ fails at least one test in $\TS$.
 \end{description}
 %
 In the next section, we establish the completeness of our test suite.
+\fixme{alcc: I don't think we need a section just for this material.}
 
 % =========================================================================
 \subsection{A Finite Complete Test Suite for Failures Refinement}
@@ -142,7 +145,7 @@ that test suite $\TS_F$ is sound, the second states that the suite is also
 exhaustive.
 %
 \begin{lemma}\label{lemma:mainfsound}
-Test suite $\TS_F$ generated from CSP process $P$, as specified in
+Test suite $\TS_F$ generated from a CSP process $P$, as specified in
 Theorem~\ref{th:failurestest}, is passed by every CSP process $Q$ satisfying
 $P\lessdet_F Q$.
 \end{lemma}

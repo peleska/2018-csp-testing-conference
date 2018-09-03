@@ -15,13 +15,13 @@ graph.
 \minhits & : & N \fun \power\power(\Sigma)
 \end{eqnarray*}
 %
-In a state $n = G(P)/s$, the set $\text{\it initials}(n)$ equals the events
-labelling outgoing edges of $n$, so  $\text{\it initials}(n) = [P/s]^0$. Function
-$\minhits$ maps $n$ to the set of all minimal hitting sets associated
-with the minimal acceptances of $n$, so $\minhits(n) =
-\minhits(P/s)$. Using the transition function $t$ and the above
-functions, $U_F(p)$ can be re-written as the failures-equivalent CSP process
-below.
+As mentioned, in a state $n = G(P)/s$, the set $\text{\it initials}(n)$
+equals the events labelling outgoing edges of $n$, so  $\text{\it
+initials}(n) = [P/s]^0$. The function $\minhits$ maps $n$ to the set of all
+minimal hitting sets associated with the minimal acceptances of $n$, so
+$\minhits(n) = \minhits(P/s)$. Using the transition function $t$ and the
+above functions, $U_F(p)$ can be re-written as the failures-equivalent CSP
+process below.
 %
 \begin{eqnarray}
 U_F^1(p) & = & U_F^1(p,0,\ii n)
@@ -29,7 +29,7 @@ U_F^1(p) & = & U_F^1(p,0,\ii n)
 U_F^1(p,k,n) & = & \big(\Extchoice e:(\Sigma - \text{\it initials}(n)) @ e \then \efail\then \Stop \big)
 \label{eq:xufa}
 \\ & & \extchoice \nonumber
-\\ & & (\minhits(n) = \varnothing)    \&   \big( \epass \then \Stop \big)
+\\ & & (\minhits(n) = \varnothing) \& \big( \epass \then \Stop \big)
 \label{eq:xufb}
 \\ & & \extchoice \nonumber
 \\ & & (k < p) \& \big(\Extchoice e:\text{\it initials}(n) @ e \then U_F^1(p,(k+1),t(n,e)) \big)
@@ -38,6 +38,8 @@ U_F^1(p,k,n) & = & \big(\Extchoice e:(\Sigma - \text{\it initials}(n)) @ e \then
 \\ & & (k = p) \& \big( \sqcap_{H\in\minhits(n)} (\Extchoice e:H @ e \then \epass \then\Stop ) \big)
 \label{eq:xufd}
 \end{eqnarray}
+\fixme{alcc: I think the example should be for the theory presented before,
+not with a different notion of test. In particular, 33 is very different.}
 
 % .....................................................................................
  \begin{figure}
@@ -52,17 +54,17 @@ U_F^1(p,k,n) & = & \big(\Extchoice e:(\Sigma - \text{\it initials}(n)) @ e \then
 % .......................................................................................
 
 \begin{example}
-\label{ex:uf1tests} Consider the following erroneous implementation $Z$ of
-process $P$ from Example~\ref{ex:a} from the point of view of failures
-refinement.
+\label{ex:uf1tests} Consider the following implementation $Z$ of process $P$
+from Example~\ref{example:CSP} that is erroneous from the point of view of
+failures refinement.
 \begin{eqnarray*}
 Z & = & a \then (Q_1 \intchoice R_1(r_{max},0))
 \\
 Q_1 & = & a\then Z \extchoice c\then Z
 \\
-R_1(r_{max},k) & = & (k < r_{max}) \& \big( c\then R_1(r_{max},k+1)\extchoice b\then Z  \big)
+R_1(r_{max},k) & = & (k < r_{max}) \& \big(b\then Z \extchoice  c\then R_1(r_{max},k+1)\big)
 \\ & & \extchoice
-\\ & & (k = r_{max}) \& \big( c\then R_1(r_{max},r_{max})\intchoice b\then Z  \big)
+\\ & & (k = r_{max}) \& \big(b\then Z \intchoice c\then R_1(r_{max},r_{max})\big)
 \end{eqnarray*}
 It is easy to see (and can be checked with FDR) that $Z$ is trace-equivalent
 to $P$. While $k < r_{max}$, $Z$ also accepts the same sets of events as $P$.
@@ -96,8 +98,6 @@ $\{c \}$, while $U_F^1(4)/s$ choses to accept only $\{a,b\}$. Therefore,
 and the test fails.
 \xbox
 \end{example}
-
-
-
+\fixme{alcc: I would write down the actual test generated.}
 
 % ======================================================================

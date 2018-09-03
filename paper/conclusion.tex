@@ -1,27 +1,27 @@
+% ==============================================================================
 \section{Discussion and Conclusions}
 \label{sec:conc}
 % ==============================================================================
-\subsubsection*{Discussion of Fault Domains}
-
-@todo
-
 
 % ==============================================================================
 \subsubsection*{Discussion of Further Reductions of the Test Effort}
 It is known from complete testing strategies for finite state machines that
-the upper bound $pq$ for the lengths of the
-traces used in our tests to investigate the SUT behaviour can be reduced. It is also
-known from FSM testing that it is not necessary to test {\it all} traces up to this maximal length. Notable complete
-strategies supporting this fact have been presented, for example,
- in~\cite{hierons_testing_2004,DBLP:conf/forte/DorofeevaEY05,petrenko_testing_2011,simao_reducing_2012}. From~\cite{Huang2017} it
- is known that complete
- FSM testing theories can be translated to other formalisms, such as
-Extended Finite State Machines, Kripke Structures, or CSP, resulting in likewise complete
-test strategies for the latter. We intend to study translations of several promising FSM
-strategies to CSP in the future. These will effectively reduce the upper bound
-$\ell\le |\Sigma|^k$ introduced in Section~\ref{sec:complexity}. The bound $h$ for
-the number of sets to be used in probing the SUT for illegal deadlocks, however, cannot be further reduced, as has been established in Lemma~\ref{lemma:hseta}.
-
+the upper bound $pq$ for the lengths of the traces used in our tests to
+investigate the SUT behaviour can be reduced. It is also known from FSM
+testing that it is not necessary to test {\it all} traces up to this maximal
+length. Notable complete strategies supporting this fact have been presented,
+for example,
+in~\cite{hierons_testing_2004,DBLP:conf/forte/DorofeevaEY05,petrenko_testing_2011,simao_reducing_2012}.
+From~\cite{Huang2017} it is known that complete FSM testing theories can be
+translated to other formalisms, such as Extended Finite State Machines,
+Kripke Structures, or CSP, resulting in likewise complete test strategies for
+the latter. We intend to study translations of several promising FSM
+strategies to CSP in the future. These will effectively reduce the upper
+bound $\ell\le |\Sigma|^k$ introduced in Section~\ref{sec:complexity}. The
+bound $h$ for the number of sets to be used in probing the SUT for illegal
+deadlocks, however, cannot be further reduced, as has been established in
+Lemma~\ref{lemma:hseta}. \fixme{alcc: my guess is that these complete tests
+are not for refinement. I think we can perhaps say something about this?}
 
 % ==============================================================================
 \subsubsection*{Discussion of Adaptive Test Cases}
@@ -31,82 +31,105 @@ sense that the trace to be executed was pre-defined for each test. As a conseque
 the authors of~\cite{DBLP:conf/icfem/CavalcantiG07} introduced \emph{inconclusive}
 as a third test result, applicable to the situations where the intended trace
 of the execution was blocked, due to legal, but nondeterministic behaviour of the
-SUT. In contrast to that,
-our test cases
-specified in Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
-adaptive. This has the advantage that test executions $(Q\parallel[\Sigma] U_F(p))$
-for failures refinement
-will never block before the final step specified by branch (\ref{eq:ufd}). As
-a consequence, we do not need inconclusive test results. It should be noted, however,
-that it is necessary for our test verdicts to recognise also deadlocks in the final
-test step and interpret
-them as FAIL, as described in Section~\ref{sec:finitecompletefails}. In practice,
-this is realised by adding a timeout event to the testing environment which indicates
-deadlock situations. For real-time systems, this is an accepted technique, because
-the SUT has to respond within a pre-defined latency interval, otherwise its behaviour
-is considered to be blocked and regarded as a failure. Our tests executions
-$(Q\parallel[\Sigma] U_T(p))$ for trace refinement never block at all. The adaptive
-behaviour of our test cases, however, induce the obligation to check that {\it all}
-possible executions have been performed before the test can be considered as passed.
-Typically, it is therefore assumed that a
-\emph{complete testing assumption}~\cite{hierons_testing_2004} holds which means that
-every possible behaviour of the SUT has been performed after a finite number of
-test executions.
-In practice, this is realised by executing each test several times,
-recording the traces that have been performed, and using hardware or software coverage
-analysers to determine whether all possible test execution behaviours of the SUT
-have been observed. Therefore, the application of adaptive test cases comes at the price
-of having to apply some grey-box testing techniques enabling us to decide whether
-all SUT behaviours have been observed.
+SUT.
 
+In contrast to that, our test cases specified in
+Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
+adaptive. This has the advantage that test executions $(Q\parallel[\Sigma]
+U_F(p))$ for failures refinement never blocks before the final step specified
+by branch (\ref{eq:ufd}), and so we do not need inconclusive test results. It
+should be noted, however, that it is necessary for our test verdicts to
+recognise also deadlocks in the final test step and interpret them as FAIL,
+as described in Section~\ref{sec:finitecompletefails}. In practice, this is
+realised by adding a timeout event to the testing environment which indicates
+deadlock situations. For real-time systems, this is an accepted technique,
+because the SUT has to respond within a pre-defined latency interval,
+otherwise its behaviour is considered to be blocked and regarded as a
+failure. \fixme{alcc: if deadlock is not acceptable?}
+
+Our tests executions $(Q\parallel[\Sigma] U_T(p))$ for trace refinement never
+block at all. The adaptive behaviour of our test cases, however, induce the
+obligation to check that {\it all} possible executions have been performed
+before the test can be considered as passed. Typically, it is therefore
+assumed that a \emph{complete testing assumption}~\cite{hierons_testing_2004}
+holds, which means that every possible behaviour of the SUT is performed
+after a finite number of test executions. In practice, this is realised by
+executing each test several times, recording the traces that have been
+performed, and using hardware or software coverage analysers to determine
+whether all possible test execution behaviours of the SUT have been observed.
+Therefore, adaptive test cases come at the price of having to apply some
+grey-box testing techniques enabling us to decide whether all SUT behaviours
+have been observed.
+
+% ==============================================================================
+\subsubsection*{Discussion of Fault Domains}
+As already mentioned, the work in~\cite{DBLP:conf/pts/CavalcantiS17} defines
+a fault domain as the set of processes that refine a given CSP process.  In
+that context, only testing for traces refinement is considered, and the
+complete test suites may not be finite. So, the work presented here go well
+beyond what is achieved there. On the other hand,
+\cite{DBLP:conf/pts/CavalcantiS17} presents an algorithm for test generation
+that can be easily adapted to consider additional selection and termination
+criteria, like, for example, the length of the traces used to construct
+tests. It would be possible, for instance, to use the bound indicated here.
+Morevoer, specifying a fault domain as a CSP process allows us to model
+domain-specific knowledge using CSP. For example, if an initialisation
+component defined by a process $I$ can be regarded as correct without further
+testing, we can use $I; RUN$ as a fault domain, to indicate that any SUT of
+interest implements $I$ correctly, but afterwards has a potentially arbitrary
+behaviour specified by $RUN$. 
 
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
 As explained in the previous sections, passing a test is specified by
-$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k)) \hide \Sigma$
-for failures testing. If the SUT $Q$ is not a programmed piece of software or
-an integrated HW/SW system, but just another CSP process specification,
-it is of course possible to verify these pass criteria using the FDR4 model checker.
-For checking the refinement relation $P\lessdet_F Q$, the pass criteria have to be verified
-for $k=0,\dots,pq-1$, where $p$ and $q$ indicate the number of nodes in $P$'s transition
-graph and the maximal number of nodes in $Q$'s graph, respectively (Theorem~\ref{th:failurestest}). Since the test cases
-$U_F(k)$ have such a simple structure, it is an interesting question for further
-research whether checking
-$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for $k=0,\dots,pq-1$ can be faster than directly
-checking $P\lessdet_F Q$, as one would do in the usual
-approach with FDR4. This is of particular interest, since the checks could be parallelised
-on several CPUs. Alternatively it is interesting to investigate whether the
-the check\footnote{We are grateful to Bill Roscoe for suggesting this option.}
+$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for
+failures testing. If the SUT $Q$ is not a programmed piece of software or an
+integrated hardware or software system, but just another CSP process
+specification, it is of course possible to verify these pass criteria using
+the FDR4 model checker. For checking the refinement relation $P\lessdet_F Q$,
+the pass criteria have to be verified for $k=0,\dots,pq-1$, where $p$ and $q$
+indicate the number of nodes in $P$'s transition graph and the maximal number
+of nodes in $Q$'s graph, respectively (Theorem~\ref{th:failurestest}). Since
+the test cases $U_F(k)$ have such a simple structure, it is an interesting
+question for further research whether checking $(\epass\then\Stop) \lessdet_F
+(Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for $k=0,\dots,pq-1$ can be faster
+than directly checking $P\lessdet_F Q$, as one would do in the usual approach
+with FDR4. This is of particular interest, since the checks could be
+parallelised on several CPUs. Alternatively it is interesting to investigate
+whether the check\footnote{We are grateful to Bill Roscoe for suggesting this
+option.}
 \[
 (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] \Intchoice_{k=0}^{pq-1} U_F(k)) \hide \Sigma
 \]
 may perform better than the check of $P\lessdet_F Q$, since the former allows for
 other optimisations in the model checker than the latter.
 
-For large and complex CSP processes $Q$, it may be too time consuming to generate
-its normalised transition graph, so that its number $q$ of nodes is unknown.
-In such a case the suggested options may still be used
-as efficient bug finders: use  $p$ of reference process $P$ as initial $q$-value
-and
+For large and complex CSP processes $Q$, it may be too time consuming to
+generate its normalised transition graph, so that its number $q$ of nodes is
+unknown. In such a case the suggested options may still be used as efficient
+bug finders: use  $p$ of reference process $P$ as initial $q$-value and
 increment $q$ from there, as long as each increment reveals new errors.
-
-
-
-
 
 % ==============================================================================
 \subsubsection*{Conclusion}
 
 In this paper, we have introduced finite complete testing strategies for
-model-based testing against CSP reference models. The strategies are applicable
-to the conformance relations failures refinement and trace refinement. The underlying fault domains have been defined as the sets of CSP processes whose normalised transition
-graphs did not have more than a given number of additional nodes, when compared to the transition graph of the reference process. For these domains, finite complete
-test suites are available. We have shown for the strategy checking failures refinement,
- that the way of probing the SUT for illegal deadlocks used in our test cases is
- optimal in the sense that it is not possible to guarantee exhaustiveness with fewer
- probes.
+model-based testing against CSP reference models. The strategies are
+applicable to the conformance relations failures refinement and trace
+refinement. The underlying fault domains have been defined as the sets of CSP
+processes whose normalised transition graphs do not have more than a given
+number of additional nodes, when compared to the transition graph of the
+reference process. For these domains, finite complete test suites are
+available. We have shown for the strategy to check failures refinement that
+the way of probing the SUT for illegal deadlocks used in our test cases is
+optimal in the sense that it is not possible to guarantee exhaustiveness with
+fewer probes.
 
 % ==============================================================================
 
 \paragraph{Acknowledgements}
-The authors would like to thank Bill Roscoe and Thomas Gibson-Robinson for their advice on using the FDR4 model checker and for very helpful discussions concerning the potential implications of this paper in the field of model-checking.
+The authors would like to thank Bill Roscoe and Thomas Gibson-Robinson for
+their advice on using the FDR4 model checker and for very helpful discussions
+concerning the potential implications of this paper in the field of model
+checking. The work of Cavalcanti is funded by the Royal Academy of
+Engineering and UK EPSRC Grant EP/R025134/1.
