@@ -69,7 +69,7 @@ $\minhits(P/s)$ are finite. We further recall that $\minhits(P/s)$ may be
 empty, so that operand (\ref{eq:ufd}) of the external choice construct
 defaults to $\Stop$. In this case, however, $\minaccs(P/s) = \{\varnothing\}$
 applies, so the test executes the branch (\ref{eq:ufb}) and terminates with
-$\epass$.
+$\epass$. \fixme{alcc: Oops. This is undefined in CSP.}
 
 Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
 a length $p$. If, after having already run through $s\in\trc(P)$ with
@@ -323,7 +323,7 @@ h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
  \text{or, asymptotically,}\  O(3^{|\frac{\Sigma}{3}|}\cdot|\Sigma|^{(pq-1)}).
  \]
 %
-From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$ 
+From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$
 above cannot be further improved, since the full collection of minimal
 hitting sets needs to be checked to verify $conf$. The
 authors of~\cite{Hennessy:1988:ATP:50497} and
