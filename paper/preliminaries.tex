@@ -56,8 +56,7 @@ external and internal choice operators allow us to define a choice over a
 collection of processes $P(i)$. By convention, , if the index set $I$ is
 empty, external choices evaluate to the process $\Stop$, which
 deadlocks:~does not engage into any event and does not terminate. An iterated
-internal choice is not defined for an empty index set. \fixme{alcc: Note the
-difference to internal choice. I think this is not a problem here.}
+internal choice is not defined for an empty index set.
 
 There are several parallelism operators. A widely used form of parallelism $P
 \parallel[cs] Q$ defines a process in which the behaviour is characterised by
@@ -223,6 +222,7 @@ As a consequence,
 so $G(P)$ allows us to re-construct the failures semantics of $P$.
 \fixme{alcc: Why not leave the commented out material in the report?}
 
+% Commented out just to shorten the report.
 %To see that this approach works only for finite CSP processes, we consider
 %the example where $\Sigma$ is infinite. In this case,
 %$\maxrefs(\Stop/\langle\rangle)$ is empty, and so we cannot use this set to
@@ -233,6 +233,7 @@ so $G(P)$ allows us to re-construct the failures semantics of $P$.
 %transition graph by following the edge labels in trace $s$, then $\maxrefs(n)
 %= \maxrefs(P/s)$.
 
+% Commented out just to shorten the report.
 %Well-formed normalised transition graphs must not refuse an event of the
 %initials of a state in {\it every} refusal applicable in this state; more
 %formally,
