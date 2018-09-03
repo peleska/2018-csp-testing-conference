@@ -20,8 +20,7 @@ strategies to CSP in the future. These will effectively reduce the upper
 bound $\ell\le |\Sigma|^k$ introduced in Section~\ref{sec:complexity}. The
 bound $h$ for the number of sets to be used in probing the SUT for illegal
 deadlocks, however, cannot be further reduced, as has been established in
-Lemma~\ref{lemma:hseta}. \fixme{alcc: my guess is that these complete tests
-are not for refinement. I think we can perhaps say something about this?}
+Lemma~\ref{lemma:hseta}.
 
 % ==============================================================================
 \subsubsection*{Discussion of Adaptive Test Cases}
@@ -78,7 +77,8 @@ domain-specific knowledge using CSP. For example, if an initialisation
 component defined by a process $I$ can be regarded as correct without further
 testing, we can use $I; RUN$ as a fault domain, to indicate that any SUT of
 interest implements $I$ correctly, but afterwards has a potentially arbitrary
-behaviour specified by $RUN$.
+behaviour specified by $RUN$. The work in~\cite{DBLP:conf/pts/CavalcantiS17}
+is not restricted to finite or non-terminating processes.
 
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
