@@ -17,7 +17,7 @@ R = c -> R [] b -> P
 
 Z = a -> ( Q1 |~| R1(rmax,0) ) 
 
-Q1 = a -> Z [] c -> Z
+Q1 = a -> Z [] b -> Z
     
 R1(rmax,k) = 
          (k < rmax) & (c -> R1(rmax,k+1) [] b -> Z)
