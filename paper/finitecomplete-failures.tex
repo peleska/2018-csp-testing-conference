@@ -104,8 +104,13 @@ according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept at least
 one event of each minimal hitting set in $\minhits(P/s)$. Therefore, the test
 only terminates with  $\epass$, if such an event is accepted by the SUT.
 
+%% =========================================================================
+%\subsection{Fault Models and Complete Test Suites}
+
+
 % =========================================================================
-\subsection{Fault Models and Complete Test Suites}
+\subsection{A Finite Complete Test Suite for Failures Refinement}
+
 
 A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a
 reference process $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T,
@@ -120,14 +125,11 @@ if and only of the following conditions are fulfilled.
 then $Q$ fails at least one test in $\TS$.
 \end{description}
 %
-In the next section, we establish the completeness of our test suite.
-\fixme{alcc: I don't think we need a section just for this material.}
+In the sequel, we establish the completeness of our test suite which is stated 
+in the following main theorem.
+%%%\fixme{alcc: I don't think we need a section just for this material.}
 
-% =========================================================================
-\subsection{A Finite Complete Test Suite for Failures Refinement}
-
-After the informal explanation of tests representing adaptive test cases, we are ready to state the main theorem of this paper.
-
+ 
 \begin{theorem}\label{th:failurestest}
 Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ whose
 normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
@@ -247,9 +249,26 @@ of $P$ with length equal to\footnote{In this estimation, we disregard
 the case where the test
 terminates earlier due to entering branch (\ref{eq:ufb}).} $k$,
 multiplied by the number $h$ of minimal hitting sets in
-$\minhits(P/s)$. The first factor
-has worst-case upper bound $\ell\le |\Sigma|^k$.
+$\minhits(P/s)$. 
 
+
+
+% -------------------------------------------------------------------------
+\subsubsection*{Estimation of $\ell$}
+The first factor $\ell$
+has worst-case upper bound $\ell\le |\Sigma|^k$. As an example, where this upper bound 
+is really met, consider the reference process
+\[
+RUN(\Sigma) = e:\Sigma \then RUN(\Sigma)
+\]
+The normalised transition graph of this process has a single state, and its initials
+are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(k)$ can 
+never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly 
+$|\Sigma|^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
+for each of their events.
+
+% -------------------------------------------------------------------------
+\subsubsection*{Estimation of $h$}
 Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
 acceptances, the cardinality $h$ of $\minhits(P/s)$ is maximal for the case
 where all $A_i$ are disjoint. In this case,  $h~~=~~|\minhits(P/s)|~~=~~
@@ -308,13 +327,13 @@ This proves the lemma.
 %
 From Lemma~\ref{lemma:minhitmax}, we conclude that
 $$h=\begin{cases}
-3^{|\frac{\Sigma}{3}|} &\text{if}\,\, \exists k: |\Sigma|=3k\\
-2^2\cdot 3^{\frac{|\Sigma|-4}{3}} &\text{if}\,\, \exists k : |\Sigma| =3k+1\\
-2\cdot 3^{\frac{|\Sigma| - 2}{3}} &\text{if}\,\, \exists k: |\Sigma| =3k+2
+3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\  |\Sigma|~~\equiv~~0 \mod 3\\
+3^{\lfloor\frac{|\Sigma|}{3}\rfloor}  + 3^{\lfloor\frac{|\Sigma|}{3}\rfloor-1}&\text{if}\ |\Sigma|~~\equiv~~1\mod 3\\
+2\cdot 3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\ |\Sigma|~~\equiv~~2 \mod 3
 \end{cases}
 $$
 %
-We note that $h$ is significantly smaller than $2^{|\Sigma|}$ -- this can
+We note that $h$ is significantly smaller than $2^{|\Sigma|}-1$, this can
 also be intuitively motivated by the fact that  for every $H\in
 \minhits(P/s)$, all of its true subsets and true supersets are {\it not}
 contained in $\minhits(P/s)$.
@@ -325,7 +344,7 @@ we use the formula for the sum of the geometric progression.
 %
 \[
 h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
- \text{or, asymptotically,}\  O(3^{|\frac{\Sigma}{3}|}\cdot|\Sigma|^{(pq-1)}).
+ \text{or, asymptotically,}\  O(3^{\lfloor\frac{|\Sigma|}{3}\rfloor}\cdot|\Sigma|^{(pq-1)}).
  \]
 %
 From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$
@@ -340,8 +359,61 @@ the last step of the test execution, so our approach reduces the number of
 test executions in comparison
 to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
 
-It is discussed in Section~\ref{sec:conc} that the term $pq$ occurring in
-this bound can be significantly reduced by using more complex test cases that
-need not execute {\it all} traces of $P$ with length less or equal to $pq$.
+
+
+% -------------------------------------------------------------------------
+\subsubsection*{Upper Bound $pq$ for Number of Test Cases}
+
+According to Theorem~\ref{th:failurestest}, the tests $U_F(k)$ need to be executed for 
+$k = 0,\dots,pq-1$ to guarantee completeness. This means that the SUT is verified 
+with test traces up to, and including, length $pq$. It is interesting to  investigate
+whether this maximal length is really necessary, or whether one could elaborate
+alternative complete test strategies where the SUT is tested with shorter traces only. 
+Indeed, an example  presented in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} 
+shows that when testing for equivalence of deterministic FSMs, it is sufficient to
+test the SUT with traces of significantly shorter length.
+
+The following example, however, shows that the maximal length $pq$ is really required 
+when testing for refinement.
+\begin{example}\label{ex:pq}
+Consider the CSP reference process $P$ and an erroneous implementation $Q$ specified
+as follows.
+\begin{eqnarray*}
+P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
+\\
+P_1 & = & a \then P \extchoice b\then P
+\\ & &  \\
+Q & = & a\then Q_1 \extchoice b\then Q_1
+\\
+Q_1 & = & a\then Q_2 \extchoice b\then Q_2
+\\
+Q_2 & = & a\then Q \intchoice b\then Q
+\end{eqnarray*}
+Obviously, $P$'s normalised transition graph has 2 nodes, 
+while $Q$'s graph has 3.
+It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$, but 
+$\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using the FDR4 tool that
+the ``test passed condition'' 
+\[
+(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k))\hide \Sigma
+\]
+holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. This means that the
+non-conformance of $Q$ cannot be detected by any test trace of length 
+less or equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
+by a trace of length 6, because the last event offered by the test $U_F(5)$ is 
+refused by $Q$.
+\xbox
+\end{example}
+%
+Generalising Example~\ref{ex:pq}, it can be shown that for any pair $p,q\in\mathbb{N}$
+whose greatest common divisor is 1, there exist reference processes with $p$ states
+and implementation processes with $q$ states, such that non-conformance of the 
+implementation
+can only be detected with a trace of length $pq$.
+
+It is discussed in Section~\ref{sec:conc} how the number of test traces to be executed 
+by complete test suites for failures refinement   can still be reduced {\it without} reducing 
+the maximal length.
+
 
 % ==========================================================================
