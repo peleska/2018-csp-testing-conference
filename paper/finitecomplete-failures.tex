@@ -29,7 +29,8 @@ U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop
 \\ & & (\#s < p) \& \big( \Extchoice e:[P/s]^0 @ e \then U_F(p,s.e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (\#s = p ) \& \big( \Intchoice_{H\in\minhits(P/s)} ( \Extchoice e:H @ e \then \epass \then\Stop   )  \big)
+\\ & & (\#s = p \wedge \minhits(P/s)\neq\varnothing) \&  \nonumber 
+\\ & & \taba \big( \Intchoice_{H\in\minhits(P/s)} ( \Extchoice e:H @ e \then \epass \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 %
@@ -41,9 +42,21 @@ Q\parallel[\Sigma] U_F(p).
 \]
 It is assumed that the events $\efail$ and $\epass$, indicating a verdict
 FAIL and PASS for the test execution, are not included in $\Sigma$. Since we
-assume that $Q$ is free of livelocks, it is guaranteed that each test
-execution terminates after some $s\in\trc(Q)$ with length $(p+1)$ and
-consecutive $\epass$ or $\efail$ event at the latest. The test is
+assume that $Q$ is free of livelocks, it is guaranteed that events 
+$\efail$ or $\epass$ always become visible, if they are the only events
+$U_F(p)/s$ is ready to engage in.
+
+The specification of $U_F(p,s)$ implies that the test always stops after having engaged into a trace $s\in\trc(Q)$ of maximal length $p$ or $p+1$: 
+If branch (\ref{eq:ufa})
+is the last to be entered, the maximal length of $s$ is $p+1$, and the test execution
+stops with $\efail$. If branch (\ref{eq:ufb}) is the last to be entered, the maximal length of $s$ is $p$, and the execution stops with $\epass$. If branch (\ref{eq:ufd})
+is the last to be entered, the process either accepts another event
+$e$ of some minimal hitting set $H\in\minhits(P/front(s))$. Then the final length
+of $s$ is $p+1$, and the execution terminates with $\epass$. Or the test execution
+$(Q\parallel[\Sigma] U_F(p))/s$ deadlocks,  the final length of $s$ is $p$,
+and the execution stops without a PASS or FAIL event. Such an execution is also interpreted as FAIL.
+
+The test is
 \emph{passed} by the SUT (written $Q\ \pass\ U_F(p)$) if, and only if, {\it
 every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with   event
 $\epass$. This can also be  expressed by means of a failures refinement as
@@ -63,16 +76,19 @@ visible traces $\varepsilon$ and $\langle \epass\rangle$ as the ``Test Passed
 Process'' $(\epass\then\Stop)$. However, the former may nondeterministically
 refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(p,s)$ executing branch (\ref{eq:ufd}),
-because $\#s = p$. This is explained further in the next paragraphs.
+because $(\#s = p\wedge \minhits(P/s)\neq\varnothing)$. 
+This is explained further in the next paragraphs.
 
 We observe that the number of possible executions of $Q\parallel[\Sigma]
 U_F(p)$ is finite, because the number of traces $s$ with maximal length
 $(p+1)$ is finite and the sets $[P/s]^0$, $(\Sigma - [P/s]^0)$, and
 $\minhits(P/s)$ are finite. We further recall that $\minhits(P/s)$ may be
-empty, so that operand (\ref{eq:ufd}) of the external choice construct
-defaults to $\Stop$. In this case, however, $\minaccs(P/s) = \{\varnothing\}$
-applies, so the test executes the branch (\ref{eq:ufb}) and terminates with
-$\epass$. \fixme{alcc: Oops. This is undefined in CSP.}
+empty, so that the indexed internal choice construct in (\ref{eq:ufd}) 
+is undefined. Therefore, the associated guard condition contains the requirement
+$\minhits(P/s)\neq\varnothing$, otherwise this branch cannot be taken.
+Recall that $\minhits(P/s)=\varnothing$ implies  $\minaccs(P/s) = \{\varnothing\}$,
+so branches (\ref{eq:ufa}) and (\ref{eq:ufb}) can be taken in this situation.
+%%%\fixme{alcc: Oops. This is undefined in CSP.}
 
 Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
 a length $p$. If, after having already run through $s\in\trc(P)$ with
