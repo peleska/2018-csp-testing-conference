@@ -3,23 +3,22 @@
 \label{section:preliminaries}
 % =========================================================================
 
-In this section, we present CSP and the concept of minimal hitting set, which
+In this section, we present CSP and the concept of minimal hitting sets, which
 is central to our novel notion of test for failures refinement.
 
 % =========================================================================
-\subsection{CSP and Refinement}
-
-%First, we introduce the CSP notation and refinement notions. We then discuss
-%a graph-based semantics for finite-state CSP processes.
-
-% =========================================================================
-%\subsubsection*{CSP}
-%\label{section:CSP}
+\subsection{CSP, Refinement, and Normalised Transition Graphs}
 
 \subsubsection*{Communicating Sequential Processes (CSP)} is a process algebra
 supporting system development by refinement. Using CSP, we model both systems and
 their components using processes. They are characterised by their patterns
 of interactions, modelled by synchronous, instantaneous, and atomic events.
+
+Throughout this paper, the alphabet of the processes, that is the set of
+events that are in scope, is denoted by $\Sigma$ and supposed to be finite.
+The FDR tool~\cite{fdr} supports model checking and semantic analyses of
+finite-state CSP processes.
+
 
 A prefixing operator $e \then P$ defines a process that is ready to engage in
 the event $e$, pending agreement of its environment to synchronise. After $e$
@@ -53,10 +52,13 @@ opportunity to interfere:~the choice is made by the process.
 %
 Iterated forms $\Extchoice i: I @ P(i)$ and $\Intchoice i: I @ P(i)$ of the
 external and internal choice operators allow us to define a choice over a
-collection of processes $P(i)$. By convention, , if the index set $I$ is
+collection of processes $P(i)$. By convention,  if the index set $I$ is
 empty, external choices evaluate to the process $\Stop$, which
 deadlocks:~does not engage into any event and does not terminate. An iterated
-internal choice is not defined for an empty index set.
+internal choice is not defined for an empty index set. For an external choice 
+indexed over a set of events in the form
+$\Extchoice e: A @ e \then P(e), A\subseteq \Sigma$, we use 
+abbreviation $e:A \then P(e)$.
 
 There are several parallelism operators. A widely used form of parallelism $P
 \parallel[cs] Q$ defines a process in which the behaviour is characterised by
@@ -109,6 +111,7 @@ follows.
 
 Failures refinement, $P \lessdet_F Q$, is defined as expected by set
 containment $\fails(Q)\subseteq\fails(P)$. Since refusals are subset-closed,
+$P \lessdet_F Q$ implies
 $(s,\varnothing)\in\fails(P)$ for all traces $s\in\trc(Q)$. So, for
 divergences-free processes, failures refinement implies trace refinement.
 Therefore, using the conformance relation
@@ -124,12 +127,6 @@ failures refinement can be expressed by $\lessdet_T$ and $conf$.
 (P \lessdet_F Q) \iff (P \lessdet_T Q \land Q\ conf\ P)
 \end{equation}
 %
-Throughout this paper, the alphabet of the processes, that is the set of
-events that are in scope, is denoted by $\Sigma$ and supposed to be finite.
-%Since we are only
-%considering ``classical'' CSP processes, the alphabet is always finite.
-The FDR tool~\cite{fdr} supports model checking and semantic analyses of
-finite-state CSP processes.
 
 For finite CSP processes, since refusals are
 subset-closed, $\refs(P/s)$ can be constructed from the set of \emph{maximal
@@ -142,7 +139,7 @@ refusals} defined by
 Conversely, with the maximal refusals $\maxrefs(P/s)$ at hand, we can
 reconstruct the refusals in the set $\refs(P/s)$ as described by
 %
-\begin{equation}
+\begin{equation}\label{eq:refMaxRef}
 \refs(P/s) = \{ R'\in\power(\Sigma)~|~\exists R\in \maxrefs(P/s): R'\subseteq R \}.
 \end{equation}
 %
@@ -166,7 +163,7 @@ Assuming an alphabet $\Sigma = \{a,b,c,d\}$, the process
 $$Q = (e:\{a,b\} \then \Stop) \intchoice (e:\{c,d\} \then \Stop)$$
 %
 has maximal refusals $\maxrefs(Q) = \{ \{c,d\}, \{a,b\} \}$ and initials
-$[Q]^0=\Sigma$. In contrast to $P$, nondeterminism is reflected by
+$[Q]^0=\Sigma$. In contrast to $P$, nondeterminism is reflected here by
 two maximal refusals. \xbox
 \end{example}
 
@@ -220,8 +217,7 @@ As a consequence,
 (s,X)\in\fails(P) \iff s\in\trc(G(P)) \wedge \exists R\in r(G(P)/s): X\subseteq R,
 \end{equation}
 so $G(P)$ allows us to re-construct the failures semantics of $P$.
-\fixme{alcc: Why not leave the commented out material in the report?}
-
+%\fixme{alcc: Why not leave the commented out material in the report?}
 % Commented out just to shorten the report.
 %To see that this approach works only for finite CSP processes, we consider
 %the example where $\Sigma$ is infinite. In this case,
@@ -275,7 +271,7 @@ A\in \minaccs(P/s) & \Leftrightarrow & \exists R\in\maxrefs(P/s) \wedge A = \Sig
 \bigcup \{ A~|~A\in \accs(P/s)\} & = & [P/s]^0
 \label{eq:accinitials}
 \\
- X\in\accs(P/s) &\Leftrightarrow & A\in \minaccs(P/s) \wedge A\subseteq X \subseteq [P/s]^0
+ X\in\accs(P/s) &\Leftrightarrow & \exists A\in \minaccs(P/s): A\subseteq X \subseteq [P/s]^0
  \label{eq:accsubset}
 \end{eqnarray}
 %
@@ -287,8 +283,9 @@ A\in \minaccs(P/s) & \Leftrightarrow & \exists R\in\maxrefs(P/s) \wedge A = \Sig
 %\fixme{jp: I'm sure and I can prove this. However, we don't need this fact, so I suggest to
 %removed it.}
 %
-Exploiting formulas (\ref{eq:accref}), (\ref{eq:accinitials}), and
-(\ref{eq:accsubset}), every node of a normalised transition graph can
+Exploiting formula (\ref{eq:accref}), 
+%(\ref{eq:accinitials}), and (\ref{eq:accsubset}), 
+every node of a normalised transition graph can
 alternatively be labelled with their minimal acceptances, and this
 information is equivalent to that contained in the maximal refusals. Since
 process states $P/s$ are equivalently expressed by states $G(P)/s$ of $P$'s
@@ -297,7 +294,7 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \begin{equation}\label{eq:maxrefsminaccs}
 \minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \}.
 \end{equation}
-\fixme{alcc: proof in the report perhaps?}
+%\fixme{alcc: proof in the report perhaps?}
 
 % .....................................................................................
  \begin{figure}[t]
@@ -346,7 +343,15 @@ G(P) & = & ( N_P, {\ii n}_P, \Sigma, t_P : N_P\times\Sigma \pfun N_P, r_P : N_P 
 G(Q) & = & ( N_Q, {\ii n}_Q, \Sigma, t_Q : N_Q\times\Sigma \pfun N_Q, r_Q : N_Q \fun \mathbb{P}\mathbb{P}(\Sigma))
 \end{eqnarray*}
 %
-as established by results in the following lemma.
+as established by the results  in the following lemma.
+There, result (\ref{eq:trcrefa}) reflects trace refinement in terms of graph
+traces; (\ref{eq:failconf}) expresses failures refinement in terms of traces
+refinement and $conf$; (\ref{eq:failrefa}) states how $conf$ can be expressed
+by means of the maximal refusal functions of the graphs involved; and
+(\ref{eq:failrefb}) states the same in terms of the minimal acceptances that
+can be derived from the maximal refusal functions by means of
+(\ref{eq:maxrefsminaccs}). 
+%%\fixme{alcc: I think at least the report should point to proofs.}
 %
 \begin{lemma}
   \label{lemma:tgtrcref}
@@ -358,7 +363,7 @@ as established by results in the following lemma.
   P \lessdet_F Q & \Leftrightarrow & P \lessdet_T Q \wedge P\ conf\ Q
   \\
   \label{eq:failrefa}
-  P\ conf\ Q & \Leftrightarrow & \nonumber
+  Q\ conf\ P & \Leftrightarrow & \nonumber
   \forall s\in\trc(G(Q))\cap \trc(G(P)), R_Q\in r_Q(G(Q)/s):  \nonumber
   \\ & & \tabd
   \exists R_P\in r_P(G(P)/s): R_Q\subseteq R_P
@@ -372,14 +377,72 @@ as established by results in the following lemma.
   \xbox
 \end{lemma}
 %
-The result (\ref{eq:trcrefa}) reflects trace refinement in terms of graph
-traces; (\ref{eq:failconf}) expresses failures refinement in terms of traces
-refinement and $conf$; (\ref{eq:failrefa}) states how $conf$ can be expressed
-by means of the maximal refusal functions of the graphs involved; and
-(\ref{eq:failrefb}) states the same in terms of the minimal acceptances that
-can be derived from the maximal refusal functions by means of
-(\ref{eq:maxrefsminaccs}). \fixme{alcc: I think at least the report should
-point to proofs.}
+\begin{proof}
+Recall that $P\lessdet_T Q$ is defined
+as $\trc(Q)\subseteq \trc(P)$ and that $\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$.
+This shows (\ref{eq:trcrefa}). 
+
+\medskip
+\noindent
+To prove (\ref{eq:failconf}), we derive
+\begin{argue}
+P \lessdet_F Q 
+\\
+\Leftrightarrow \fails(Q)\subseteq \fails(Q) & definition of $\lessdet_F$
+\\
+\Leftrightarrow \forall (s,X) \in  \fails(Q): (s,X) \in\fails(P) 
+& property of $\subseteq$
+\\
+\Leftrightarrow \forall (s,\varnothing) \in  \fails(Q): (s,\varnothing) \in\fails(P)
+\wedge {}
+\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
+\\
+& Definition of failures, refusals, subset closure
+\\
+\Leftrightarrow \trc(Q)\subseteq\trc(P)
+\wedge {}
+\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
+\\
+& Definition of failures and traces
+\\
+\Leftrightarrow \trc(Q)\subseteq\trc(P)
+\wedge {}
+\\\tabc \forall s\in\trc(Q)\cap\trc(P): \refs(Q/s) \subseteq\refs(P/s)
+\\
+& Property of $\cap$ and $\subseteq$
+\\
+\Leftrightarrow
+P\lessdet_T Q \wedge Q\ conf\ P
+& Definition of $\lessdet_T$ and $conf$
+\end{argue}
+
+\medskip
+\noindent
+To prove (\ref{eq:failrefa}), we derive
+\begin{argue}
+Q\ conf\ P 
+\\
+ \Leftrightarrow \forall s\in\trc(P)\cap \trc(Q): \refs(Q/s)\subseteq\refs(P/s)
+ \\
+ & Definition of $conf$  (\ref{eq:conf})
+ \\
+ \Leftrightarrow \forall s\in\trc(G(P))\cap \trc(G(Q)): \refs(Q/s)\subseteq\refs(P/s)
+ \\
+ & $\trc(P) = \trc(G(P))$, $\trc(Q) = \trc(G(Q))$
+ \\
+\Leftrightarrow \forall s\in\trc(G(P))\cap \trc(G(Q)), R_Q\in r_Q(G(Q)/s):
+\\\tabc
+\exists R_P\in r_P(G(P)/s): R_Q\subseteq R_P
+& Property of $r_P, r_Q$ and (\ref{eq:refMaxRef})
+\end{argue}
+
+\medskip
+\noindent
+Finally, (\ref{eq:failrefb}) follows from (\ref{eq:failrefa}) using (\ref{eq:accref})
+and the fact that $R_Q \subseteq R_P$ is equivalent to 
+$\Sigma - R_P \subseteq \Sigma - R_Q$.
+\xbox
+\end{proof}
 
 % =========================================================================
 \subsubsection*{Reachability Under Sets of Traces}
