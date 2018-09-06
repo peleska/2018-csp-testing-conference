@@ -42,6 +42,7 @@ CSP test process for failures refinement as shown below.
 %
 %
 \begin{eqnarray}
+\label{eq:UFP}
 U_F(p) & = & U_F(p,0,\ii n)
 \\
 U_F(p,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
@@ -220,7 +221,7 @@ reference process $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T,
 over $P$'s alphabet that may or may not conform to $P$.
 
 A test suite $\TS$ is called \emph{complete} with respect to fault model ${\cal F}$,
-if and only of the following conditions are fulfilled.
+if and only if the following conditions are fulfilled.
 \begin{description}
 \item[1.~Soundness] If $P \sqsubseteq Q$, then $Q$ passes all tests in $\TS$.
 \item[2.~Exhaustiveness] If $P \not\sqsubseteq Q$ and $Q\in{\cal D}$,
@@ -239,7 +240,7 @@ D}$ as the set of all divergence-free CSP processes over alphabet $\Sigma$,
 whose transition graph has at most $q$ states with $q \ge p$. Then the test
 suite
 \[
-\TS_F = \{ U_F(k)~|~0 \le k < pq  \}
+\TS_F = \{ U_F(k)~|~0 \le k < pq  \}\quad\text{$U_F(k)$ specified in (\ref{eq:UFP})}
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
@@ -253,26 +254,40 @@ Test suite $\TS_F$ generated from a CSP process $P$, as specified in
 Theorem~\ref{th:failurestest}, is passed by every CSP process $Q$ satisfying
 $P\lessdet_F Q$.
 \end{lemma}
-\begin{proof}
-{\bf Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $P\ conf\
-Q$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq \trc(P)$,
+\begin{proof}{~}\newline
+{\bf Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $Q\ conf\
+P$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq \trc(P)$,
 any adaptive test $U_F(p)$ running in parallel with $Q$ will always enter the
 branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the external
-choice construction for $U_F(p,s)$. Branch~(\ref{eq:ufa}) can never be
-entered in the parallel execution of $Q$ and $U_F(p)$, because
-$[Q/s]^0\subseteq [P/s]^0$ for all traces of $Q$.
+choice construction for $U_F(p,k,n)$:  
+If $U_F(p,k,n) = U_F(p)/s$ with $s\in\trc(P)$, then Lemma~\ref{lemma:ufproperties}
+implies $U_F(p,k,n) = U_F(p,k,G(P)/s)$, so $[n]^0 = [G(P)/s]^0 = [P/s]^0$. As
+a consequence, $[Q/s]^0\subseteq [P/s]^0 = [n]^0$, so branch~(\ref{eq:ufa}) can never be
+entered in the parallel execution of $Q$ and $U_F(p)$.
 
-{\bf Step~2.} Also,  Lemma~\ref{lemma:hseta} implies that for all traces
-$s\in\trc(Q)\cap\trc(P)$, every $H$ in $\minhits(P/s)$ is a hitting set for
-$\minaccs(Q/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,s)$ leads always to a
-PASS verdict, and branch (\ref{eq:ufc}) to test continuation without a
-verdict. For the last branch, we note that any selected minimal hitting set
-$H\in\minhits(P/s)$ has a non-empty intersection with each of the minimal
-acceptances of $Q/s$. As a consequence, $Q/s$ never blocks when offered
-events from $H$, and the test terminates with PASS event $\epass$. Note that
+\medskip
+\noindent
+{\bf Step~2.} Sinc $Q\ conf\ P$, Lemma~\ref{lemma:hseta} implies that for all  
+$s\in\trc(Q)\cap\trc(P)$, every $H \in \minhits(P/s)$ is a hitting set for
+$\minaccs(Q/s)$. 
+From Lemma~\ref{lemma:ufproperties} we know that
+$U_F(p)/s = U_F(p,k,n)$ with $U_F(p,k,n) = U_F(p,\#s,G(P)/s)$, 
+so $\minhits(n) = \minhits(P/s)$. 
+Branch (\ref{eq:ufb}) of test $U_F(p,k,n)$ leads always to a
+PASS verdict and is taken if $\minhits(P/s) = \varnothing$. Branch (\ref{eq:ufc}) 
+always leads to test continuation without a
+verdict. For the last branch, we note that it can only be entered if $\minhits(P/s)
+= \minhits(n) \neq\varnothing$. In this case,
+any selected minimal hitting set
+$H\in\minhits(n)$ has a non-empty intersection with each of the minimal
+acceptances of $Q/s$. 
+As a consequence, $Q/s$ never blocks when offered
+events from $H\in\minhits(n)$, 
+and the test terminates with PASS event $\epass$. Note that
 this argument requires that $Q$ is free of livelocks, because otherwise the
 $\epass$-events might not become visible, due to unbounded sequences of
-hidden events performed by $Q$. \xbox
+hidden events performed by $Q$. 
+\xbox
 \end{proof}
 %
 \begin{lemma}\label{lemma:mainfexhaustive}
@@ -282,7 +297,7 @@ for the fault model specified there.
 \begin{proof}
 Consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$, According to
 (\ref{eq:failconf}), this non-conformance can be caused in two possible ways
-corresponding to the cases $P\not\lessdet_T Q$ and $\neg(P\ conf\ Q)$,
+corresponding to the cases $P\not\lessdet_T Q$ and $\neg(Q\ conf\ P)$,
 respectively:
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
@@ -294,13 +309,15 @@ of $\minaccs(Q/s)$, such that
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
 \end{equation}
 \end{description}
-It has to be shown for each of the two possibilities that at least one test
+It has to be shown for each of the two cases that at least one test
 execution of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the
    $\efail$-event or without giving any verdict. The latter case is also
 interpreted  as FAIL, since then the process $\epass\then\Stop$ is no longer
-failures-refined by the test execution.
+failures-refined by $(Q\parallel[\Sigma] U_F(k))\hide \Sigma$.
 
-For Case~1, consider a  trace $s.e\in\trc(Q)$ such that $s\in\trc(P)$, but
+\medskip
+\noindent
+{\bf Case~1.} Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$, but
 $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is a
 trace of every process. In this case, $s$ is also a trace of the product
 graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. Suppose that
@@ -311,34 +328,40 @@ Lemma~\ref{lemma:reachproduc}, $(n_P,n_Q)$ can be reached by a trace
 $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition
 function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test
 $U_F(pq-1)$ accepts all traces of $P$ up to length $pq-1$, $u$ is also a
-trace of this test, and, by construction, $U_F(pq-1)/u = U_F(pq-1,u)$. Since
-$s.e\not\in\trc(P)$, $e$ is an element of $\Sigma-[P/u]^0$. So, in at least
-one execution, $U_F(pq-1,u)$ executes its first branch (\ref{eq:ufa}) with
+trace of this test, and, by construction and by Lemma~\ref{lemma:ufproperties}, 
+$U_F(pq-1)/u = U_F(pq-1,\#u,G(P)/u)$. Since
+$s.e\not\in\trc(P)$, $e$ is an element of $\Sigma-[P/u]^0 = \Sigma - [G(P)/s]^0$. 
+Hence, in at least
+one execution, $U_F(pq-1,\#u,G(P)/u)$ executes its first branch (\ref{eq:ufa}) with
 this event $e$, so that the test fails. Again, the
-assumption of non-divergence of Q is needed for this conclusion. %\fixme{alcc:
+assumption of non-divergence of Q is needed for this conclusion.  
 
-For   Case~2, we note that trace $s$ is again a trace of the product graph
+\medskip
+\noindent
+{\bf Case~2.} We note that trace $s$ is again a trace of the product graph
 $G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
 we know that the state   $G/s$ can   be reached by a trace
 $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. Consider test $U_F(\#
-u)$, which satisfies $U_F(\# u)/u = U_F(\#u,u)$, because it always performs
+u)$, which satisfies $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because of Lemma~\ref{lemma:ufproperties}. This process   always performs
 branch (\ref{eq:ufc}) until the trace $u$ has been completely processed.
-$U_F(\#u,u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
+$U_F(\#u,\#u,G(P)/u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
 only:~assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has
-at least one non-empty minimal acceptance, so the guard condition
-$(\minaccs(P/s) = \{ \varnothing \})$
-of branch (\ref{eq:ufb}) evaluates to $\isf$ for $U_F(\#u,u)$.
-Moreover, the guard condition $(\#s < p)$ for branch (\ref{eq:ufc}) evaluates
-to $\isf$ for $U_F(\#u,u)$, too. If branch (\ref{eq:ufa}) is executed, the
+at least one non-empty minimal acceptance. From (\ref{eq:minhitminaccempty}) 
+we know that this is equivalent to $\minhits(P/s) = \minhits(G(P)/s)\neq\varnothing$.
+As a consequence, branch (\ref{eq:ufb}) can never be taken because its guard condition
+evaluates to $\isf$  for $U_F(\#u,\#u,G(P)/u)$.
+Moreover, the guard condition $(k < p)$ for branch (\ref{eq:ufc}) evaluates
+to $\isf$ for $U_F(\#u,\#u,G(P)/u)$, too. If branch (\ref{eq:ufa}) is executed, the
 test always fails. If branch (\ref{eq:ufd}) is executed, the test fails for
 the execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen
-by $U_F(\#u,u)$ that has an empty intersection with the minimal acceptance
+by $U_F(\#u,\#u,G(P)/u)$ that has an empty intersection with the minimal acceptance
 $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of such an
 $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a consequence, there
 exists a test execution   where $Q/u$ selects acceptance $A_Q$ and
-$U_F(\#u,u)$ selects $H$. This execution deadlocks in process state
+$U_F(\#u,\#u,G(P)/u)$ selects $H$. This execution deadlocks in process state
 $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
-this  means that the test fails and concludes the proof. \xbox
+this  means that the test fails and concludes the proof. 
+\xbox
 \end{proof}
 
 % ==========================================================================
