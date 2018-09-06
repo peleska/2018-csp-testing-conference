@@ -360,7 +360,7 @@ can be derived from the maximal refusal functions by means of
   \label{eq:trcrefa}
   \\
   \label{eq:failconf}
-  P \lessdet_F Q & \Leftrightarrow & P \lessdet_T Q \wedge P\ conf\ Q
+  P \lessdet_F Q & \Leftrightarrow & P \lessdet_T Q \wedge Q\ conf\ P
   \\
   \label{eq:failrefa}
   Q\ conf\ P & \Leftrightarrow & \nonumber
@@ -390,7 +390,7 @@ P \lessdet_F Q
 \\
 \Leftrightarrow \fails(Q)\subseteq \fails(Q) & definition of $\lessdet_F$
 \\
-\Leftrightarrow \forall (s,X) \in  \fails(Q): (s,X) \in\fails(P) 
+\Leftrightarrow \forall (s,R) \in  \fails(Q): (s,R) \in\fails(P) 
 & property of $\subseteq$
 \\
 \Leftrightarrow \forall (s,\varnothing) \in  \fails(Q): (s,\varnothing) \in\fails(P)
@@ -531,8 +531,9 @@ $V' = V \cup V.\Sigma\cup\dots \cup V.\Sigma^{(pq-1)}$. The maximal length of tr
 $V'$ is $(pq-1)$.
 \xbox
 \end{proof}
-\fixme{Abrupt end to the section. It has more than just preliminary material.
-It has some new results.}
+
+%\fixme{Abrupt end to the section. It has more than just preliminary material.
+%It has some new results.}
 
 % =========================================================================
 \subsection{Minimal Hitting Sets}
@@ -620,4 +621,30 @@ conclude that $\varnothing\in\minaccs(P)$ implies $\minaccs(P) = \{
 \varnothing \}$. This clarifies that $\minhits(P/s)$ is empty if, and only
 if, $\minaccs(P) = \{ \varnothing \}$. The proof of Lemma~\ref{lemma:hseta}
 covers the situations where $\minaccs(P/s) = \{ \varnothing \}$ and so
-$\minhits(P/s) = \varnothing$.
+$\minhits(P/s) = \varnothing$. Trivially,
+\begin{equation}
+\label{eq:minhitminaccempty}
+\minaccs(P/s) = \{ \varnothing \} \iff \minhits(P/s) = \varnothing
+\end{equation}
+holds.
+
+Since minimal acceptances can be used to label the nodes of a normalised transition graph, and since $\minaccs(P/s) = \minaccs(G(P)/s)$, the notation of minimal hitting sets also
+carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and observe that
+\begin{equation}
+\label{eq:minhitsGP}
+\minhits(G(P)/s) = \minhits(P/s) \ \text{for all}\ s\in \trc(P).
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
