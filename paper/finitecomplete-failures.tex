@@ -530,11 +530,58 @@ refused by $Q$.
 \xbox
 \end{example}
 %
-Generalising Example~\ref{ex:pq}, it can be shown that for any pair $p,q\in\mathbb{N}$
-whose greatest common divisor is 1, there exist reference processes with $p$ states
+Generalising Example~\ref{ex:pq}, it can be shown that for any pair 
+$2\le p,q \in\mathbb{N}$,  
+there exist reference processes with $p$ states
 and implementation processes with $q$ states, such that non-conformance of the 
 implementation
-can only be detected with a trace of length $pq$.
+can only be detected with a trace of length $pq$. This is proven in the following 
+theorem.
+
+\begin{theorem}
+Let $2\le p,q \in\mathbb{N}$. Then there exists a reference process $P$ and an
+implementation process $Q$ with the following properties.
+\begin{enumerate}
+\item $G(P)$ has $p$ states.
+\item $G(Q)$ has $q$ states.
+\item $P\not\lessdet_T Q$.
+\item $\forall s\in\trc(Q): \#s < pq\implies s\in\trc(P)$.
+\end{enumerate}
+As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement cannot be reduced without losing the test suite's completeness property.
+\end{theorem}
+\begin{proof}
+Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$
+over alphabet $\Sigma =\{ a,b\}$ as follows.
+\begin{eqnarray*}
+P & = &  P(0) 
+\\
+P(k) & = & \big( a \then P(k) \big) \extchoice (k < p-1) \& \big( b \then P(k+1)\big)
+\\ 
+Q & = & Q(0)
+\\
+Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) \extchoice 
+( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
+\end{eqnarray*}
+Using regular expression notation, the traces of $P$ can be specified as
+\[
+\trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
+\]
+where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subset\Sigma^*$, 
+including the traces of $M$ themselves.
+The traces of $Q$ can be specified by
+\[
+\trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
+\]
+It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; 
+for example, the trace $(a^{q-1}b)^p$ is in
+$\trc(Q)\setminus\trc(P)$.
+
+Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented 
+by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$. 
+Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$ 
+is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$.
+\xbox
+\end{proof}
 
 It is discussed in Section~\ref{sec:conc} how the number of test traces to be executed 
 by complete test suites for failures refinement   can still be reduced {\it without} reducing 
