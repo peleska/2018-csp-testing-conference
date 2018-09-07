@@ -533,8 +533,8 @@ refused by $Q$.
 Generalising Example~\ref{ex:pq}, it can be shown that for any pair 
 $2\le p,q \in\mathbb{N}$,  
 there exist reference processes with $p$ states
-and implementation processes with $q$ states, such that non-conformance of the 
-implementation
+and implementation processes with $q$ states, such that 
+a violation of the trace refinement property
 can only be detected with a trace of length $pq$. This is proven in the following 
 theorem.
 
@@ -579,7 +579,9 @@ $\trc(Q)\setminus\trc(P)$.
 Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented 
 by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$. 
 Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$ 
-is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$.
+is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, since
+$\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events, 
+where at most $p-1$ events $b$ have been inserted.
 \xbox
 \end{proof}
 
