@@ -36,9 +36,10 @@ example, \cite{976937,DBLP:conf/prdc/ShiPK99,DBLP:conf/amast/ButhKPS97}.
 \subsubsection*{Contributions}
 
 This paper presents complete black-box test suites for software and systems
-modelled using CSP. They can be generated for divergence-free\footnote{The
+modelled using CSP. They can be generated for non-terminating, 
+divergence-free\footnote{The
 assumption of divergence freedom is usually applied in black-box testing,
-since it cannot distinguish between divergence and deadlock.} finite-state
+since it cannot distinguish between divergence and deadlock.}, finite-state
 CSP processes with finite alphabets, interpreted both in the trace and the
 failures semantics. Our results complement work
 in~\cite{DBLP:conf/pts/CavalcantiS17}. There, fault domains are specified as
@@ -49,8 +50,8 @@ particularly interested in {\it finite} suites when it comes to practical
 application. While~\cite{DBLP:conf/pts/CavalcantiS17} may require additional
 criteria to select tests from still infinite test suites, here, we further
 restrict fault domains using a graph representation of processes (originally
-elaborated for model checking) to obtain finite test suites. \fixme{alcc: I
-think termination is not handled either?}
+elaborated for model checking) to obtain finite test suites. 
+%%%\fixme{alcc: I think termination is not handled either?}
 
 Our approach to the definition of CSP fault domains is presented in this
 paper. We take advantage of results on model checking of CSP
@@ -68,7 +69,8 @@ reference model's graph by more than a given constant.
 
 The main contribution of this paper is the construction of two test suites to
 verify the conformance relations \emph{trace refinement} and \emph{failures
-refinement} for any given non-divergent, finite-state, finite alphabet CSP
+refinement} for any given non-terminating, 
+non-divergent, finite-state, finite alphabet CSP
 process. We prove their completeness with respect to fault domains
 of the described type.  The existence of -- possibly infinite -- complete
 test suites has been established for process algebras, and for CSP in
@@ -79,22 +81,32 @@ To the best of our knowledge, however, this article is the first to present
 domains and conformance relations.
 
 Moreover, our result is not a simple transcription of existing knowledge
-about finite, complete test suites for finite state machines: the
+about finite, complete test suites for finite state machines. The
 capabilities of CSP to express nondeterminism in a more fine-grained way than
 it is possible for FSMs requires a more complex approach to testing systems
 for conformity in the failures-model than it is required for model-based
 testing against nondeterministic FSMs, as published, for example,
-in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}. We show that the
+in~\cite{hierons_testing_2004,DBLP:conf/hase/PetrenkoY14}: CSP distinguishes between 
+external choice, where the environment can control the behaviour of a process, and
+internal choice where process behaviour is internally decided and cannot be influenced
+by the environment. In contrast to this, FSMs specify nondeterministic behaviour
+by offering more than one possible output to a given input, and this output can be 
+controlled by an FSM representing the environment. Loosely speaking, this corresponds to external choice in CSP, while there is no equivalent to internal choice in nondeterministic FSMs.
+
+Finally, we prove two optimality results.
+(1) We show that the
 approach to testing the admissibility of an SUT's nondeterministic behaviour
-is optimal in the sense that it cannot be established with fewer test cases.
-\fixme{alcc: I did not understand this?}
+is optimal in the sense that it cannot be established with fewer ``probes'' investigating
+the SUT's degree of nondeterminism. These probes are minimal sets of events offered
+by the test to the SUT, such that a refusal of the SUT to engage into any of these events
+reveals a violation of failures refinement.
+(2) Furthermore, it is shown that the maximal length of traces to be investigated in 
+a complete test suite cannot be further reduced without loosing the suite's capability to
+uncover any violation of trace or faulures  refinement. 
 
-%It should be noted that the presented results are of a theoretical
-%nature:~despite being finite, the resulting test suite size will still be too
-%large to be applied in practice to real-world problems. We discuss a number
-%of promising options how the test suite size can be reduced to become
-%practically applicable.
 
+%%%\fixme{alcc: I did not understand this?}
+ 
 % ==================================================================================
 
 \subsubsection*{Overview}
@@ -102,7 +114,10 @@ In Section~\ref{section:preliminaries}, we present the background material
 relevant to our work. In Section~\ref{sec:finitecompletefails}, finite
 complete test suites for verifying failures refinement are presented. Test
 suites checking trace refinement are a simplified version of the former
-class; they are presented in Section~\ref{sec:finitecomplete}. A sample test
+class; they are presented in Section~\ref{sec:finitecomplete}. 
+The optimality results are presented in Section~\ref{sec:complexity}, together with further
+complexity considerations.
+A sample test
 suite is presented in Section~\ref{sec:case}. Our results are discussed in
 Section~\ref{sec:conc}, where we also conclude. References to related work
 are given throughout the paper where appropriate.

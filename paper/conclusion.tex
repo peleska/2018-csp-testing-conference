@@ -44,8 +44,10 @@ realised by adding a timeout event to the testing environment which indicates
 deadlock situations. For real-time systems, this is an accepted technique,
 because the SUT has to respond within a pre-defined latency interval,
 otherwise its behaviour is considered to be blocked and regarded as a
-failure. \fixme{alcc: if deadlock is not acceptable? I think you need
-instrumentation here as well. }
+failure. 
+%\fixme{alcc: if deadlock is not acceptable? I think you need
+%instrumentation here as well. }
+%% jp : I do not understand the problem - sorry !
 
 Our tests executions $(Q\parallel[\Sigma] U_T(p))$ for trace refinement never
 block at all. The adaptive behaviour of our test cases, however, induce the
@@ -72,7 +74,7 @@ beyond what is achieved there. On the other hand,
 that can be easily adapted to consider additional selection and termination
 criteria, like, for example, the length of the traces used to construct
 tests. It would be possible, for instance, to use the bound indicated here.
-Morevoer, specifying a fault domain as a CSP process allows us to model
+Moreover, specifying a fault domain as a CSP process allows us to model
 domain-specific knowledge using CSP. For example, if an initialisation
 component defined by a process $I$ can be regarded as correct without further
 testing, we can use $I; RUN$ as a fault domain, to indicate that any SUT of

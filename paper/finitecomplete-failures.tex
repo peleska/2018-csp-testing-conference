@@ -126,7 +126,9 @@ It is assumed that the events $\efail$ and $\epass$, indicating a verdict
 FAIL and PASS for the test execution, are not included in $\Sigma$. Since we
 assume that $Q$ is free of livelocks, it is guaranteed that events 
 $\efail$ or $\epass$ always become visible, if they are the only events
-$U_F(p)/s$ is ready to engage in.
+$U_F(p)/s$ is ready to engage in: if $U_F(p)/s$ can only produce $\epass$ or
+$\efail$, the occurrence of these events can never be blocked due to a livelock in $Q$
+occurring in the same step of the execution.
 
 
 The test is
@@ -149,7 +151,7 @@ visible traces $\varepsilon$ and $\epass$ as the ``Test Passed
 Process'' $(\epass\then\Stop)$. However, the former may nondeterministically
 refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(p,k,n)$ executing branch (\ref{eq:ufd}),
-because $(k = p\wedge \minhits(P/s)\neq\varnothing)$. 
+when guard condition $(k = p\wedge \minhits(n)\neq\varnothing)$ evaluates to $\ist$. 
 This is explained further in the next paragraphs.
 
 The specification of $U_F(p,k,n)$ implies that the test always stops after having engaged into a trace $s\in\trc(Q)$ of maximal length $p$ or $p+1$: 
@@ -157,7 +159,8 @@ If branch (\ref{eq:ufa})
 is the last to be entered, the maximal length of $s$ is $p+1$, and the test execution
 stops with $\efail$. If branch (\ref{eq:ufb}) is the last to be entered, the maximal length of $s$ is $p$, and the execution stops with $\epass$. If branch (\ref{eq:ufd})
 is the last to be entered, the process either accepts another event
-$e$ of some minimal hitting set $H\in\minhits(P/front(s))$. Then the final length
+$e$ of some minimal hitting set $H\in\minhits(n)$ with $n = G(P)/s$ according to
+Lemma~\ref{lemma:ufproperties}. Then the final length
 of $s$ is $p+1$, and the execution terminates with $\epass$. Or the test execution
 $(Q\parallel[\Sigma] U_F(p))/s$ deadlocks,  the final length of $s$ is $p$,
 and the execution stops without a PASS or FAIL event. Such an execution is also interpreted as FAIL, because it reveals that $(\epass\then\Stop) \not\lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma$.
@@ -169,7 +172,7 @@ $(p+1)$ is finite and the sets $[n]^0$, $(\Sigma - [n]^0)$, and
 $\minhits(n)$ are finite. We further recall that $\minhits(n)$ may be
 empty, so that the indexed internal choice construct in (\ref{eq:ufd}) 
 is undefined. Therefore, the associated guard condition contains the requirement
-$\minhits(P/s)\neq\varnothing$, otherwise this branch cannot be taken,
+$\minhits(n)\neq\varnothing$, otherwise this branch cannot be taken,
 but branches (\ref{eq:ufa}) or (\ref{eq:ufb}) can be taken in this situation.
 %%%\fixme{alcc: Oops. This is undefined in CSP.}
 
@@ -178,33 +181,40 @@ a length $p$. If, after having already run through $s\in\trc(P)$ with
 $\#s \le p$, an event is accepted by the SUT that is outside the initials of $P/s$
  (recall from Lemma~\ref{lemma:ufproperties} that $[n]^0 = [P/s]^0$ for $U_F(p)/s$),
 the test immediately terminates with FAIL-event $\efail$. This is handled by
-the branch (\ref{eq:ufa}) of the external choice in the process $U_F(p,s)$
+the branch (\ref{eq:ufa}) of the external choice in the process $U_F(p,\#s,n)$
 defined above.
 
 If $P/s$ is the $\Stop$ process or has $\Stop$ as an internal choice,
-this is revealed by $\minhits(n) = \varnothing$ (recall (\ref{eq:minhitminaccempty}) and
+this is revealed by $\minhits(G(P)/s) = \varnothing$ (recall (\ref{eq:minhitminaccempty}) and
 Lemma~\ref{lemma:ufproperties}). 
 In this case, the test may terminate successfully (branch (\ref{eq:ufb}) of
-the external choice in $U_F(p,s)$). If $P/s$ may also nondeterministically engage into events in such a situation, branches  (\ref{eq:ufa}) and (\ref{eq:ufc}) of the test are
-simultaneously enabled.
+the external choice in $U_F(p,\#s,G(P)/s)$). 
+If $P/s$ may also nondeterministically engage into events in such a situation, branche 
+ (\ref{eq:ufc}) of the test is
+simultaneously enabled. If $Q/s$ is able to engage into an event from 
+$\Sigma - [P/s]^0$, a test execution exists where $U_F(p,\#s,G(P)/s)$ branches
+into (\ref{eq:ifpb}) and produces the $\efail$-event.
 
 
 If the length of $s$ is still less than $p$, the test accepts any event $e$ from
 the initials $[P/s]^0 = [G(P)/s]^0$ and continues recursively as $U_F(p,\#s+1,G(P)/s.e)$ in
-branch~(\ref{eq:ufc}), this follows again from  Lemma~\ref{lemma:ufproperties}). 
+branch~(\ref{eq:ufc}), this follows again from  Lemma~\ref{lemma:ufproperties}. 
 A test of this type is called \emph{adaptive}, because
 it accepts any legal behaviour of the SUT and adapts its consecutive
 behaviour to the event selected by the SUT.
 
-After having run through a trace of length $p$, and if
-$\minhits(P/s)\neq \varnothing$, the test changes its behaviour: instead of
-offering {\it all} legal events from $[P/s]^0$ to the SUT, it
-nondeterministically chooses a minimal hitting set   $H\in \minhits(G(P)/s)$ 
+Suppose that a test execution has run through a trace 
+$s\in\trc(P)$ of length $p$, so that $U_F(p)/s = U_F(p,p,n)$ with $n = G(P)/s$. 
+Then,   if
+$\minhits(n)\neq \varnothing$, the test changes its behaviour: instead of
+offering {\it all} legal events from $[n]^0$ to the SUT, it
+nondeterministically chooses a minimal hitting set   $H\in \minhits(n)$ 
 and
 only offers the events contained in $H$. If the SUT refuses to engage
 into any event of $H$, this reveals a violation of failures refinement:
 according to Lemma~\ref{lemma:hseta}, a conforming SUT should accept at least
-one event of each minimal hitting set in $\minhits(P/s)$. Therefore, the test
+one event of each minimal hitting set in $\minhits(n)$. Therefore, the test
+execution
 only terminates with  $\epass$, if such an event is accepted by the SUT.
 
 %% =========================================================================
@@ -234,7 +244,7 @@ in the following main theorem.
 
  
 \begin{theorem}\label{th:failurestest}
-Let $P$ be a divergence-free CSP process over alphabet $\Sigma$ whose
+Let $P$ be a non-terminating, divergence-free CSP process over alphabet $\Sigma$ whose
 normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
 D}$ as the set of all divergence-free CSP processes over alphabet $\Sigma$,
 whose transition graph has at most $q$ states with $q \ge p$. Then the test
@@ -274,7 +284,7 @@ From Lemma~\ref{lemma:ufproperties} we know that
 $U_F(p)/s = U_F(p,k,n)$ with $U_F(p,k,n) = U_F(p,\#s,G(P)/s)$, 
 so $\minhits(n) = \minhits(P/s)$. 
 Branch (\ref{eq:ufb}) of test $U_F(p,k,n)$ leads always to a
-PASS verdict and is taken if $\minhits(P/s) = \varnothing$. Branch (\ref{eq:ufc}) 
+PASS verdict and is taken if $\minhits(n) = \varnothing$. Branch (\ref{eq:ufc}) 
 always leads to test continuation without a
 verdict. For the last branch, we note that it can only be entered if $\minhits(P/s)
 = \minhits(n) \neq\varnothing$. In this case,
@@ -320,13 +330,15 @@ failures-refined by $(Q\parallel[\Sigma] U_F(k))\hide \Sigma$.
 {\bf Case~1.} Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$, but
 $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is a
 trace of every process. In this case, $s$ is also a trace of the product
-graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}. Suppose that
-$G/s = (n_P,n_Q)$. The length of $s$ is not known, but from the construction
+graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}, and  
+$G/s = (G(P)/s,G(Q)/s)$ holds. The length of $s$ is not known, but from the construction
 of $G$,  we know that $G$ has at most $pq$ reachable states, because $G(P)$
 has $p$ states, and $G(Q)$ has at most $q$ states. By
-Lemma~\ref{lemma:reachproduc}, $(n_P,n_Q)$ can be reached by a trace
+Lemma~\ref{lemma:reachproduc}, $(G(P)/s,G(Q)/s)$ can be reached by a trace
 $u\in\trc(G)$ of length $\#u < pq$. Now the construction of the transition
-function of $G$ implies that $u$ is also a trace of $P$ and $Q$. Since test
+function of $G$ implies that $u$ is also a trace of $P$ and $Q$, 
+which means that 
+$(G(P)/s,G(Q)/s) = (G(P)/u,G(Q)/u)$. Since test
 $U_F(pq-1)$ accepts all traces of $P$ up to length $pq-1$, $u$ is also a
 trace of this test, and, by construction and by Lemma~\ref{lemma:ufproperties}, 
 $U_F(pq-1)/u = U_F(pq-1,\#u,G(P)/u)$. Since
@@ -342,15 +354,16 @@ assumption of non-divergence of Q is needed for this conclusion.
 $G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
 we know that the state   $G/s$ can   be reached by a trace
 $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. Consider test $U_F(\#
-u)$, which satisfies $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because of Lemma~\ref{lemma:ufproperties}. This process   always performs
+u)$, which satisfies $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$   always performs
 branch (\ref{eq:ufc}) until the trace $u$ has been completely processed.
 $U_F(\#u,\#u,G(P)/u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
 only:~assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has
 at least one non-empty minimal acceptance. From (\ref{eq:minhitminaccempty}) 
-we know that this is equivalent to $\minhits(P/s) = \minhits(G(P)/s)\neq\varnothing$.
-As a consequence, branch (\ref{eq:ufb}) can never be taken because its guard condition
+we know that this is equivalent to $\minhits(P/s) = \minhits(G(P)/s)\neq\varnothing$, and
+we observe that $G(P)/s = G(P)/u$, so $\minhits(G(P)/u)\neq\varnothing$.
+As a consequence, branch (\ref{eq:ufb}) cannot be taken because its guard condition
 evaluates to $\isf$  for $U_F(\#u,\#u,G(P)/u)$.
-Moreover, the guard condition $(k < p)$ for branch (\ref{eq:ufc}) evaluates
+The guard condition $(k < p)$ for branch (\ref{eq:ufc}) evaluates
 to $\isf$ for $U_F(\#u,\#u,G(P)/u)$, too. If branch (\ref{eq:ufa}) is executed, the
 test always fails. If branch (\ref{eq:ufd}) is executed, the test fails for
 the execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen
@@ -363,231 +376,5 @@ $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
 this  means that the test fails and concludes the proof. 
 \xbox
 \end{proof}
-
-% ==========================================================================
-\subsection{Complexity Considerations}
-\label{sec:complexity}
-
-As can be seen from the specification of the test cases $U_F(k)$, the number of
-executions ending in a $\epass$-event corresponds to the number $\ell$ of traces $s$
-of $P$ with length equal to\footnote{In this estimation, we disregard
-the case where the test
-terminates earlier due to entering branch (\ref{eq:ufb}).} $k$,
-multiplied by the number $h$ of minimal hitting sets in
-$\minhits(P/s)$. 
-
-
-
-% -------------------------------------------------------------------------
-\subsubsection*{Estimation of $\ell$}
-The first factor $\ell$
-has worst-case upper bound $\ell\le |\Sigma|^k$. As an example, where this upper bound 
-is really met, consider the reference process
-\[
-RUN(\Sigma) = e:\Sigma \then RUN(\Sigma)
-\]
-The normalised transition graph of this process has a single state, and its initials
-are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(k)$ can 
-never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly 
-$|\Sigma|^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
-for each of their events.
-
-% -------------------------------------------------------------------------
-\subsubsection*{Estimation of $h$}
-Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
-acceptances, the cardinality $h$ of $\minhits(P/s)$ is maximal for the case
-where all $A_i$ are disjoint. In this case,  $h~~=~~|\minhits(P/s)|~~=~~
-\prod_{i=1}^\alpha|A_i|$. To find an upper bound for $h$, we use the result
-that we prove in the following lemma.
-%
-\begin{lemma}\label{lemma:minhitmax}
-Let $n\ge 2$ be any positive integer. We call a sequence
-%
-$$0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$$
-%
-a partition of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$. Define
-%
-$$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
-Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
-\alpha\in \mathbb{N}\big\}.$$
-%
-\end{lemma}
-\begin{proof}
-Let $n\ge 2$. Obviously, \begin{equation}\label{eq:1} n\le
-p(n).\end{equation} Define $\pi(n)$ to be the following partition  of $n$:
-%
-$$\pi(n)=\begin{cases} \underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k\\ 2,2,\underbrace{3,\ldots,3}_{k-1\text{ times}}  &\text{if}\,\, n=3k+1\\2,\underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k+2\end{cases}$$
-%
-Then the product of the numbers in $\pi(n)$ equals  $p(n)$. In the remainder
-of the proof we have to show that $p(n)$ is really maximal in the sense of
-the lemma.
-
-Since the number of partitions of a given $n$ is finite,
-%
-$$\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$$
-%
-exists. Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with
-maximal product. Then, obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
-Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then
-from~(\ref{eq:1}) we have
-$$\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}.$$
-Hence we can replace $a_j$ by $\pi(a_j)$, and the new partition has  a
-product value which is not less then the original partition $a_1, \ldots ,
-a_{\alpha}$. This process can be repeated, until every $a_i$ in the resulting
-partition is either 2 or 3. Hence there exists a partition of $n$ with
-maximal product, such that every term is $2$ or $3$. Since $6=2+2+2=3 + 3$
-and $2^3< 3^2$, the number of $2$'s in such a maximal partition is less than
-$3$. Let $a_1\le a_2\le \ldots\le  a_{\alpha}$ with $a_i\in \{2,3\},
-i=1,\dots,\alpha$, be a partition of $n$ with maximal product. Let $k_1\le 2$
-be the number of terms equal $2$ and $k_2$ be the number of terms equal $3$.
-Every $n\ge 2$ can be represented by $n=2k_1+3k_2$, $n\equiv 2k_1 (\mod 3)$
-with $k_1\le 2$, and $\prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}$. We have
-
-\begin{align*}k_1&=\begin{cases} 0 &\text{if}\,\, n=3k\\ 2 &\text{if}\,\, n=3k+1\\1 &\text{if}\,\, n=3k+2\end{cases}\\
- k_2&=\begin{cases} k &\text{if}\,\, n=3k\\ k-1 &\text{if}\,\, n=3k+1\\k &\text{if}\,\, n=3k+2\end{cases}\\
-\prod_{i=1}^{\alpha}a_i&=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}\end{align*}
-This proves the lemma.
-\xbox
-\end{proof}
-%
-From Lemma~\ref{lemma:minhitmax}, we conclude that
-$$h=\begin{cases}
-3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\  |\Sigma|~~\equiv~~0 \mod 3\\
-3^{\lfloor\frac{|\Sigma|}{3}\rfloor}  + 3^{\lfloor\frac{|\Sigma|}{3}\rfloor-1}&\text{if}\ |\Sigma|~~\equiv~~1\mod 3\\
-2\cdot 3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\ |\Sigma|~~\equiv~~2 \mod 3
-\end{cases}
-$$
-%
-We note that $h$ is significantly smaller than $2^{|\Sigma|}-1$, this can
-also be intuitively motivated by the fact that  for every $H\in
-\minhits(P/s)$, all of its true subsets and true supersets are {\it not}
-contained in $\minhits(P/s)$.
-
-From Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(k)$ for
-$k = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
-we use the formula for the sum of the geometric progression.
-%
-\[
-h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
- \text{or, asymptotically,}\  O(3^{\lfloor\frac{|\Sigma|}{3}\rfloor}\cdot|\Sigma|^{(pq-1)}).
- \]
-%
-From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$
-above cannot be further improved, since the full collection of minimal
-hitting sets needs to be checked to verify $conf$. The
-authors of~\cite{Hennessy:1988:ATP:50497} and
-\cite{DBLP:conf/icfem/CavalcantiG07} suggest to test {\it every} non-empty
-subset of $\Sigma$ whose events cannot be completely refused in a given
-process state of the reference model; this leads to a worst-case estimate of
-$2^{|\Sigma|}-1$ for the number of different sets to be offered to the SUT in
-the last step of the test execution, so our approach reduces the number of
-test executions in comparison
-to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
-
-
-
-% -------------------------------------------------------------------------
-\subsubsection*{Upper Bound $pq$ for Number of Test Cases}
-
-According to Theorem~\ref{th:failurestest}, the tests $U_F(k)$ need to be executed for 
-$k = 0,\dots,pq-1$ to guarantee completeness. This means that the SUT is verified 
-with test traces up to, and including, length $pq$. It is interesting to  investigate
-whether this maximal length is really necessary, or whether one could elaborate
-alternative complete test strategies where the SUT is tested with shorter traces only. 
-Indeed, an example  presented in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} 
-shows that when testing for equivalence of deterministic FSMs, it is sufficient to
-test the SUT with traces of significantly shorter length.
-
-The following example, however, shows that the maximal length $pq$ is really required 
-when testing for refinement.
-\begin{example}\label{ex:pq}
-Consider the CSP reference process $P$ and an erroneous implementation $Q$ specified
-as follows.
-\begin{eqnarray*}
-P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
-\\
-P_1 & = & a \then P \extchoice b\then P
-\\ & &  \\
-Q & = & a\then Q_1 \extchoice b\then Q_1
-\\
-Q_1 & = & a\then Q_2 \extchoice b\then Q_2
-\\
-Q_2 & = & a\then Q \intchoice b\then Q
-\end{eqnarray*}
-Obviously, $P$'s normalised transition graph has 2 nodes, 
-while $Q$'s graph has 3.
-It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$, but 
-$\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using the FDR4 tool that
-the ``test passed condition'' 
-\[
-(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k))\hide \Sigma
-\]
-holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. This means that the
-non-conformance of $Q$ cannot be detected by any test trace of length 
-less or equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
-by a trace of length 6, because the last event offered by the test $U_F(5)$ is 
-refused by $Q$.
-\xbox
-\end{example}
-%
-Generalising Example~\ref{ex:pq}, it can be shown that for any pair 
-$2\le p,q \in\mathbb{N}$,  
-there exist reference processes with $p$ states
-and implementation processes with $q$ states, such that 
-a violation of the trace refinement property
-can only be detected with a trace of length $pq$. This is proven in the following 
-theorem.
-
-\begin{theorem}
-Let $2\le p,q \in\mathbb{N}$. Then there exists a reference process $P$ and an
-implementation process $Q$ with the following properties.
-\begin{enumerate}
-\item $G(P)$ has $p$ states.
-\item $G(Q)$ has $q$ states.
-\item $P\not\lessdet_T Q$.
-\item $\forall s\in\trc(Q): \#s < pq\implies s\in\trc(P)$.
-\end{enumerate}
-As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement cannot be reduced without losing the test suite's completeness property.
-\end{theorem}
-\begin{proof}
-Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$
-over alphabet $\Sigma =\{ a,b\}$ as follows.
-\begin{eqnarray*}
-P & = &  P(0) 
-\\
-P(k) & = & \big( a \then P(k) \big) \extchoice (k < p-1) \& \big( b \then P(k+1)\big)
-\\ 
-Q & = & Q(0)
-\\
-Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) \extchoice 
-( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
-\end{eqnarray*}
-Using regular expression notation, the traces of $P$ can be specified as
-\[
-\trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
-\]
-where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subset\Sigma^*$, 
-including the traces of $M$ themselves.
-The traces of $Q$ can be specified by
-\[
-\trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
-\]
-It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; 
-for example, the trace $(a^{q-1}b)^p$ is in
-$\trc(Q)\setminus\trc(P)$.
-
-Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented 
-by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$. 
-Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$ 
-is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, since
-$\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events, 
-where at most $p-1$ events $b$ have been inserted.
-\xbox
-\end{proof}
-
-It is discussed in Section~\ref{sec:conc} how the number of test traces to be executed 
-by complete test suites for failures refinement   can still be reduced {\it without} reducing 
-the maximal length.
-
 
 % ==========================================================================

@@ -1,0 +1,253 @@
+\section{Complexity Considerations}
+\label{sec:complexity}
+% ================================================================================
+
+
+ 
+As can be seen from the specification of the test cases $U_F(k)$ 
+(see Section~\ref{sec:finitecompletefails}), the number of
+executions ending in a $\epass$-event corresponds to the number $\ell$ of traces $s$
+of $P$ with length equal to\footnote{In this estimation, we disregard
+the case where the test
+terminates earlier due to entering branch (\ref{eq:ufb}).} $k$,
+multiplied by the number $h$ of minimal hitting sets in
+$\minhits(P/s)$. For the tests $U_T(k)$ verifying trace refinement (see Section~\ref{sec:finitecomplete}), the number of executions equals $\ell$, since
+there is no equivalent in $U_T(k)$ 
+to checking different hitting sets in the last step of a 
+test execution.
+
+
+
+% -------------------------------------------------------------------------
+\subsection{Estimation of $\ell$}
+The first factor $\ell$
+has worst-case upper bound $\ell\le |\Sigma|^k$. As an example, where this upper bound 
+is really met, consider the reference process
+\[
+RUN(\Sigma) = e:\Sigma \then RUN(\Sigma).
+\]
+The normalised transition graph of this process has a single state, and its initials
+are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(k)$ can 
+never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly 
+$|\Sigma|^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
+for each of their events.
+
+% -------------------------------------------------------------------------
+\subsection{Estimation of $h$}
+Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
+acceptances, the cardinality $h$ of $\minhits(P/s)$ is maximal for the case
+where all $A_i$ are disjoint. In this case,  $h~~=~~|\minhits(P/s)|~~=~~
+\prod_{i=1}^\alpha|A_i|$. To find an upper bound for $h$, we use the result
+that we prove in the following lemma.
+%
+\begin{lemma}\label{lemma:minhitmax}
+Let $n\ge 2$ be any positive integer. We call a sequence
+%
+$$0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$$
+%
+a partition of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$. Define
+%
+$$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
+Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
+\alpha\in \mathbb{N}\big\}.$$
+%
+\end{lemma}
+\begin{proof}
+Let $n\ge 2$. Obviously, \begin{equation}\label{eq:1} n\le
+p(n).\end{equation} Define $\pi(n)$ to be the following partition  of $n$:
+%
+$$\pi(n)=\begin{cases} \underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k\\ 2,2,\underbrace{3,\ldots,3}_{k-1\text{ times}}  &\text{if}\,\, n=3k+1\\2,\underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k+2\end{cases}$$
+%
+Then the product of the numbers in $\pi(n)$ equals  $p(n)$. In the remainder
+of the proof we have to show that $p(n)$ is really maximal in the sense of
+the lemma.
+
+Since the number of partitions of a given $n$ is finite,
+%
+$$\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$$
+%
+exists. Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with
+maximal product. Then, obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
+Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then
+from~(\ref{eq:1}) we have
+$$\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}.$$
+Hence we can replace $a_j$ by $\pi(a_j)$, and the new partition has  a
+product value which is not less then the original partition $a_1, \ldots ,
+a_{\alpha}$. This process can be repeated, until every $a_i$ in the resulting
+partition is either 2 or 3. Hence there exists a partition of $n$ with
+maximal product, such that every term is $2$ or $3$. Since $6=2+2+2=3 + 3$
+and $2^3< 3^2$, the number of $2$'s in such a maximal partition is less than
+$3$. Let $a_1\le a_2\le \ldots\le  a_{\alpha}$ with $a_i\in \{2,3\},
+i=1,\dots,\alpha$, be a partition of $n$ with maximal product. Let $k_1\le 2$
+be the number of terms equal $2$ and $k_2$ be the number of terms equal $3$.
+Every $n\ge 2$ can be represented by $n=2k_1+3k_2$, $n\equiv 2k_1 (\mod 3)$
+with $k_1\le 2$, and $\prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}$. We have
+
+\begin{align*}k_1&=\begin{cases} 0 &\text{if}\,\, n=3k\\ 2 &\text{if}\,\, n=3k+1\\1 &\text{if}\,\, n=3k+2\end{cases}\\
+ k_2&=\begin{cases} k &\text{if}\,\, n=3k\\ k-1 &\text{if}\,\, n=3k+1\\k &\text{if}\,\, n=3k+2\end{cases}\\
+\prod_{i=1}^{\alpha}a_i&=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}\end{align*}
+This proves the lemma.
+\xbox
+\end{proof}
+%
+From Lemma~\ref{lemma:minhitmax}, we conclude that
+$$h=\begin{cases}
+3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\  |\Sigma|~~\equiv~~0 \mod 3\\
+3^{\lfloor\frac{|\Sigma|}{3}\rfloor}  + 3^{\lfloor\frac{|\Sigma|}{3}\rfloor-1}&\text{if}\ |\Sigma|~~\equiv~~1\mod 3\\
+2\cdot 3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\ |\Sigma|~~\equiv~~2 \mod 3
+\end{cases}
+$$
+%
+We note that $h$ is significantly smaller than $2^{|\Sigma|}-1$, this can
+also be intuitively motivated by the fact that  for every $H\in
+\minhits(P/s)$, all of its true subsets and true supersets are {\it not}
+contained in $\minhits(P/s)$.
+
+% -------------------------------------------------------------------------
+\subsection{Upper Bounds of Test Executions for Checking Failures Refinement}
+According to  Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(k)$ for
+$k = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
+we use the formula for the sum of the geometric progression.
+%
+\[
+h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
+ \text{or, asymptotically,}\  O(3^{\lfloor\frac{|\Sigma|}{3}\rfloor}\cdot|\Sigma|^{(pq-1)}).
+ \]
+%
+From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$
+above cannot be further improved, since the full collection of minimal
+hitting sets needs to be checked to verify $conf$. The
+authors of~\cite{Hennessy:1988:ATP:50497} and
+\cite{DBLP:conf/icfem/CavalcantiG07} suggest to test {\it every} non-empty
+subset of $\Sigma$ whose events cannot be completely refused in a given
+process state of the reference model; this leads to a worst-case estimate of
+$2^{|\Sigma|}-1$ for the number of different sets to be offered to the SUT in
+the last step of the test execution, so our approach reduces the number of
+test executions in comparison
+to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
+
+
+% -------------------------------------------------------------------------
+\subsection{Upper Bounds of Test Executions for Checking Trace Refinement}
+
+According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
+refinement just contains the adaptive test case $U_T(pq-1)$. As derived for $U_F(k)$
+above, the number of executions performed by $(Q\parallel[\Sigma] U_R(pq-1))$ 
+is bounded by $|\Sigma|^{pq-1}$.
+
+
+% -------------------------------------------------------------------------
+\subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
+
+According to Theorem~\ref{th:failurestest}, the tests $U_F(k)$ need to be executed for 
+$k = 0,\dots,pq-1$ to guarantee completeness. This means that the SUT is verified 
+with test traces up to, and including, length $pq$:
+recall from the test specification, branch (\ref{eq:ufa}), that $U_F(k)$ will accept
+all traces $s.e$ with $s\in\trc(P), \#s = k, e\not\in\trc(P/s)$, so erroneous trace
+up to length $k+1$ are detected.
+It is interesting to  investigate
+whether this maximal length is really necessary, or whether one could elaborate
+alternative complete test strategies where the SUT is tested with shorter traces only. 
+Indeed, an example  presented in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} 
+shows that when testing for equivalence of deterministic FSMs, it is sufficient to
+test the SUT with traces of significantly shorter length.
+
+The following example, however, shows that the maximal length $pq$ is really required 
+when testing for refinement.
+\begin{example}\label{ex:pq}
+Consider the CSP reference process $P$ and an erroneous implementation $Q$ specified
+as follows.
+\begin{eqnarray*}
+P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
+\\
+P_1 & = & a \then P \extchoice b\then P
+\\ & &  \\
+Q & = & a\then Q_1 \extchoice b\then Q_1
+\\
+Q_1 & = & a\then Q_2 \extchoice b\then Q_2
+\\
+Q_2 & = & a\then Q \intchoice b\then Q
+\end{eqnarray*}
+Obviously, $P$'s normalised transition graph has 2 nodes, 
+while $Q$'s graph has 3.
+It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$, but 
+$\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using the FDR4 tool that
+the ``test passed condition'' 
+\[
+(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k))\hide \Sigma
+\]
+holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. This means that the
+non-conformance of $Q$ cannot be detected by any test trace of length 
+less or equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
+by a trace of length 6, because the last event offered by the test $U_F(5)$ is 
+refused by $Q$.
+\xbox
+\end{example}
+%
+Generalising Example~\ref{ex:pq}, it can be shown that for any pair 
+$2\le p,q \in\mathbb{N}$,  
+there exist reference processes with $p$ states
+and implementation processes with $q$ states, such that 
+a violation of the trace refinement property
+can only be detected with a trace of length $pq$. This is proven in the following 
+theorem.
+
+\begin{theorem}\label{th:maxtracelen}
+Let $2\le p,q \in\mathbb{N}$. Then there exists a reference process $P$ and an
+implementation process $Q$ with the following properties.
+\begin{enumerate}
+\item $G(P)$ has $p$ states.
+\item $G(Q)$ has $q$ states.
+\item $P\not\lessdet_T Q$.
+\item $\forall s\in\trc(Q): \#s < pq\implies s\in\trc(P)$.
+\end{enumerate}
+As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement cannot be reduced without losing the test suite's completeness property.
+\end{theorem}
+\begin{proof}
+Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$
+over alphabet $\Sigma =\{ a,b\}$ as follows.
+\begin{eqnarray*}
+P & = &  P(0) 
+\\
+P(k) & = & \big( a \then P(k) \big) \extchoice (k < p-1) \& \big( b \then P(k+1)\big)
+\\ 
+Q & = & Q(0)
+\\
+Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) \extchoice 
+( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
+\end{eqnarray*}
+Using regular expression notation, the traces of $P$ can be specified as
+\[
+\trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
+\]
+where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subset\Sigma^*$, 
+including the traces of $M$ themselves.
+The traces of $Q$ can be specified by
+\[
+\trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
+\]
+It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; 
+for example, the trace $(a^{q-1}b)^p$ is in
+$\trc(Q)\setminus\trc(P)$.
+
+Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented 
+by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$. 
+Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$ 
+is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, since
+$\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events, 
+where at most $p-1$ events $b$ have been inserted.
+\xbox
+\end{proof}
+
+Since Theorem~\ref{th:maxtracelen} just states that a violation of trace refinement
+may remain undetected if only traces shorter than $pq$ are checked during tests, 
+it can also be applied to our trace refinement tests. Therefore, 
+test suites $\{ U_T(z) \}$ with $z<pq-1$ are no longer complete.
+
+
+It is discussed in Section~\ref{sec:conc} how the number of test traces to be executed 
+by complete test suites for failures or tarce 
+refinement   can still be reduced {\it without} reducing 
+the maximal length.
+
+% =================================================================================
