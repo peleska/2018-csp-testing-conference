@@ -21,7 +21,7 @@ test execution.
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
 The first factor $\ell$
-has worst-case upper bound $\ell\le |\Sigma|^k$. As an example, where this upper bound 
+has worst-case upper bound $\ell\le \card{\Sigma}^k$. As an example, where this upper bound 
 is really met, consider the reference process
 \[
 RUN(\Sigma) = e:\Sigma \then RUN(\Sigma).
@@ -29,79 +29,62 @@ RUN(\Sigma) = e:\Sigma \then RUN(\Sigma).
 The normalised transition graph of this process has a single state, and its initials
 are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(k)$ can 
 never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly 
-$|\Sigma|^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
+$\card{\Sigma}^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
 for each of their events.
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $h$}
 Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
-acceptances, the cardinality $h$ of $\minhits(P/s)$ is maximal for the case
-where all $A_i$ are disjoint. In this case,  $h~~=~~|\minhits(P/s)|~~=~~
-\prod_{i=1}^\alpha|A_i|$. To find an upper bound for $h$, we use the result
-that we prove in the following lemma.
-%
-\begin{lemma}\label{lemma:minhitmax}
-Let $n\ge 2$ be any positive integer. We call a sequence
-%
-$$0 < a_1\le a_2\le \ldots\le  a_{\alpha}, a_i\in \mathbb{N}, i=1,\dots, \alpha$$
-%
-a partition of $n$, if $n=\Sigma_{i=1}^{\alpha}a_i$. Define
-%
-$$p(n)=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}$$
-Then  $$p(n)=\max\big\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i,\ a_i,
-\alpha\in \mathbb{N}\big\}.$$
-%
-\end{lemma}
+acceptances, the cardinality   $h = \minhits(P/s)$ has the upper bound
+\[
+h \le \binom{n}{\lfloor\frac{n}{2}\rfloor}, \quad \text{where $n = \card{\Sigma}$.}
+\]
+This follows from Theorem~\ref{th:sperner} and the fact that $\minhits(P/s)$ is a 
+Sperner Family, as introduced in Section~\ref{sec:hit}. The next theorem shows that this
+upper bound can really be reached by collections of minimal hitting sets.
+
+\begin{theorem}
+\label{th:upperboundh}
+Let $n\ge 2$ be any positive integer and $\Sigma$  any finite set of cardinality $n$.
+Let $C\subseteq 2^\Sigma$ be any collection of  subsets of $\Sigma$. Then  
+\[
+\text{max}\{\card{\text{minHit}(C)}~|~C\subseteq 2^\Sigma\}=\binom{n}{\lfloor\frac{n}{2}\rfloor}
+\]
+\end{theorem}
 \begin{proof}
-Let $n\ge 2$. Obviously, \begin{equation}\label{eq:1} n\le
-p(n).\end{equation} Define $\pi(n)$ to be the following partition  of $n$:
-%
-$$\pi(n)=\begin{cases} \underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k\\ 2,2,\underbrace{3,\ldots,3}_{k-1\text{ times}}  &\text{if}\,\, n=3k+1\\2,\underbrace{3,\ldots,3}_{k\text{ times}}  &\text{if}\,\, n=3k+2\end{cases}$$
-%
-Then the product of the numbers in $\pi(n)$ equals  $p(n)$. In the remainder
-of the proof we have to show that $p(n)$ is really maximal in the sense of
-the lemma.
-
-Since the number of partitions of a given $n$ is finite,
-%
-$$\text{max}\{\prod_{i=1}^{\alpha}a_i~|~n=\Sigma_{i=1}^{\alpha}a_i, a_i\in \mathbb{N}\}$$
-%
-exists. Let $a_1, \ldots , a_{\alpha}$ be any partition of $n\ge 2$ with
-maximal product. Then, obviously,  $a_i>1$ for all $i=1,\dots,\alpha$.
-Suppose there is some $a_j$, $1\le j\le \alpha$, with $a_j>3$. Then
-from~(\ref{eq:1}) we have
-$$\prod_{i=1}^{\alpha}a_i\le a_1\cdot a_{j-1}\cdot p(a_j)\cdot a_{j+1}\ldots\cdot a_{\alpha}.$$
-Hence we can replace $a_j$ by $\pi(a_j)$, and the new partition has  a
-product value which is not less then the original partition $a_1, \ldots ,
-a_{\alpha}$. This process can be repeated, until every $a_i$ in the resulting
-partition is either 2 or 3. Hence there exists a partition of $n$ with
-maximal product, such that every term is $2$ or $3$. Since $6=2+2+2=3 + 3$
-and $2^3< 3^2$, the number of $2$'s in such a maximal partition is less than
-$3$. Let $a_1\le a_2\le \ldots\le  a_{\alpha}$ with $a_i\in \{2,3\},
-i=1,\dots,\alpha$, be a partition of $n$ with maximal product. Let $k_1\le 2$
-be the number of terms equal $2$ and $k_2$ be the number of terms equal $3$.
-Every $n\ge 2$ can be represented by $n=2k_1+3k_2$, $n\equiv 2k_1 (\mod 3)$
-with $k_1\le 2$, and $\prod_{i=1}^{\alpha}a_i=2^{k_1}\cdot 3^{k_2}$. We have
-
-\begin{align*}k_1&=\begin{cases} 0 &\text{if}\,\, n=3k\\ 2 &\text{if}\,\, n=3k+1\\1 &\text{if}\,\, n=3k+2\end{cases}\\
- k_2&=\begin{cases} k &\text{if}\,\, n=3k\\ k-1 &\text{if}\,\, n=3k+1\\k &\text{if}\,\, n=3k+2\end{cases}\\
-\prod_{i=1}^{\alpha}a_i&=\begin{cases} 3^k &\text{if}\,\, n=3k\\ 2^2\cdot 3^{k-1} &\text{if}\,\, n=3k+1\\2\cdot 3^{k} &\text{if}\,\, n=3k+2\end{cases}\end{align*}
-This proves the lemma.
+For any subset  $B$  of $\Sigma$, define  $A_{B}:=\Sigma\setminus B$.
+Define 
+$$
+C=\{A_{B}~|~ B\subseteq \Sigma, \card{B} < \lfloor\frac{n}{2}\rfloor\}.
+$$
+Let $H$ be any minimal Hitting set of $C$. Then $H$ contains at least $\lfloor\frac{n}{2}\rfloor$ elements, because 
+otherwise there existed an $A_{H}\in C$ with $A_H\cap H=\varnothing$. 
+Since $\card{A_{B}}=n-\card{B}>n-\lfloor\frac{n}{2}\rfloor$, for any $B\subseteq \Sigma$ with $\card{B}< \lfloor\frac{n}{2}\rfloor$, we conclude that
+ any  subset of $\Sigma$  with at least $\lfloor\frac{n}{2}\rfloor$ elements 
+ has a non-empty intersection with all  $A_B\in C$.  
+ The number of subsets in $\Sigma$ with exactly $\lfloor \frac{n}{2}\rfloor$ elements
+ is $\binom{n}{\lfloor\frac{n}{2}\rfloor}$.
+Thus $\card{\text{minHit}(C)} \ge \binom{n}{\lfloor\frac{n}{2}\rfloor}$, and 
+Theorem~\ref{th:sperner} yields $\card{\text{minHit}(C)} = \binom{n}{\lfloor\frac{n}{2}\rfloor}$.
 \xbox
 \end{proof}
+
+
+To get an approximation of the maximal size of $\minhits(P/s)$ for large $n$, recall
+Stirling's approximation~\cite[p.~112]{Graham:1994:CMF:562056}
+\[
+m! \approx \sqrt{2\pi m} \cdot \big( \frac{m}{e} \big)^m, \quad\text{where $e$ denotes the Euler Number.}
+\]
+Applying this approximation to the   case where $n = \card{\Sigma}$ is even and $m = (n/2)$  
+results in
+\[
+h \le \binom{2m}{m} \approx \frac{4^m}{\sqrt{\pi m}} = 
+\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}.
+\]
 %
-From Lemma~\ref{lemma:minhitmax}, we conclude that
-$$h=\begin{cases}
-3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\  |\Sigma|~~\equiv~~0 \mod 3\\
-3^{\lfloor\frac{|\Sigma|}{3}\rfloor}  + 3^{\lfloor\frac{|\Sigma|}{3}\rfloor-1}&\text{if}\ |\Sigma|~~\equiv~~1\mod 3\\
-2\cdot 3^{\lfloor\frac{|\Sigma|}{3}\rfloor} &\text{if}\ |\Sigma|~~\equiv~~2 \mod 3
-\end{cases}
-$$
-%
-We note that $h$ is significantly smaller than $2^{|\Sigma|}-1$, this can
-also be intuitively motivated by the fact that  for every $H\in
-\minhits(P/s)$, all of its true subsets and true supersets are {\it not}
-contained in $\minhits(P/s)$.
+We note that, due to this approximation result, 
+$h$ is   smaller than $2^{\card{\Sigma}}-1$, the cardinality of the 
+non-empty subsets of $\Sigma$.
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bounds of Test Executions for Checking Failures Refinement}
@@ -110,22 +93,39 @@ $k = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
 we use the formula for the sum of the geometric progression.
 %
 \[
-h\cdot \big( \frac{1-|\Sigma|^{pq}}{1-|\Sigma|} \big),\
- \text{or, asymptotically,}\  O(3^{\lfloor\frac{|\Sigma|}{3}\rfloor}\cdot|\Sigma|^{(pq-1)}).
+h\cdot \big( \frac{1-\card{\Sigma}^{pq}}{1-\card{\Sigma}} \big),\
+ \text{or, asymptotically,}\  O(\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}\cdot\card{\Sigma}^{(pq-1)}).
  \]
 %
-From Lemma~\ref{lemma:hseta} we know that the worst-case bound for $h$
+From Theorem~\ref{th:upperboundh} we know that the worst-case bound for $h$
 above cannot be further improved, since the full collection of minimal
 hitting sets needs to be checked to verify $conf$. The
 authors of~\cite{Hennessy:1988:ATP:50497} and
 \cite{DBLP:conf/icfem/CavalcantiG07} suggest to test {\it every} non-empty
 subset of $\Sigma$ whose events cannot be completely refused in a given
 process state of the reference model; this leads to a worst-case estimate of
-$2^{|\Sigma|}-1$ for the number of different sets to be offered to the SUT in
+$2^{\card{\Sigma}}-1$ for the number of different sets to be offered to the SUT in
 the last step of the test execution, so our approach reduces the number of
 test executions in comparison
-to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
+to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07} by a factor of
+$1/{\sqrt{2\pi \card{\Sigma}}}$.
 
+In Fig.~\ref{fig:minhita}, the reduction is visualised by a function plot of
+$2^{\card{\Sigma}}$ versus $\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$.
+
+
+
+% .....................................................................................
+ \begin{figure}
+ %%\hspace*{-40mm}
+ \begin{center}
+\includegraphics[width=.8\textwidth]{minhit-fig.pdf}
+\end{center}
+\vspace*{-10mm}
+\caption{Function plot $2^{\card{\Sigma}}$ versus $\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$.}
+ \label{fig:minhita}
+ \end{figure}
+% .......................................................................................
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bounds of Test Executions for Checking Trace Refinement}
@@ -133,7 +133,7 @@ to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07}.
 According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
 refinement just contains the adaptive test case $U_T(pq-1)$. As derived for $U_F(k)$
 above, the number of executions performed by $(Q\parallel[\Sigma] U_R(pq-1))$ 
-is bounded by $|\Sigma|^{pq-1}$.
+is bounded by $\card{\Sigma}^{pq-1}$.
 
 
 % -------------------------------------------------------------------------

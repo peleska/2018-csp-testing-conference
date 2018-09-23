@@ -632,6 +632,24 @@ carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and obser
 \end{equation}
 
 
+In preparation of complexity results to be presented in Section~\ref{sec:complexity}, we consider the question how many minimal hitting sets can maximally exist for a given 
+collection of finite sets. To this end, the following definitions and results are 
+useful\footnote{The authors are grateful to @todo for suggesting the applicability of Sperner's Theorem in the context of the work presented here.}. 
+A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a given universe $\Sigma$ that do not contain each other, that is, 
+$H_1 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq H_2\in S$. 
+Specialising   antichains known from   partial orders to finite sets partially ordered by $\subseteq$ results in Sperner families. 
+
+We observe that the collection of minimal hitting sets constructed from the minimal acceptances of a CSP process state build a Sperner Family. Therefore, the following theorem can be applied.
+\begin{theorem}[Sperner's Theorem~\cite{sperner_satz_1928}]
+\label{th:sperner}
+The largest Sperner family $S$ 
+over an $n$-element universe $\Sigma$ has cardinality 
+$$
+\card{S} = \binom{n}{\lfloor\frac{n}{2}\rfloor}.
+$$
+\xbox
+\end{theorem}
+It will be shown in Section~\ref{sec:complexity} that this upper bound can actually be reached by hitting sets associated with the minimal acceptances of a CSP process state.
 
 
 
