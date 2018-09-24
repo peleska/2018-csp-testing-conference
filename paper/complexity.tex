@@ -39,33 +39,37 @@ acceptances, the cardinality   $h = \minhits(P/s)$ has the upper bound
 \[
 h \le \binom{n}{\lfloor\frac{n}{2}\rfloor}, \quad \text{where $n = \card{\Sigma}$.}
 \]
-This follows from Theorem~\ref{th:sperner} and the fact that $\minhits(P/s)$ is a 
-Sperner Family, as introduced in Section~\ref{sec:hit}. The next theorem shows that this
-upper bound can really be reached by collections of minimal hitting sets.
+This follows from Theorem~\ref{th:sperner}, since $\minhits(P/s)$ is a 
+Sperner Family, as introduced in Section~\ref{sec:sperner}. 
+The next theorem shows that this
+upper bound can really be reached by collections of minimal hitting sets associated with 
+a CSP process state.
 
 \begin{theorem}
 \label{th:upperboundh}
-Let $n\ge 2$ be any positive integer and $\Sigma$  any finite set of cardinality $n$.
-Let $C\subseteq 2^\Sigma$ be any collection of  subsets of $\Sigma$. Then  
+Let  $\Sigma$  be an alphabet with cardinality $n\ge 2$.  Then  
+there exists a CSP process $P$ with 
 \[
-\text{max}\{\card{\text{minHit}(C)}~|~C\subseteq 2^\Sigma\}=\binom{n}{\lfloor\frac{n}{2}\rfloor}
+\card{\text{minHit}(P)} = \binom{n}{\lfloor\frac{n}{2}\rfloor}.
 \]
 \end{theorem}
 \begin{proof}
-For any subset  $B$  of $\Sigma$, define  $A_{B}:=\Sigma\setminus B$.
-Define 
-$$
-C=\{A_{B}~|~ B\subseteq \Sigma, \card{B} < \lfloor\frac{n}{2}\rfloor\}.
-$$
-Let $H$ be any minimal Hitting set of $C$. Then $H$ contains at least $\lfloor\frac{n}{2}\rfloor$ elements, because 
-otherwise there existed an $A_{H}\in C$ with $A_H\cap H=\varnothing$. 
-Since $\card{A_{B}}=n-\card{B}>n-\lfloor\frac{n}{2}\rfloor$, for any $B\subseteq \Sigma$ with $\card{B}< \lfloor\frac{n}{2}\rfloor$, we conclude that
- any  subset of $\Sigma$  with at least $\lfloor\frac{n}{2}\rfloor$ elements 
- has a non-empty intersection with all  $A_B\in C$.  
- The number of subsets in $\Sigma$ with exactly $\lfloor \frac{n}{2}\rfloor$ elements
- is $\binom{n}{\lfloor\frac{n}{2}\rfloor}$.
-Thus $\card{\text{minHit}(C)} \ge \binom{n}{\lfloor\frac{n}{2}\rfloor}$, and 
-Theorem~\ref{th:sperner} yields $\card{\text{minHit}(C)} = \binom{n}{\lfloor\frac{n}{2}\rfloor}$.
+Let $C$ be the collection of all subsets of $\Sigma$ with cardinality 
+$n-\lfloor{\frac{n}{2}}\rfloor+1$. Then any CSP process of the form 
+\[
+P = \Intchoice_{A\in C} e:A\then P(e)
+\]
+fulfils $\minaccs(P) = C$.
+Let $H$ be any minimal Hitting set of $C$. Then $H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because 
+otherwise
+$\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, 
+and any subset $A\subseteq \Sigma\setminus H$ with cardinality
+$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in $C$, but satisfy 
+$A\cap H=\varnothing$. 
+Since $\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we conclude
+ that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$ 
+ intersects  every element of $C$.  Therefore, every minimal hitting set of $C$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
+so $\card{\minhits(C)} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$.
 \xbox
 \end{proof}
 
