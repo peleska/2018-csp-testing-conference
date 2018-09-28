@@ -5,7 +5,8 @@
 
 We present CSP~(Section~\ref{section:csp}) and the concept of minimal hitting
 sets~(Section~\ref{sec:hit}), which is central to our novel notion of test
-for failures refinement.
+for failures refinement. To study complexity, we also introduce the concept
+of Sperner families~(Section~\ref{sec:sperner}).
 
 % =========================================================================
 \subsection{CSP, Refinement, and Normalised Transition Graphs}
@@ -535,9 +536,6 @@ $V'$ is $(pq-1)$.
 This concludes our presentation of CSP and of some results regarding its
 semantics and normalised transition graphs that are used in the next section.
 
-\fixme{Abrupt end to the section. It has more than just preliminary material.
-It has some new results.}
-
 % =========================================================================
 \subsection{Minimal Hitting Sets}
 \label{sec:hit}
@@ -545,7 +543,7 @@ It has some new results.}
 
 
 \subsubsection*{Definition}
-The main idea of the underlying test strategy for failures refinement can be
+The main idea of the underlying test strategy for failures refinement is
 based on solving a \emph{hitting set problem}. Given a finite collection of
 finite sets $C = \{ A_1,\dots,A_n\}$, such that each $A_i$ is a subset of a
 universe $\Sigma$, a \emph{hitting set} $H\subseteq\Sigma$ is a set
@@ -615,10 +613,14 @@ Define
 \]
 Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*),
 $\overline H$ is a hitting set of $\minaccs(G(P)/s)$ which has an  empty
-intersection with $A$.
-Minimising $\overline H$ yields   a minimal hitting set $H\in
-\minhits(P/s)$ which is {\it not} a hitting set of $\minaccs(G(Q)/s)$, a
-contradiction to Assumption~2. This completes the proof of the lemma. \xbox
+intersection with $A$. Minimising $\overline H$ yields   a minimal hitting
+set $H\in \minhits(P/s)$ which is {\it not} a hitting set of
+$\minaccs(G(Q)/s)$, a contradiction to Assumption~2. We note that we use
+$\minhits(G(P)/s) = \minhits(P/s)$, as well $\minaccs(G(Q)/s) =
+\minaccs(Q/s)$, which follow from the identification of process states with
+states of the normalised graph for the proof discussed in the previous
+section. This completes the proof of the lemma. \fixme{Please, check that
+you're happy with this observation.}\xbox
 \end{proof}
 %
 We note that $\minaccs(P) = \{ \varnothing \}$ if $P = Q\intchoice \Stop$.
@@ -643,36 +645,41 @@ carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and obser
 \label{eq:minhitsGP}
 \minhits(G(P)/s) = \minhits(P/s) \ \text{for all}\ s\in \trc(P).
 \end{equation}
-
+\fixme{You already used this above. Perhaps you want to move this to before
+Lemma 4?}
 
 % =========================================================================
 \subsection{Sperner Families}
 \label{sec:sperner}
-In preparation of complexity results to be presented in Section~\ref{sec:complexity}, we consider the question how many minimal hitting sets can maximally exist for a given
-collection of minimal acceptances.
-To this end, the following definitions and results are
-useful\footnote{The authors are grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan,
-for suggesting the applicability of Sperner's Theorem in the context of the work presented here.}.
+% =========================================================================
 
+In preparation for complexity results to be presented in
+Section~\ref{sec:complexity}, we consider how many minimal hitting sets can
+maximally exist for a given collection of minimal acceptances. To this end,
+the following definitions and results are useful\footnote{The authors are
+grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan, for
+suggesting the applicability of Sperner's Theorem in the context of the work
+presented here.}.\fixme{Shouldn't the footnote go to the acknowledgements?}
 
-A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a given
-finite universe $\Sigma$ that do not contain each other, that is,
-$H_1 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq H_2\in S$.
-Specialising   antichains known from   partial orders to finite sets partially ordered by $\subseteq$ results in Sperner families.
-We observe that
+A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a
+given finite universe $\Sigma$ that do not contain each other, that is, $H_1
+\not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq
+H_2\in S$. Specialising antichains known from partial orders to finite sets
+partially ordered by $\subseteq$ results in Sperner families. We observe that
 \begin{itemize}
 \item the maximal refusals of a CSP process state,
 \item the minimal acceptances of a CSP process state, and
 \item the minimal hitting sets of a given collection of sets
 \end{itemize}
-represent Sperner families. Moreover, given any finite alphabet $\Sigma$ with
-$\card{\Sigma} = n$, every collection $S$ of subsets with identical cardinality $k \le n$
-is a Sperner family,  because $A_1, A_2\in S \wedge A_1 \subseteq A_2\wedge \card{A_1} = \card{A_2}$ implies $A_1 = A_2$. Given  any Sperner Family $S$ of $\Sigma$, $S$ represents
-the minimal acceptances in the initial state of the CSP process
-\[
-P = \Intchoice_{A\in S}\big( e:A \then P(e) \big).
-\]
-
+are Sperner families. Moreover, given any finite alphabet $\Sigma$ with
+$\card{\Sigma} = n$, every collection $S$ of subsets with identical
+cardinality $k \le n$ is a Sperner family,  because $A_1, A_2\in S \wedge A_1
+\subseteq A_2\wedge \card{A_1} = \card{A_2}$ implies $A_1 = A_2$. Given  any
+Sperner Family $S$ of $\Sigma$, $S$ represents the minimal acceptances in the
+initial state of the CSP process
+%\[
+$P = \Intchoice_{A\in S}\big( e:A \then P(e) \big)$.
+%\]
 
 The cardinality of Sperner Families is determined by the following theorem.
 \begin{theorem}[Sperner's Theorem~\cite{sperner_satz_1928}]
@@ -682,15 +689,19 @@ over an $n$-element universe $\Sigma$, its cardinality is bound by
 \[
 \card{S} \le \binom{n}{\lfloor\frac{n}{2}\rfloor}.
 \]
-The upper bound is reached if and only if one of the following cases apply.
+The upper bound is reached if, and only if, one of the following cases apply:
 \begin{enumerate}
-\item For even $n$, if $S$ consists of all subsets of $\Sigma$ with cardinality $n/2$.
-\item For odd $n$, if one of the following cases holds.
+\item For even $n$, if $S$ consists of all subsets of $\Sigma$ with
+    cardinality $n/2$;
+\item For odd $n$, if one of the following cases holds;
 \begin{enumerate}
-\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/s$.
+\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/s$;
+    or
 \item $S$ consists of all subsets of $\Sigma$ with cardinality $(n-1)/s$.
 \end{enumerate}
 \end{enumerate}
 \xbox
 \end{theorem}
-It will be shown in Section~\ref{sec:complexity} that this upper bound can actually be reached by hitting sets associated with the minimal acceptances of a CSP process state.
+It is shown in Section~\ref{sec:complexity} that this upper bound can
+actually be reached by hitting sets associated with the minimal acceptances
+of a CSP process state.
