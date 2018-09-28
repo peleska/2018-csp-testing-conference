@@ -3,18 +3,21 @@
 \label{section:preliminaries}
 % =========================================================================
 
-In this section, we present CSP and the concept of minimal hitting sets, which
-is central to our novel notion of test for failures refinement.
+We present CSP~(Section~\ref{section:csp}) and the concept of minimal hitting
+sets~(Section~\ref{sec:hit}), which is central to our novel notion of test
+for failures refinement.
 
 % =========================================================================
 \subsection{CSP, Refinement, and Normalised Transition Graphs}
+\label{section:csp}
+% =========================================================================
 
 \subsubsection*{Communicating Sequential Processes (CSP)} is a process algebra
 supporting system development by refinement. Using CSP, we model both systems and
 their components using processes. They are characterised by their patterns
 of interactions, modelled by synchronous, instantaneous, and atomic events.
 
-Throughout this paper, the alphabet of the processes, that is the set of
+Throughout this paper, the alphabet of the processes, that is, the set of
 events that are in scope, is denoted by $\Sigma$ and supposed to be finite.
 The FDR tool~\cite{fdr} supports model checking and semantic analyses of
 finite-state CSP processes.
@@ -51,14 +54,12 @@ opportunity to interfere:~the choice is made by the process.
 \end{example}
 %
 Iterated forms $\Extchoice i: I @ P(i)$ and $\Intchoice i: I @ P(i)$ of the
-external and internal choice operators allow us to define a choice over a
-collection of processes $P(i)$. By convention,  if the index set $I$ is
-empty, external choices evaluate to the process $\Stop$, which
-deadlocks:~does not engage into any event and does not terminate. An iterated
-internal choice is not defined for an empty index set. For an external choice 
-indexed over a set of events in the form
-$\Extchoice e: A @ e \then P(e), A\subseteq \Sigma$, we use 
-abbreviation $e:A \then P(e)$.
+external and internal choice operators define a choice over a collection of
+processes $P(i)$. If the index set $I$ is empty, the external choice is the
+process $\Stop$, which deadlocks:~does not engage into any event or
+terminate. For an external choice $\Extchoice e: A @ e \then P(e), A\subseteq
+\Sigma$ over a set $A$ of events, we use the abbreviation $e:A \then P(e)$.
+An iterated internal choice is not defined for an empty index set.
 
 There are several parallelism operators. A widely used form of parallelism $P
 \parallel[cs] Q$ defines a process in which the behaviour is characterised by
@@ -70,9 +71,9 @@ Interactions that are not supposed to be visible to the environment can be
 hidden. The operator $P \hide H$ defines a process that behaves as $P$, with
 the interactions modelled by events in the set $H$ hidden. Frequently, hiding
 is used in conjunction with parallelism:~it is often desirable to make
-internal actions of each process in a network of parallel processes, perhaps
-used for coordination of the network, invisible, while events happening at
-their interfaces remain observable.
+actions of each process in a network of parallel processes, perhaps used for
+coordination of the network, invisible, while events happening at their
+interfaces remain observable.
 
 A rich collection of process operators allows us to define networks of
 parallel processes in a concise and elegant way, and reason about safety,
@@ -109,12 +110,12 @@ subset-closed~\cite{Hoare:1985:CSP:3921,Roscoe2010}: if $(s,X)$ is a failure
 of $P$ and $Y\subseteq X$, then $(s,Y)\in\fails(P)$ and $Y\in\refs(P/s)$
 follows.
 
-Failures refinement, $P \lessdet_F Q$, is defined as expected by set
-containment $\fails(Q)\subseteq\fails(P)$. Since refusals are subset-closed,
-$P \lessdet_F Q$ implies
+For divergence-free processes, failures refinement, $P \lessdet_F Q$, is
+defined as expected by set containment $\fails(Q)\subseteq\fails(P)$. Since
+refusals are subset-closed, $P \lessdet_F Q$ implies
 $(s,\varnothing)\in\fails(P)$ for all traces $s\in\trc(Q)$. So, for
 divergences-free processes, failures refinement implies trace refinement.
-Therefore, using the conformance relation
+Therefore, using the conformance relation $conf$ below
 %
 \begin{equation}\label{eq:conf}
   Q\ conf\ P \defs \forall s\in \trc(P) \cap \trc(Q): \refs(Q/s)
@@ -127,7 +128,6 @@ failures refinement can be expressed by $\lessdet_T$ and $conf$.
 (P \lessdet_F Q) \iff (P \lessdet_T Q \land Q\ conf\ P)
 \end{equation}
 %
-
 For finite CSP processes, since refusals are
 subset-closed, $\refs(P/s)$ can be constructed from the set of \emph{maximal
 refusals} defined by
@@ -198,7 +198,7 @@ a path through $G(P)$ starting  at $\ii n$ whose edge labels coincide with
 $s$. In analogy to $\trc(P)$, we use the notation $\trc(G(P))$ for the set of
 finite, initialised paths through $G(P)$, each path represented by its finite
 sequence of edge labels. We note that $\trc(P) = \trc(G(P))$. Since $G(P)$ is
-normalised, there is a unique node reached by applying the events from $s$
+normalised, there is a unique node reached by following the events from $s$
 one by one, starting in $\ii n$. Therefore, $G(P)/s$  is also well defined.
 By $[n]^0$ we denote the \emph{initials} of $n$:~the set of events occurring
 as labels in any outgoing transitions.
@@ -283,8 +283,8 @@ A\in \minaccs(P/s) & \Leftrightarrow & \exists R\in\maxrefs(P/s) \wedge A = \Sig
 %\fixme{jp: I'm sure and I can prove this. However, we don't need this fact, so I suggest to
 %removed it.}
 %
-Exploiting formula (\ref{eq:accref}), 
-%(\ref{eq:accinitials}), and (\ref{eq:accsubset}), 
+Exploiting (\ref{eq:accref}),
+%(\ref{eq:accinitials}), and (\ref{eq:accsubset}),
 every node of a normalised transition graph can
 alternatively be labelled with their minimal acceptances, and this
 information is equivalent to that contained in the maximal refusals. Since
@@ -294,7 +294,7 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \begin{equation}\label{eq:maxrefsminaccs}
 \minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \}.
 \end{equation}
-%\fixme{alcc: proof in the report perhaps?}
+\fixme{alcc: proof in the report perhaps? What do you need (5) for? }
 
 % .....................................................................................
  \begin{figure}[t]
@@ -306,6 +306,9 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
    \caption{Normalised transition graph of CSP process $P$ from Example~\ref{ex:a}.}
    \label{fig:tga}
  \end{figure}
+
+\fixme{alcc: the a from node 2 should go back to 0, I think.}
+
 % .......................................................................................
 
 \begin{example}\label{ex:a}
@@ -327,7 +330,7 @@ $t(1,c) = 2$. This transition, however, can have
 been caused by either $Q$ or $R$ engaging into $c$, so node 2 corresponds to
 process state $Q/c \intchoice R/c = P \intchoice R$. This is reflected by the
 two minimal acceptance sets labelling node 2. Similar considerations explain
-the other nodes and transitions in Fig.~\ref{fig:tga}. 
+the other nodes and transitions in Fig.~\ref{fig:tga}.
 \xbox
 \end{example}
 %
@@ -346,7 +349,7 @@ refinement and $conf$; (\ref{eq:failrefa}) states how $conf$ can be expressed
 by means of the maximal refusal functions of the graphs involved; and
 (\ref{eq:failrefb}) states the same in terms of the minimal acceptances that
 can be derived from the maximal refusal functions by means of
-(\ref{eq:maxrefsminaccs}). 
+(\ref{eq:maxrefsminaccs}).
 %%\fixme{alcc: I think at least the report should point to proofs.}
 %
 \begin{lemma}
@@ -374,19 +377,20 @@ can be derived from the maximal refusal functions by means of
 \end{lemma}
 %
 \begin{proof}
-Recall that $P\lessdet_T Q$ is defined
-as $\trc(Q)\subseteq \trc(P)$ and that $\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$.
-This shows (\ref{eq:trcrefa}). 
+Recall that $P\lessdet_T Q$ is defined as $\trc(Q)\subseteq \trc(P)$ and that
+$\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$. This shows (\ref{eq:trcrefa}).
+\fixme{alcc: (11) is already proved in my paper with mcg. No need to repeat
+it here. I suggest just to add a reference.}
 
 \medskip
 \noindent
 To prove (\ref{eq:failconf}), we derive
 \begin{argue}
-P \lessdet_F Q 
+P \lessdet_F Q
 \\
 \Leftrightarrow \fails(Q)\subseteq \fails(Q) & definition of $\lessdet_F$
 \\
-\Leftrightarrow \forall (s,R) \in  \fails(Q): (s,R) \in\fails(P) 
+\Leftrightarrow \forall (s,R) \in  \fails(Q): (s,R) \in\fails(P)
 & property of $\subseteq$
 \\
 \Leftrightarrow \forall (s,\varnothing) \in  \fails(Q): (s,\varnothing) \in\fails(P)
@@ -416,7 +420,7 @@ P\lessdet_T Q \wedge Q\ conf\ P
 \noindent
 To prove (\ref{eq:failrefa}), we derive
 \begin{argue}
-Q\ conf\ P 
+Q\ conf\ P
 \\
  \Leftrightarrow \forall s\in\trc(P)\cap \trc(Q): \refs(Q/s)\subseteq\refs(P/s)
  \\
@@ -435,7 +439,7 @@ Q\ conf\ P
 \medskip
 \noindent
 Finally, (\ref{eq:failrefb}) follows from (\ref{eq:failrefa}) using (\ref{eq:accref})
-and the fact that $R_Q \subseteq R_P$ is equivalent to 
+and the fact that $R_Q \subseteq R_P$ is equivalent to
 $\Sigma - R_P \subseteq \Sigma - R_Q$.
 \xbox
 \end{proof}
@@ -527,9 +531,12 @@ $V' = V \cup V.\Sigma\cup\dots \cup V.\Sigma^{(pq-1)}$. The maximal length of tr
 $V'$ is $(pq-1)$.
 \xbox
 \end{proof}
+%
+This concludes our presentation of CSP and of some results regarding its
+semantics and normalised transition graphs that are used in the next section.
 
-%\fixme{Abrupt end to the section. It has more than just preliminary material.
-%It has some new results.}
+\fixme{Abrupt end to the section. It has more than just preliminary material.
+It has some new results.}
 
 % =========================================================================
 \subsection{Minimal Hitting Sets}
@@ -641,17 +648,17 @@ carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and obser
 % =========================================================================
 \subsection{Sperner Families}
 \label{sec:sperner}
-In preparation of complexity results to be presented in Section~\ref{sec:complexity}, we consider the question how many minimal hitting sets can maximally exist for a given 
-collection of minimal acceptances. 
-To this end, the following definitions and results are 
-useful\footnote{The authors are grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan, 
-for suggesting the applicability of Sperner's Theorem in the context of the work presented here.}. 
+In preparation of complexity results to be presented in Section~\ref{sec:complexity}, we consider the question how many minimal hitting sets can maximally exist for a given
+collection of minimal acceptances.
+To this end, the following definitions and results are
+useful\footnote{The authors are grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan,
+for suggesting the applicability of Sperner's Theorem in the context of the work presented here.}.
 
 
-A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a given 
-finite universe $\Sigma$ that do not contain each other, that is, 
-$H_1 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq H_2\in S$. 
-Specialising   antichains known from   partial orders to finite sets partially ordered by $\subseteq$ results in Sperner families. 
+A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a given
+finite universe $\Sigma$ that do not contain each other, that is,
+$H_1 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq H_2\in S$.
+Specialising   antichains known from   partial orders to finite sets partially ordered by $\subseteq$ results in Sperner families.
 We observe that
 \begin{itemize}
 \item the maximal refusals of a CSP process state,
@@ -661,7 +668,7 @@ We observe that
 represent Sperner families. Moreover, given any finite alphabet $\Sigma$ with
 $\card{\Sigma} = n$, every collection $S$ of subsets with identical cardinality $k \le n$
 is a Sperner family,  because $A_1, A_2\in S \wedge A_1 \subseteq A_2\wedge \card{A_1} = \card{A_2}$ implies $A_1 = A_2$. Given  any Sperner Family $S$ of $\Sigma$, $S$ represents
-the minimal acceptances in the initial state of the CSP process  
+the minimal acceptances in the initial state of the CSP process
 \[
 P = \Intchoice_{A\in S}\big( e:A \then P(e) \big).
 \]
@@ -670,7 +677,7 @@ P = \Intchoice_{A\in S}\big( e:A \then P(e) \big).
 The cardinality of Sperner Families is determined by the following theorem.
 \begin{theorem}[Sperner's Theorem~\cite{sperner_satz_1928}]
 \label{th:sperner}
-Given a  Sperner family $S$ 
+Given a  Sperner family $S$
 over an $n$-element universe $\Sigma$, its cardinality is bound by
 \[
 \card{S} \le \binom{n}{\lfloor\frac{n}{2}\rfloor}.
@@ -687,15 +694,3 @@ The upper bound is reached if and only if one of the following cases apply.
 \xbox
 \end{theorem}
 It will be shown in Section~\ref{sec:complexity} that this upper bound can actually be reached by hitting sets associated with the minimal acceptances of a CSP process state.
-
-
-
-
-
-
-
-
-
-
-
-
