@@ -269,49 +269,53 @@ A test suite $\TS_F$ generated from a CSP process $P$, as specified in
 Theorem~\ref{th:failurestest}, is passed by every CSP process $Q$ satisfying
 $P\lessdet_F Q$.
 \end{lemma}
-\begin{proof}{~}We make two points, described in separate steps below. The
+\begin{proof}{~}We make two points in separate steps below. The
 first is that the test execution cannot reach branch~(\ref{eq:ufa})and raise
 a $fail$ event.  The second is that it cannot deadlock without raising a
-$pass$ event.
+$pass$ event. This case would also interpreted as FAIL, since then
+$\epass\then\Stop$ is not failures-refined by $(Q\parallel[\Sigma]
+U_F(k))\hide \Sigma$.
+% alcc: part of the explanation above was in the following lemma, but it is already
+% relevant here.
 
-{\bf Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and  $Q\ conf\
-P$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq \trc(P)$, any
-adaptive test $U_F(p)$ running in parallel with $Q$ will always enter the
-branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the external
-choice construction for $U_F(p,k,n)$. If $U_F(p,k,n) = U_F(p)/s$ with
-$s\in\trc(P)$, then Lemma~\ref{lemma:ufproperties} implies $U_F(p,k,n) =
+\paragraph{Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and $Q\
+conf\ P$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq
+\trc(P)$, any adaptive test $U_F(p)$ running in parallel with $Q$ will always
+enter the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the
+external choice construction for $U_F(p,k,n)$. If $U_F(p,k,n) = U_F(p)/s$
+with $s\in\trc(P)$, then Lemma~\ref{lemma:ufproperties} implies $U_F(p,k,n) =
 U_F(p,k,G(P)/s)$, so $[n]^0 = [G(P)/s]^0 = [P/s]^0$. As a consequence,
 $[Q/s]^0\subseteq [P/s]^0 = [n]^0$, so branch~(\ref{eq:ufa}) can never be
 entered in the parallel execution of $Q$ and $U_F(p)$, and the $fail$ event
 cannot occur.
 
-\medskip
-\noindent {\bf Step~2.} Since $Q\ conf\ P$, Lemma~\ref{lemma:hseta} implies
+\paragraph{Step~2.} Since $Q\ conf\ P$, Lemma~\ref{lemma:hseta} implies
 that for all $s\in\trc(Q)\cap\trc(P)$, every $H \in \minhits(P/s)$ is a
 hitting set for $\minaccs(Q/s)$. From Lemma~\ref{lemma:ufproperties} we know
 that $U_F(p)/s = U_F(p,k,n)$ with $U_F(p,k,n) = U_F(p,\#s,G(P)/s)$, so
-$\minhits(n) = \minhits(P/s)$. Branch (\ref{eq:ufb}) of test $U_F(p,k,n)$
-leads always to a PASS verdict and is taken if $\minhits(n) = \varnothing$.
-Branch (\ref{eq:ufc}) always leads to test continuation without a verdict.
-For the last branch, we note that it can only be entered if $\minhits(P/s) =
-\minhits(n) \neq\varnothing$. In this case, any selected minimal hitting set
-$H\in\minhits(n)$ has a non-empty intersection with each of the minimal
-acceptances of $Q/s$. As a consequence, $Q/s$ never blocks when offered
-events from $H\in\minhits(n)$, and the test terminates with PASS event
-$\epass$. Note that this argument requires that $Q$ is free of livelocks,
-because otherwise the $\epass$-events might not become visible, due to
-unbounded sequences of hidden events performed by $Q$. \xbox
+$\minhits(n) = \minhits(P/s)$. The branch (\ref{eq:ufb}) of the test
+$U_F(p,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
+\varnothing$. The branch (\ref{eq:ufc}) always leads to test continuation
+without a verdict. \fixme{I think we need a stronger argument here, as to why
+it cannot deadlock.} For the last branch, we note that it can only be entered
+if $\minhits(P/s) = \minhits(n) \neq\varnothing$. In this case, any selected
+minimal hitting set $H\in\minhits(n)$ has a non-empty intersection with each
+of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ never blocks
+when offered events from $H\in\minhits(n)$, and the test terminates with
+event $\epass$. Note that this argument requires that $Q$ is free of
+livelocks, because otherwise the $\epass$-events might not become visible,
+due to unbounded sequences of hidden events performed by $Q$. \xbox
 \end{proof}
 %
 \begin{lemma}\label{lemma:mainfexhaustive}
-Test suite $\TS_F$ specified in Theorem~\ref{th:failurestest} is exhaustive
-for the fault model specified there.
+A test suite $\TS_F$ specified as in Theorem~\ref{th:failurestest} is
+exhaustive for the fault model specified there.
 \end{lemma}
 \begin{proof}
-Consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$, According to
+Consider a process $Q\in{\cal D}$ with $P\not\lessdet_F Q$. According to
 (\ref{eq:failconf}), this non-conformance can be caused in two possible ways
-corresponding to the cases $P\not\lessdet_T Q$ and $\neg(Q\ conf\ P)$,
-respectively:
+corresponding to the cases $P\not\lessdet_T Q$ and $\neg(Q\ conf\ P)$. These
+cases can be characterised as follows:
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
 \item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
@@ -322,11 +326,9 @@ of $\minaccs(Q/s)$, such that
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
 \end{equation}
 \end{description}
-It has to be shown for each of the two cases that at least one test
-execution of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the
-   $\efail$-event or without giving any verdict. The latter case is also
-interpreted  as FAIL, since then the process $\epass\then\Stop$ is no longer
-failures-refined by $(Q\parallel[\Sigma] U_F(k))\hide \Sigma$.
+It has to be shown for each of these cases that at least one test execution
+of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the $\efail$
+event or deadlocks.
 
 \medskip
 \noindent {\bf Case~1.} Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
@@ -346,7 +348,10 @@ U_F(pq-1,\#u,G(P)/u)$. Since $s.e\not\in\trc(P)$, $e$ is an element of
 $\Sigma-[P/u]^0 = \Sigma - [G(P)/s]^0$. Hence, in at least one execution,
 $U_F(pq-1,\#u,G(P)/u)$ executes its first branch (\ref{eq:ufa}) with this
 event $e$, so that the test fails. Again, the assumption of non-divergence of
-$Q$ is needed for this conclusion.
+$Q$ is needed for this conclusion. \fixme{There is an assumption here that
+the graph of a test execution is given by the cross-product of graphs.  But,
+test execution is not defined in this way. It is defined by parallelism and
+hiding. I think the definition of test execution needs to change.}
 
 \medskip
 \noindent
