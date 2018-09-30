@@ -139,20 +139,22 @@ above about this process.}
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
 
 According to Theorem~\ref{th:failurestest}, the tests $U_F(k)$ need to be
-executed for $k = 0,\dots,pq-1$ to guarantee completeness. This means that
-the SUT is verified with test traces up to, and including, length $pq$:
-recall from the test specification, branch (\ref{eq:ufa}), that $U_F(k)$ will
-accept all traces $s.e$ with $s\in\trc(P), \#s = k, e\not\in\trc(P/s)$, so
-erroneous trace up to length $k+1$ are detected. It is interesting to
-investigate whether this maximal length is really necessary, or whether one
-could elaborate alternative complete test strategies where the SUT is tested
-with shorter traces only. Indeed, an example  presented
-in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} shows that when testing for
-equivalence of deterministic FSMs, it is sufficient to test the SUT with
-traces of significantly shorter length.
+executed for $k = 0,\dots,pq-1$ to guarantee completeness. \fixme{Confusing
+use of $p$ and $q$ again.} This means that the SUT is verified with test
+traces up to, and including, length $pq$: recall from the test specification,
+branch (\ref{eq:ufa}), that $U_F(k)$ will accept all traces $s.e$ with
+$s\in\trc(P), \#s = k, e\not\in\trc(P/s)$, so erroneous traces up to length
+$k+1$ are detected.
 
-The following example, however, shows that the maximal length $pq$ is really required
-when testing for refinement.
+It is interesting to investigate whether this maximal length is really
+necessary, or whether one could elaborate alternative complete test
+strategies where the SUT is tested with shorter traces only. Indeed, an
+example  presented in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} shows
+that when testing for equivalence of deterministic FSMs, it is sufficient to
+test the SUT with traces of significantly shorter length.
+
+The following example, however, shows that the maximal length $pq$ is really
+required when testing for refinement.
 \begin{example}\label{ex:pq}
 Consider the CSP reference process $P$ and an erroneous implementation $Q$
 specified as follows.
@@ -167,21 +169,22 @@ Q_1 & = & a\then Q_2 \extchoice b\then Q_2
 \\
 Q_2 & = & a\then Q \intchoice b\then Q
 \end{eqnarray*}
-Obviously, $P$'s normalised transition graph has 2 nodes,
-while $Q$'s graph has 3.
-It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$, but
-$\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using the FDR4 tool that
+Obviously, $P$'s normalised transition graph has 2 nodes, while $Q$'s graph
+has 3. It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$,
+but $\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using FDR4 that
 the ``test passed condition''
 \[
 (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k))\hide \Sigma
 \]
-holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. This means that the
-non-conformance of $Q$ cannot be detected by any test trace of length
-less or equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
-by a trace of length 6, because the last event offered by the test $U_F(5)$ is
-refused by $Q$.
-\xbox
+holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. So, the
+non-conformance of $Q$ cannot be detected by any test trace of length less or
+equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
+by a trace of length 6, because the last event offered by the test $U_F(5)$
+is refused by $Q$. \xbox
 \end{example}
+\fixme{But, there is no argument that the proofs based on graph products
+corresponds to this process. In particular the hiding does not seem to play a
+role.}
 %
 Generalising Example~\ref{ex:pq}, it can be shown that for any pair
 $2\le p,q \in\mathbb{N}$,
@@ -215,6 +218,9 @@ Q & = & Q(0)
 Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) \extchoice
 ( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
 \end{eqnarray*}
+\fixme{The internal choice became external. To test for traces refinement, yo
+put forward just one adaptive tests. So, there is more going on here.I think
+it is because your tests are checking both traces and failures refinement.}
 Using regular expression notation, the traces of $P$ can be specified as
 \[
 \trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
@@ -225,9 +231,8 @@ The traces of $Q$ can be specified by
 \[
 \trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
 \]
-It is easy to see that $\trc(Q)\not\subseteq\trc(P)$;
-for example, the trace $(a^{q-1}b)^p$ is in
-$\trc(Q)\setminus\trc(P)$.
+It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; for example, the trace
+$(a^{q-1}b)^p$ is in $\trc(Q)\setminus\trc(P)$.
 
 Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented
 by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$.
@@ -237,16 +242,13 @@ $\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events
 where at most $p-1$ events $b$ have been inserted.
 \xbox
 \end{proof}
-
-Since Theorem~\ref{th:maxtracelen} just states that a violation of trace refinement
-may remain undetected if only traces shorter than $pq$ are checked during tests,
-it can also be applied to our trace refinement tests. Therefore,
-test suites $\{ U_T(z) \}$ with $z<pq-1$ are no longer complete.
-
-
-It is discussed in Section~\ref{sec:conc} how the number of test traces to be executed
-by complete test suites for failures or tarce
-refinement   can still be reduced {\it without} reducing
-the maximal length.
+%
+Since Theorem~\ref{th:maxtracelen} just states that a violation of trace
+refinement may remain undetected if only traces shorter than $pq$ are checked
+during tests, it can also be applied to our trace refinement tests.
+Therefore, test suites $\{ U_T(z) \}$ with $z<pq-1$ are not complete. It is
+discussed in Section~\ref{sec:conc} how the number of test traces to be
+executed by complete test suites for failures or trace refinement can still
+be reduced {\it without} reducing the maximal length.
 
 % =================================================================================

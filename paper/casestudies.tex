@@ -44,9 +44,9 @@
 Generating the test cases $U_F(p)$ specified in  (\ref{eq:UFP}) for the reference
 process $P$ discussed in Example~\ref{example:CSP},
 results in the following instantiations of initials, minimal hitting sets, and
-transition function; this can be directly seen by analysing $P$'s normalised 
+transition function; this can be directly seen by analysing $P$'s normalised
 transition graph with nodes $N =\{0,1,2,3\}$ as shown in Fig.~\ref{fig:tga}.
- 
+
 \begin{eqnarray*}
 { }[0]^0 & = & \{ a \} \\
 { }[1]^0 & = & \{ a,b,c \} \\
@@ -98,11 +98,10 @@ R_1(r_{max},k) & = & (k < r_{max}) \& \big(b\then Z \extchoice  c\then R_1(r_{ma
 \end{eqnarray*}
 It is easy to see (and can be checked with FDR) that $Z$ is trace-equivalent
 to $P$. While $k < r_{max}$, $Z$ also accepts the same sets of events as $P$.
-When $R_1(r_{max},k)$ runs through several recursions and $k = r_{max}$ is
-fulfilled, however, $R_1(r_{max},k)$ makes an internal choice, instead of
-offering an external choice, so $P\not\lessdet_F Z$.
-Fig.~\ref{fig:tgZ} shows the normalised transition graph of $Z$ for $r_{max}
-= 3$.
+When $R_1(r_{max},k)$ runs through several recursions and $k = r_{max}$,
+however, $R_1(r_{max},k)$ makes an internal choice, instead of offering an
+external choice, so $P\not\lessdet_F Z$. Fig.~\ref{fig:tgZ} shows the
+normalised transition graph of $Z$ for $r_{max} = 3$.
 
 %%%and refinement does not hold.
 % alcc: I don't think there is a notion of refinement for state?
@@ -111,29 +110,28 @@ Fig.~\ref{fig:tgZ} shows the normalised transition graph of $Z$ for $r_{max}
 %$P$ in the failures model.
 
 
-Running the test $U_F(k)$ against $Z$ for $k=0,\dots,20$ ($G(P)$ has $p =
-4$ states and $G(Z)$ has $q=5$, so $pq=20$ is an upper bound for the test
-depth to be used according to Theorem~\ref{th:failurestest}), tests
-$U_F(0),\dots, U_F(3)$ are passed by $Z$, but $Z$ fails $U_F(4)$,
-because after  execution trace
+Running the test $U_F(k)$ against $Z$ for $k=0,\dots,20$ ($G(P)$ has $p = 4$
+states and $G(Z)$ has $q=5$, so $pq=20$ is an upper bound for the test depth
+to be used according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
+U_F(3)$ are passed by $Z$, but $Z$ fails $U_F(4)$, because after execution of
+the trace
 \[
 s = a.c.c.c, \qquad\text{(note that $G(P)/s = \text{node}\ 3$ according to Fig.~\ref{fig:tga})},
 \]
 the test $U_F(4)$ offers hitting sets from $\minhits(3) = \{\{b\},\{c\}\}$
 in branch (\ref{eq:ufd}). Therefore,  there exists one test execution
-where $Z/s$ accepts only $\{b\}$ due to the internal choice (note 
+where $Z/s$ accepts only $\{b\}$ due to the internal choice (note
 from Fig.~\ref{fig:tgZ} that
 $G(Z)/s = 4$), while $U_F(4)/s$
-only offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for 
-branch (\ref{eq:ufa}).  As a consequence, this execution of 
+only offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for
+branch (\ref{eq:ufa}).  As a consequence, this execution of
 $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
 $\{c \}$, while $U_F(4)/s$ choses to accept only $\{a,b\}$. Therefore,
 \[
 (\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F(4)),
 \]
-and the test fails.
-\xbox
+\fixme{The hiding is missing.} and the test fails. \xbox
 \end{example}
 %%%\fixme{alcc: I would write down the actual test generated.}
 

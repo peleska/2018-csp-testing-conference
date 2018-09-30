@@ -36,39 +36,40 @@ In contrast to that, our test cases specified in
 Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
 adaptive. This has the advantage that test executions $(Q\parallel[\Sigma]
 U_F(p))$ for failures refinement never blocks before the final step specified
-by branch (\ref{eq:ufd}), and so we do not need inconclusive test results. It
-should be noted, however, that it is necessary for our test verdicts to
-recognise also deadlocks in the final test step and interpret them as FAIL,
-as described in Section~\ref{sec:finitecompletefails}. In practice, this is
-realised by adding a timeout event to the testing environment which indicates
-deadlock situations. For real-time systems, this is an accepted technique,
-because the SUT has to respond within a pre-defined latency interval,
-otherwise its behaviour is considered to be blocked and regarded as a
-failure. 
-%\fixme{alcc: if deadlock is not acceptable? I think you need
-%instrumentation here as well. }
-%% jp : I do not understand the problem - sorry !
+by branch (\ref{eq:ufd}), and so we do not need inconclusive test results.
+\fixme{From the proofs of the main theorems, and what you say below, I
+thought you did have verdicts coming from deadlock, and you simply chose not
+to mark it with an inc event.} It should be noted, however, that it is
+necessary for our test verdicts to recognise also deadlocks in the final test
+step and interpret them as FAIL, as described in
+Section~\ref{sec:finitecompletefails}. In practice, this is realised by
+adding a timeout event to the testing environment which indicates deadlock
+situations. For real-time systems, this is an accepted technique, because the
+SUT has to respond within a pre-defined latency interval, otherwise its
+behaviour is considered to be blocked and regarded as a failure.
 
 Our tests executions $(Q\parallel[\Sigma] U_T(p))$ for trace refinement never
 block at all. The adaptive behaviour of our test cases, however, induce the
-obligation to check that {\it all} possible executions have been performed
-before the test can be considered as passed. Typically, it is therefore
-assumed that a \emph{complete testing assumption}~\cite{hierons_testing_2004}
-holds, which means that every possible behaviour of the SUT is performed
-after a finite number of test executions. In practice, this is realised by
-executing each test several times, recording the traces that have been
-performed, and using hardware or software coverage analysers to determine
-whether all possible test execution behaviours of the SUT have been observed.
-Therefore, adaptive test cases come at the price of having to apply some
-grey-box testing techniques enabling us to decide whether all SUT behaviours
-have been observed.
+\fixme{Missing hiding. And also, if the SUT blocks, the test should block,
+no?} obligation to check that {\it all} possible executions have been
+performed before the test can be considered as passed. Typically, it is
+therefore assumed that a \emph{complete testing
+assumption}~\cite{hierons_testing_2004} \fixme{I think you need this for the
+failures refinement tests as well.} holds, which means that every possible
+behaviour of the SUT is performed after a finite number of test executions.
+In practice, this is realised by executing each test several times, recording
+the traces that have been performed, and using hardware or software coverage
+analysers to determine whether all possible test execution behaviours of the
+SUT have been observed. Therefore, adaptive test cases come at the price of
+having to apply some grey-box testing techniques enabling us to decide
+whether all SUT behaviours have been observed.
 
 % ==============================================================================
 \subsubsection*{Discussion of Fault Domains}
 As already mentioned, the work in~\cite{DBLP:conf/pts/CavalcantiS17} defines
 a fault domain as the set of processes that refine a given CSP process.  In
 that context, only testing for traces refinement is considered, and the
-complete test suites may not be finite. So, the work presented here go well
+complete test suites may not be finite. So, the work presented here goes well
 beyond what is achieved there. On the other hand,
 \cite{DBLP:conf/pts/CavalcantiS17} presents an algorithm for test generation
 that can be easily adapted to consider additional selection and termination
@@ -79,8 +80,9 @@ domain-specific knowledge using CSP. For example, if an initialisation
 component defined by a process $I$ can be regarded as correct without further
 testing, we can use $I; RUN$ as a fault domain, to indicate that any SUT of
 interest implements $I$ correctly, but afterwards has a potentially arbitrary
-behaviour specified by $RUN$. The work in~\cite{DBLP:conf/pts/CavalcantiS17}
-is not restricted to finite or non-terminating processes.
+behaviour specified by $RUN$. In addition, the work
+in~\cite{DBLP:conf/pts/CavalcantiS17} is not restricted to finite or
+non-terminating processes.
 
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
@@ -88,9 +90,9 @@ As explained in the previous sections, passing a test is specified by
 $(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for
 failures testing. If the SUT $Q$ is not a programmed piece of software or an
 integrated hardware or software system, but just another CSP process
-specification, it is of course possible to verify these pass criteria using
+specification, it is of course possible to verify the pass criterion using
 the FDR4 model checker. For checking the refinement relation $P\lessdet_F Q$,
-the pass criteria have to be verified for $k=0,\dots,pq-1$, where $p$ and $q$
+the pass criterion has to be verified for $k=0,\dots,pq-1$, where $p$ and $q$
 indicate the number of nodes in $P$'s transition graph and the maximal number
 of nodes in $Q$'s graph, respectively (Theorem~\ref{th:failurestest}). Since
 the test cases $U_F(k)$ have such a simple structure, it is an interesting
@@ -117,16 +119,16 @@ increment $q$ from there, as long as each increment reveals new errors.
 \subsubsection*{Conclusion}
 
 In this paper, we have introduced finite complete testing strategies for
-model-based testing against CSP reference models. The strategies are
-applicable to the conformance relations failures refinement and trace
-refinement. The underlying fault domains have been defined as the sets of CSP
-processes whose normalised transition graphs do not have more than a given
-number of additional nodes, when compared to the transition graph of the
-reference process. For these domains, finite complete test suites are
-available. We have shown for the strategy to check failures refinement that
-the way of probing the SUT for illegal deadlocks used in our test cases is
-optimal in the sense that it is not possible to guarantee exhaustiveness with
-fewer probes.
+model-based testing against finite, non-terminating CSP reference models. The
+strategies are applicable to the conformance relations failures refinement
+and trace refinement. The underlying fault domains have been defined as the
+sets of CSP processes whose normalised transition graphs do not have more
+than a given number of additional nodes, when compared to the transition
+graph of the reference process. For these domains, finite complete test
+suites are available. We have shown for the strategy to check failures
+refinement that the way of probing the SUT for illegal deadlocks used in our
+test cases is optimal in the sense that it is not possible to guarantee
+exhaustiveness with fewer probes.
 
 % ==============================================================================
 
