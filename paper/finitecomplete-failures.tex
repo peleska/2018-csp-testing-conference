@@ -96,13 +96,13 @@ This type of pass relation is often called \emph{must test} in the
 literature, because every test execution must end with the $\epass$
 event~\cite{Hennessy:1988:ATP:50497}.
 
-Note that it is necessary to use the failures-refinement relation in this
-condition, and not the trace-refinement relation:~$(Q\parallel[\Sigma]
-U_F(p)) \hide \Sigma$ may have  the same visible traces $\varepsilon$ and
-$\epass$ as the ``Test Passed Process'' $(\epass\then\Stop)$. However, the
-former may nondeterministically refuse $\epass$, due to a deadlock occurring
-when a faulty SUT process executes concurrently with $U_F(p,k,n)$ executing
-branch (\ref{eq:ufd}), when guard condition $(k = p\wedge
+We note that it is necessary to use failures refinement in the definition
+above, and not just trace refinement:~$(Q\parallel[\Sigma] U_F(p)) \hide
+\Sigma$ may have the same visible traces $\varepsilon$ and $\epass$ as the
+``Test Passed Process'' $(\epass\then\Stop)$. However, the former may
+nondeterministically refuse $\epass$, due to a deadlock occurring when a
+faulty SUT process executes concurrently with $U_F(p,k,n)$ executing
+branch~(\ref{eq:ufd}), when the guard condition $(k = p\wedge
 \minhits(n)\neq\varnothing)$ evaluates to $\ist$. This is explained further
 in the next paragraphs.
 
@@ -273,7 +273,7 @@ $P\lessdet_F Q$.
 first is that the test execution cannot reach branch~(\ref{eq:ufa})and raise
 a $fail$ event.  The second is that it cannot deadlock without raising a
 $pass$ event. This case would also interpreted as FAIL, since then
-$\epass\then\Stop$ is not failures-refined by $(Q\parallel[\Sigma]
+$\epass\then\Stop$ is not failures refined by $(Q\parallel[\Sigma]
 U_F(k))\hide \Sigma$.
 % alcc: part of the explanation above was in the following lemma, but it is already
 % relevant here.
@@ -383,5 +383,9 @@ $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
 the hiding that is needed is discarded.} this means that the test fails. This
 concludes the proof. \xbox
 \end{proof}
+%
+Our notion of tests can be specialised to deal with traces refinement, as we
+explain next. Examples come later in Section~\ref{sec:case}. \fixme{I think
+the example should come before more theory.}
 
 % ==========================================================================

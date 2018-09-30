@@ -5,24 +5,21 @@
 
 For establishing trace refinement, the following class of adaptive test cases
 will be used for a given reference process $P$ and  integers $p \ge 0$.
-Just as for the tests developed  in 
-Section~\ref{sec:finitecompletefails} to verify failures refinement, 
+Just as for the tests developed  in
+Section~\ref{sec:finitecompletefails} to verify failures refinement,
 the tests for trace refinement are
 derived from the reference model's transition graph
 $$
 G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)).
 $$
-In contrast to the failures tests (\ref{eq:UFP}), however, we do not need to
-check the SUT with respect to its acceptance of hitting sets. Therefore, these
-do not occur in the specification of the test cases below, and we use the
-condition $\minaccs(n) = \{ \varnothing \}$ instead of $\minhits(n) = \varnothing$
-to indicate that minimal hitting sets need not to be calculated for generating
-these tests from $G(P)$. From (\ref{eq:minhitminaccempty}) we know that both conditions
-are equivalent.
+In contrast to the tests for failures refinement~(\ref{eq:UFP}), however, we
+do not need to check the SUT with respect to its acceptance of hitting sets.
+Therefore, these do not occur in the specification of the test cases below,
+and we use the condition $\minaccs(n) = \{ \varnothing \}$ instead of
+$\minhits(n) = \varnothing$ to indicate that minimal hitting sets need not to
+be calculated for generating these tests from $G(P)$. From
+(\ref{eq:minhitminaccempty}) we know that these conditions are equivalent.
 
-
-
-%
 %\begin{eqnarray}
 %U_T(p) & = & U_T(p,\varepsilon)
 %\\
@@ -39,9 +36,6 @@ are equivalent.
 %\label{eq:utd}
 %\end{eqnarray}
 
-
-
-
 \begin{eqnarray}
 U_T(p) & = & U_T(p,0,\ii n)
 \\
@@ -57,7 +51,7 @@ U_T(p,k,n) & = & \big(  e:(\Sigma - [n]^0)   \then \efail\then \Stop \big)
 \\ & & (k = p) \& \big( \epass\then \Stop  \big)
 \label{eq:utd}
 \end{eqnarray}
-
+%
 It is easy to see that the tests $U_T(p)$ satisfy the properties
 \begin{eqnarray}
 \label{eq:ifpaT}
@@ -66,10 +60,10 @@ It is easy to see that the tests $U_T(p)$ satisfy the properties
 \label{eq:ifpbT}
 e\not\in [P/s]^0 & \implies & U_T(p)/s.e = (\efail\then\Stop)
 \end{eqnarray}
-proven in Lemma~\ref{lemma:ufproperties} for $U_F(p)$ for traces $s\in\trc(P)$.
+proven in Lemma~\ref{lemma:ufproperties} for $U_F(p)$ for traces
+$s\in\trc(P)$. \fixme{In (37), I think there is an implicit assumption about
+$p$ and $\# s$?}
 
-
-%
 %The difference between adaptive tests $U_T(p)$ for trace refinement and
 %$U_F(p)$ for failures refinement consists in the fact that the former do not
 %``probe'' the SUT with respect to minimal sets of events to be accepted
@@ -79,21 +73,20 @@ proven in Lemma~\ref{lemma:ufproperties} for $U_F(p)$ for traces $s\in\trc(P)$.
 The existence of complete, finite test suites is expressed in analogy to
 Theorem~\ref{th:failurestest}. A noteworthy difference is that the complete
 suite for trace refinement just needs the single adaptive test case
-$U_T(pq-1)$, while failures refinement required the execution of $\{
-U_F(0),\dots,U_F(pq-1)\}$. The reason for this is that $U_T(pq-1)$ identifies
-trace errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes
-for erroneous acceptances at the end of each trace of length $(pq -1)$.
-Since $U_T(pq-1)$ never blocks any $Q$-event before terminating, the pass 
-criterion can be based on trace refinement instead of failures refinement
-as required in (\ref{eq:passF}).
+$U_T(pq-1)$, while failures refinement requires the execution of $\{
+U_F(0),\dots,U_F(pq-1)\}$. The reason is that $U_T(pq-1)$ identifies trace
+errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes for
+erroneous acceptances at the end of each trace of length $(pq -1)$. Since
+$U_T(pq-1)$ never blocks any $Q$ event before terminating, the pass criterion
+can be based on trace refinement instead of failures refinement as required
+in (\ref{eq:passF}).
 %
 \begin{equation}
 \label{eq:passT}
 Q\ \pass\ U_T(p) \defs (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(p)) \hide \Sigma
 \end{equation}
+\fixme{The proofs don't use this definition. It should change.}
 %
-
-
 \begin{theorem}\label{th:tracetest}
 Let $P$ be a non-terminating, divergence-free CSP process over alphabet $\Sigma$ whose
 normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
@@ -107,9 +100,10 @@ is complete with respect to ${\cal F} = (P,\lessdet_T,{\cal D})$.
 \xbox
 \end{theorem}
 \begin{proof}
-The theorem follows directly  
+The theorem follows directly
 from Step~1 in the proof of Lemma~\ref{lemma:mainfsound} and
 Case~1 in the proof of Lemma~\ref{lemma:mainfexhaustive}.
 \xbox
 \end{proof}
- 
+%
+Examples are provided after our discussion of size of the test suites.
