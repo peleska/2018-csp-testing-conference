@@ -134,7 +134,7 @@ its consecutive behaviour to the event selected by the SUT.
 
 Finally, we suppose that a test execution has run through a trace
 $s\in\trc(P)$ of length $p$, so that $U_F(p)/s = U_F(p,p,n)$ with $n =
-G(P)/s$. Then, if $\minhits(n)\neq \varnothing$, the test changes its
+G(P)/s$. If $\minhits(n)\neq \varnothing$, the test changes its
 behaviour:~instead of offering {\it all} legal events from $[n]^0$ to the
 SUT, it nondeterministically chooses a minimal hitting set $H\in \minhits(n)$
 and only offers the events contained in $H$. If the SUT refuses to engage
@@ -354,32 +354,34 @@ test execution is not defined in this way. It is defined by parallelism and
 hiding. I think the definition of test execution needs to change.}
 
 \medskip
-\noindent
-{\bf Case~2.} We note that trace $s$ is again a trace of the product graph
-$G$, but we do not know its length. Again, by applying Lemma~\ref{lemma:reachproduc},
-we know that the state   $G/s$ can   be reached by a trace
-$u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. Consider test $U_F(\#
-u)$, which satisfies $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$   always performs
-branch (\ref{eq:ufc}) until the trace $u$ has been completely processed.
+\noindent {\bf Case~2.} We note that trace $s$ is again a trace of the
+product graph $G$, but we do not know its length. Again, by applying
+Lemma~\ref{lemma:reachproduc}, we know that the state $G/s$ can be reached by
+a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider
+the test $U_F(\# u)$, for which $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because
+of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$   always performs branch
+(\ref{eq:ufc}) until the trace $u$ has been completely processed.
 $U_F(\#u,\#u,G(P)/u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
 only:~assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has
 at least one non-empty minimal acceptance. From (\ref{eq:minhitminaccempty})
-we know that this is equivalent to $\minhits(P/s) = \minhits(G(P)/s)\neq\varnothing$, and
-we observe that $G(P)/s = G(P)/u$, so $\minhits(G(P)/u)\neq\varnothing$.
-As a consequence, branch (\ref{eq:ufb}) cannot be taken because its guard condition
-evaluates to $\isf$  for $U_F(\#u,\#u,G(P)/u)$.
-The guard condition $(k < p)$ for branch (\ref{eq:ufc}) evaluates
-to $\isf$ for $U_F(\#u,\#u,G(P)/u)$, too. If branch (\ref{eq:ufa}) is executed, the
-test always fails. If branch (\ref{eq:ufd}) is executed, the test fails for
-the execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen
-by $U_F(\#u,\#u,G(P)/u)$ that has an empty intersection with the minimal acceptance
-$A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of such an
-$H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a consequence, there
-exists a test execution   where $Q/u$ selects acceptance $A_Q$ and
-$U_F(\#u,\#u,G(P)/u)$ selects $H$. This execution deadlocks in process state
+we know that this is equivalent to $\minhits(P/s) =
+\minhits(G(P)/s)\neq\varnothing$, and we observe that $G(P)/s = G(P)/u$, so
+$\minhits(G(P)/u)\neq\varnothing$. As a consequence, branch (\ref{eq:ufb})
+cannot be taken because its guard condition evaluates to $\isf$  for
+$U_F(\#u,\#u,G(P)/u)$. The guard condition $(k < p)$ for branch
+(\ref{eq:ufc}) evaluates to $\isf$ for $U_F(\#u,\#u,G(P)/u)$, too. If branch
+(\ref{eq:ufa}) is executed, the test always fails. If branch (\ref{eq:ufd})
+is executed, the test fails for the execution where a minimal hitting set
+$H\in\minhits(P/u)$ is chosen by $U_F(\#u,\#u,G(P)/u)$ that has an empty
+intersection with the minimal acceptance $A_Q$ from condition
+(\ref{eq:accsnotcontained}). The existence of such an $H$ is guaranteed
+because of Lemma~\ref{lemma:hseta}. As a consequence, there exists a test
+execution   where $Q/u$ selects acceptance $A_Q$ and $U_F(\#u,\#u,G(P)/u)$
+selects $H$. This execution deadlocks in process state
 $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
-this  means that the test fails and concludes the proof.
-\xbox
+\fixme{Again, nothing here is about this process, but about the graph, and
+the hiding that is needed is discarded.} this means that the test fails. This
+concludes the proof. \xbox
 \end{proof}
 
 % ==========================================================================
