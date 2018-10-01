@@ -293,7 +293,7 @@ process states $P/s$ are equivalently expressed by states $G(P)/s$ of $P$'s
 normalised transition graph, we also write $\minaccs(G(P)/s)$ and
 note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \begin{equation}\label{eq:maxrefsminaccs}
-\minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \}.
+\minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \} = \minaccs(P/s).
 \end{equation}
 \fixme{alcc: proof in the report perhaps? What do you need (5) for? }
 
@@ -309,6 +309,9 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
  \end{figure}
 
 \fixme{alcc: the a from node 2 should go back to 0, I think.}
+\fxnote{jp: No, this is correct: state 0 corresponds to $P$, 1 to $Q\intchoice R$,
+2 to $P\intchoice R$, and 3 to $R$. 
+Therefore, 2 goes with $a$ to $(P/a) = Q\intchoice R$, that is, to node 1. }
 
 % .......................................................................................
 
@@ -381,41 +384,42 @@ can be derived from the maximal refusal functions by means of
 Recall that $P\lessdet_T Q$ is defined as $\trc(Q)\subseteq \trc(P)$ and that
 $\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$. This shows (\ref{eq:trcrefa}).
 \fixme{alcc: (11) is already proved in my paper with mcg. No need to repeat
-it here. I suggest just to add a reference.}
+it here. I suggest just to add a reference.} \fxnote{jp: done}Formula (\ref{eq:failconf}) has been
+shown in~\cite{DBLP:conf/icfem/CavalcantiG07}
 
-\medskip
-\noindent
-To prove (\ref{eq:failconf}), we derive
-\begin{argue}
-P \lessdet_F Q
-\\
-\Leftrightarrow \fails(Q)\subseteq \fails(Q) & definition of $\lessdet_F$
-\\
-\Leftrightarrow \forall (s,R) \in  \fails(Q): (s,R) \in\fails(P)
-& property of $\subseteq$
-\\
-\Leftrightarrow \forall (s,\varnothing) \in  \fails(Q): (s,\varnothing) \in\fails(P)
-\wedge {}
-\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
-\\
-& Definition of failures, refusals, subset closure
-\\
-\Leftrightarrow \trc(Q)\subseteq\trc(P)
-\wedge {}
-\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
-\\
-& Definition of failures and traces
-\\
-\Leftrightarrow \trc(Q)\subseteq\trc(P)
-\wedge {}
-\\\tabc \forall s\in\trc(Q)\cap\trc(P): \refs(Q/s) \subseteq\refs(P/s)
-\\
-& Property of $\cap$ and $\subseteq$
-\\
-\Leftrightarrow
-P\lessdet_T Q \wedge Q\ conf\ P
-& Definition of $\lessdet_T$ and $conf$
-\end{argue}
+%\medskip
+%\noindent
+%To prove (\ref{eq:failconf}), we derive
+%\begin{argue}
+%P \lessdet_F Q
+%\\
+%\Leftrightarrow \fails(Q)\subseteq \fails(Q) & definition of $\lessdet_F$
+%\\
+%\Leftrightarrow \forall (s,R) \in  \fails(Q): (s,R) \in\fails(P)
+%& property of $\subseteq$
+%\\
+%\Leftrightarrow \forall (s,\varnothing) \in  \fails(Q): (s,\varnothing) \in\fails(P)
+%\wedge {}
+%\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
+%\\
+%& Definition of failures, refusals, subset closure
+%\\
+%\Leftrightarrow \trc(Q)\subseteq\trc(P)
+%\wedge {}
+%\\\tabc \forall s\in\trc(Q), R\in \refs(Q/s): R\in\refs(P/s)
+%\\
+%& Definition of failures and traces
+%\\
+%\Leftrightarrow \trc(Q)\subseteq\trc(P)
+%\wedge {}
+%\\\tabc \forall s\in\trc(Q)\cap\trc(P): \refs(Q/s) \subseteq\refs(P/s)
+%\\
+%& Property of $\cap$ and $\subseteq$
+%\\
+%\Leftrightarrow
+%P\lessdet_T Q \wedge Q\ conf\ P
+%& Definition of $\lessdet_T$ and $conf$
+%\end{argue}
 
 \medskip
 \noindent
@@ -465,7 +469,7 @@ every} node of $N$.
 \label{lemma:extendV} Let $P$ be a CSP process with normalised transition
 graph $G(P)$. %\fixme{alcc: can a
 %normalised graph for a process have states that are unreachable?}
-%\fxnote{jp: You are rights: all states in G(P) are reachable by construction of the graph -- I have added this information to the section introducing the graphs.}
+%\fxnote{jp: You are right: all states in G(P) are reachable by construction of the graph -- I have added this information to the section introducing the graphs.}
 Let
 $V\subseteq\Sigma^*$ be a finite prefix-closed set of sequences of events.
 Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is, $|t(\ii
@@ -565,6 +569,20 @@ NP-hard~\cite{5533149}. We see below, however, that it reduces the effort of
 testing for failures refinement from a factor of $2^{|\Sigma|}$ to a factor
 that equals the number of minimal hitting sets.
 
+
+
+% -------------------------------------------------------------------------
+\subsubsection*{Minimal Hitting Sets of Normalised Transition Graphs}
+Since minimal acceptances can be used to label the nodes of a normalised transition graph, and since $\minaccs(P/s) = \minaccs(G(P)/s)$ according to (\ref{eq:maxrefsminaccs}), the notation of minimal hitting sets also
+carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and observe that
+\begin{equation}
+\label{eq:minhitsGP}
+\minhits(G(P)/s) = \minhits(P/s) \ \text{for all}\ s\in \trc(P).
+\end{equation}
+\fixme{You already used this above. Perhaps you want to move this to before
+Lemma 4?}\fxnote{jp: done}
+
+
 % ------------------------------------------------------------------------
 \subsubsection*{Characterisation of $conf$ by Minimal Hitting Sets}
 The following lemma establishes that the $conf$ relation specified in
@@ -587,6 +605,11 @@ a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
+Throughout the proof, we apply (\ref{eq:maxrefsminaccs}) and (\ref{eq:minhitsGP}), 
+so that $\minaccs(P/s)$ and $\minaccs(G(P)/s)$, as well as 
+$\minhits(P/s)$ and $\minhits(G(P)/s)$ can be used interchangeably.
+
+
 For showing ``$1 \Rightarrow 2$'', assume   $Q\ conf\ P$ and $s\in\trc(P)\cap
 \trc(Q)$. Lemma~\ref{lemma:tgtrcref} (\ref{eq:failrefb}), states that
 \[
@@ -615,12 +638,17 @@ Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*),
 $\overline H$ is a hitting set of $\minaccs(G(P)/s)$ which has an  empty
 intersection with $A$. Minimising $\overline H$ yields   a minimal hitting
 set $H\in \minhits(P/s)$ which is {\it not} a hitting set of
-$\minaccs(G(Q)/s)$, a contradiction to Assumption~2. We note that we use
-$\minhits(G(P)/s) = \minhits(P/s)$, as well $\minaccs(G(Q)/s) =
-\minaccs(Q/s)$, which follow from the identification of process states with
-states of the normalised graph for the proof discussed in the previous
-section. This completes the proof of the lemma. \fixme{Please, check that
-you're happy with this observation.}\xbox
+$\minaccs(G(Q)/s)$, a contradiction to Assumption~2. 
+%We note that we use
+%$\minhits(G(P)/s) = \minhits(P/s)$, as well $\minaccs(G(Q)/s) =
+%\minaccs(Q/s)$, which follow from the identification of process states with
+%states of the normalised graph for the proof discussed in the previous
+%section. 
+This completes the proof of the lemma. 
+\fixme{Please, check that
+you're happy with this observation.}
+\fxnote{jp: I think the new first sentence of the proof should now be sufficient. Therefore, I removed your addition.}
+\xbox
 \end{proof}
 %
 We note that $\minaccs(P) = \{ \varnothing \}$ if $P = Q\intchoice \Stop$.
@@ -636,17 +664,6 @@ $\minhits(P/s) = \varnothing$. Trivially,
 \minaccs(P/s) = \{ \varnothing \} \iff \minhits(P/s) = \varnothing
 \end{equation}
 holds.
-
-% -------------------------------------------------------------------------
-\subsubsection*{Minimal Hitting Sets of Normalised Transition Graphs}
-Since minimal acceptances can be used to label the nodes of a normalised transition graph, and since $\minaccs(P/s) = \minaccs(G(P)/s)$, the notation of minimal hitting sets also
-carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and observe that
-\begin{equation}
-\label{eq:minhitsGP}
-\minhits(G(P)/s) = \minhits(P/s) \ \text{for all}\ s\in \trc(P).
-\end{equation}
-\fixme{You already used this above. Perhaps you want to move this to before
-Lemma 4?}
 
 % =========================================================================
 \subsection{Sperner Families}
