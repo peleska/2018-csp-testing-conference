@@ -252,41 +252,33 @@ so $G(P)$ allows us to re-construct the failures semantics of $P$.
 \label{sec:accs}
 
 When investigating  tests for failures refinement, the notion of
-\emph{acceptances}~\cite{Hennessy:1988:ATP:50497}, which is dual to refusals,
-is also useful. An acceptance set of $P/s$ is a subset of its initials
-$[P/s]^0$; equivalently, it is a subset of events labelling  outgoing transitions of
-$G(P)/s$. If the behaviour of  $P/s$ is deterministic, its only acceptance
+\emph{acceptances}, which is dual to refusals,
+is also useful. While the original introduction of acceptances presented 
+in~\cite[pp.~75]{Hennessy:1988:ATP:50497} was independent of refusals, 
+we use the definition from~\cite[pp.~278]{Roscoe:1997:TPC:550448}.   A \emph{minimal acceptance} of a CSP process state $P/s$ 
+is the complement of a maximal refusal of the same state. The set of minimal acceptances 
+of $P/s$ is denoted by $\minaccs(P/s)$ and formally defined as 
+%
+\begin{equation}\label{eq:accref}
+\minaccs(P/s) = \{ \Sigma - R~|~R\in \maxrefs(P/s)  \}
+\end{equation}
+%
+With this definition, a (not necessarily minimal) \emph{acceptance} of $P/s$ is a superset of some minimal acceptance and a subset of the initials $[P/s]^0$. Denoting the acceptances of $P/s$ by $\accs(P/s)$, this leads to the formal definition
+\begin{equation}
+\label{eq:accrefall}
+\accs(P/s)  = \{ B\subseteq [P/s]^0~|~\exists A\in\minaccs(P/s):  A \subseteq B   \}
+\end{equation}
+%
+Acceptances have the following intuitive interpretation.  If the behaviour of  $P/s$ is deterministic, its only acceptance
 equals $[P/s]^0$, because $P/s$ never refuses any of the events contained in
 this set. If $P/s$ is nondeterministic, it internally chooses one of its
 \emph{minimal acceptance sets} $A$ and never refuses any event in $A$, while
 {\it possibly} refusing the events from $[P/s]^0 - A$ and
 {\it always} refusing those from $\Sigma - [P/s]^0$.
-The acceptances of $P/s$ are denoted by
-$\accs(P/s)$, and the minimal acceptances by $\minaccs(P/s)$. They satisfy
-the following properties.
-%
-\begin{eqnarray}
-A\in \minaccs(P/s) & \Leftrightarrow & \exists R\in\maxrefs(P/s) \wedge A = \Sigma-R
-\label{eq:accref}
-\\
-\bigcup \{ A~|~A\in \accs(P/s)\} & = & [P/s]^0
-\label{eq:accinitials}
-\\
- X\in\accs(P/s) &\Leftrightarrow & \exists A\in \minaccs(P/s): A\subseteq X \subseteq [P/s]^0
- \label{eq:accsubset}
-\end{eqnarray}
-%
-%Note that (\ref{eq:accref}) can be regarded as a definition of minimal
-%acceptances by means of maximal refusals. In this case,
-%(\ref{eq:accinitials}) and (\ref{eq:accsubset}) are consequences of this
-%definition and the fact that refusals are subset-closed. \fixme{alcc: are you
-%sure? (4) does not talk about Acc. Is this important?}
-%\fixme{jp: I'm sure and I can prove this. However, we don't need this fact, so I suggest to
-%removed it.}
-%
+
+
 Exploiting (\ref{eq:accref}),
-%(\ref{eq:accinitials}), and (\ref{eq:accsubset}),
-every node of a normalised transition graph can
+the nodes of a normalised transition graph can
 alternatively be labelled with their minimal acceptances, and this
 information is equivalent to that contained in the maximal refusals. Since
 process states $P/s$ are equivalently expressed by states $G(P)/s$ of $P$'s
@@ -296,6 +288,9 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \} = \minaccs(P/s).
 \end{equation}
 \fixme{alcc: proof in the report perhaps? What do you need (5) for? }
+\fxnote{jp: I have clarified the introduction of acceptances and removed the statements
+we do not need in the rest of the paper. We need (5) here show that the set of
+maximal refusals of $P/s$ equals $r(G(P/s))$.}
 
 % .....................................................................................
  \begin{figure}[t]
@@ -354,7 +349,6 @@ by means of the maximal refusal functions of the graphs involved; and
 (\ref{eq:failrefb}) states the same in terms of the minimal acceptances that
 can be derived from the maximal refusal functions by means of
 (\ref{eq:maxrefsminaccs}).
-%%\fixme{alcc: I think at least the report should point to proofs.}
 %
 \begin{lemma}
   \label{lemma:tgtrcref}
@@ -385,7 +379,7 @@ Recall that $P\lessdet_T Q$ is defined as $\trc(Q)\subseteq \trc(P)$ and that
 $\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$. This shows (\ref{eq:trcrefa}).
 \fixme{alcc: (11) is already proved in my paper with mcg. No need to repeat
 it here. I suggest just to add a reference.} \fxnote{jp: done}Formula (\ref{eq:failconf}) has been
-shown in~\cite{DBLP:conf/icfem/CavalcantiG07}
+shown in~\cite{DBLP:conf/icfem/CavalcantiG07}.
 
 %\medskip
 %\noindent
@@ -673,10 +667,7 @@ holds.
 In preparation for complexity results to be presented in
 Section~\ref{sec:complexity}, we consider how many minimal hitting sets can
 maximally exist for a given collection of minimal acceptances. To this end,
-the following definitions and results are useful\footnote{The authors are
-grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan, for
-suggesting the applicability of Sperner's Theorem in the context of the work
-presented here.}.\fixme{Shouldn't the footnote go to the acknowledgements?}
+the following definitions and results are useful.\fixme{Shouldn't the footnote go to the acknowledgements?}\fxnote{jp: done}
 
 A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a
 given finite universe $\Sigma$ that do not contain each other, that is, $H_1
@@ -712,9 +703,9 @@ The upper bound is reached if, and only if, one of the following cases apply:
     cardinality $n/2$;
 \item For odd $n$, if one of the following cases holds;
 \begin{enumerate}
-\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/s$;
+\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/2$;
     or
-\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n-1)/s$.
+\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n-1)/2$.
 \end{enumerate}
 \end{enumerate}
 \xbox

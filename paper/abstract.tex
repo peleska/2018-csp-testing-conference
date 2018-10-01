@@ -1,11 +1,14 @@
 In this paper, two new contributions for model-based testing with
 Communicating Sequential Processes (CSP) are presented. For a given CSP
 process representing the reference model, test suites checking the
-conformance relations trace and failures refinement are constructed, and
+conformance relations trace refinement and failures refinement are constructed, and
 their finiteness and completeness (that is, capability to uncover conformity
 violations) is proven. While complete test suites for CSP processes have been
 previously investigated by several authors, a sufficient condition for their
-finiteness is presented here for the first time. Moreover, an optimal
-technique for testing the admissibility of an implementation's
-nondeterministic behaviour is described. \fixme{alcc: Is the technique
+finiteness is presented here for the first time. 
+%Moreover, an optimal
+%technique for testing the admissibility of an implementation's
+%nondeterministic behaviour is described. 
+It is shown that the test suites are optimal with respect to two aspects:  (a)  the maximal length of test traces cannot be reduced, and (b) the nondeterministic behaviour cannot be tested with smaller or fewer sets of events, without losing the test suite's completeness property. \fixme{alcc: Is the technique
 applying the test suites?}
+\fxnote{jp: this sentence needed to be re-phrased -- the new version should be better understandable}
