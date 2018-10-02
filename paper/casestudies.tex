@@ -129,9 +129,11 @@ $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
 $\{c \}$, while $U_F(4)/s$ choses to accept only $\{a,b\}$. Therefore,
 \[
-(\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F(4)),
+(\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F(4)) \hide\Sigma,
 \]
-\fixme{The hiding is missing.} and the test fails. \xbox
+\fixme{The hiding is missing.} 
+\fxnote{jp: done}
+and the test fails. \xbox
 \end{example}
 %%%\fixme{alcc: I would write down the actual test generated.}
 

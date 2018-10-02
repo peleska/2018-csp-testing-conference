@@ -102,18 +102,30 @@ above cannot be further improved, since the full collection of minimal
 hitting sets needs to be checked to verify $conf$.\fixme{Theorem 4 is not
 about $conf$. I don't think you have tests for $conf$.}
 
-The authors of~\cite{Hennessy:1988:ATP:50497} and
-\cite{DBLP:conf/icfem/CavalcantiG07} suggest to test {\it every} non-empty
+In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test 
+\fixme{In \cite{DBLP:conf/icfem/CavalcantiG07}, we work
+with minimal acceptances. I didn't check \cite{Hennessy:1988:ATP:50497}.}
+\fxnote{jp: we have studied \cite{DBLP:conf/icfem/CavalcantiG07} now in more detail -- you are right, of course, but there is a confusion of terms: you are also using the minimal hitting sets we handle here in our joint paper, but you used the term ``minimal acceptance'' for them. 
+This is not in line with the definition of minimal acceptances as presented in \cite{Hennessy:1988:ATP:50497} and
+in Roscoe's books. Here, in our joint paper, minimal acceptances are introduced
+as defined in Roscoe's books. I have changed the text accordingly.}
+{\it every} non-empty
 subset of $\Sigma$ whose events cannot be completely refused in a given
 process state of the reference model; this leads to a worst-case estimate of
 $2^{\card{\Sigma}}-1$ for the number of different sets to be offered to the
 SUT in the last step of the test execution, so our approach reduces the
 number of test executions in comparison
-to~\cite{Hennessy:1988:ATP:50497,DBLP:conf/icfem/CavalcantiG07} by a factor
+to~\cite{Hennessy:1988:ATP:50497} by a factor
 of $1/{\sqrt{2\pi \card{\Sigma}}}$. In Fig.~\ref{fig:minhita}, the reduction
 is visualised by a function plot of $2^{\card{\Sigma}}$ versus
-$\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$. \fixme{In [2], we work
-with minimal acceptances. I didn't check [8].}
+$\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$. 
+ 
+In~\cite{DBLP:conf/icfem/CavalcantiG07}, the authors also use minimal hitting sets\footnote{However, they are denoted by {\it minimal acceptances} in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but they do not give an upper bound for
+the number of test executions to be performed. 
+ 
+ 
+ 
+ 
 % .....................................................................................
  \begin{figure}
  %%\hspace*{-40mm}

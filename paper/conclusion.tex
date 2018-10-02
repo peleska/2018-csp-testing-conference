@@ -47,15 +47,27 @@ adding a timeout event to the testing environment which indicates deadlock
 situations. For real-time systems, this is an accepted technique, because the
 SUT has to respond within a pre-defined latency interval, otherwise its
 behaviour is considered to be blocked and regarded as a failure.
+The tests executions $(Q\parallel[\Sigma] U_T(p))$ 
+\fixme{Missing hiding.}
+\fxnote{jp: Here, the hiding operator is not necessary: the possible test executions are really the traces of $Q$ parallel $U_T(p)$. The hiding is only needed to specify the verdict.}  
+for trace refinement never
+block at all before stopping after the verdict $\epass$ or $\efail$, unless the
+SUT process $Q$ has an unexpected deadlock state. 
+\fxfatal{And also, if the SUT blocks, the test should block,
+no?}\fxnote{jp: you are right, I changed the text here and added explanations above after the verdict explanation
+in formula (\ref{eq:passT}).}
+Recall from the explanations given in Section~\ref{sec:finitecomplete} that the 
+blocking situation also leads to passing the test, because 
+$(\epass\then \Stop)\lessdet_T (Q\parallel[\Sigma] U_T(p))\hide\Sigma$ still holds
+if $(Q\parallel[\Sigma] U_T(p))\hide\Sigma$ only produces the empty trace.
 
-Our tests executions $(Q\parallel[\Sigma] U_T(p))$ for trace refinement never
-block at all. The adaptive behaviour of our test cases, however, induce the
-\fixme{Missing hiding. And also, if the SUT blocks, the test should block,
-no?} obligation to check that {\it all} possible executions have been
+The adaptive behaviour of both our test case types $U_F(p)$ and $U_T(p)$,
+however, induce the obligation to check that {\it all}
+possible executions have been
 performed before the test can be considered as passed. Typically, it is
 therefore assumed that a \emph{complete testing
 assumption}~\cite{hierons_testing_2004} \fixme{I think you need this for the
-failures refinement tests as well.} holds, which means that every possible
+failures refinement tests as well.}\fxnote{jp: yes, I re-arranged the text accordingly.} holds, which means that every possible
 behaviour of the SUT is performed after a finite number of test executions.
 In practice, this is realised by executing each test several times, recording
 the traces that have been performed, and using hardware or software coverage
