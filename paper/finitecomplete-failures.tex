@@ -67,7 +67,7 @@ U_F(p,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
 % --------------------------------------------------------------------------
 \subsubsection*{Explanation of the Test Definition}
 A test is performed by running $U_F(p)$ concurrently with any SUT process
-$Q$, synchronising over $\Sigma$. So, a test execution is a trace of the
+$Q$, synchronising over $\Sigma$. So, a \emph{test execution} is a trace of the
 concurrent process
 %\[
 $Q\parallel[\Sigma] U_F(p)$.
@@ -272,7 +272,7 @@ $P\lessdet_F Q$.
 \begin{proof}{~}We make two points in separate steps below. The
 first is that the test execution cannot reach branch~(\ref{eq:ufa}) and raise
 a $fail$ event.  The second is that it cannot deadlock without raising a
-$pass$ event. This case would also interpreted as FAIL, since then
+$pass$ event. This case would also be interpreted as FAIL, since then
 $\epass\then\Stop$ is not failures refined by $(Q\parallel[\Sigma]
 U_F(k))\hide \Sigma$.
 % alcc: part of the explanation above was in the following lemma, but it is already
@@ -297,7 +297,9 @@ $\minhits(n) = \minhits(P/s)$. The branch (\ref{eq:ufb}) of the test
 $U_F(p,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
 \varnothing$. The branch (\ref{eq:ufc}) always leads to test continuation
 without a verdict. \fixme{I think we need a stronger argument here, as to why
-it cannot deadlock.} For the last branch, we note that it can only be entered
+it cannot deadlock.}
+\fxnote{jp: I do not understand the question -- let's discuss this on the phone.}
+ For the last branch, we note that it can only be entered
 if $\minhits(P/s) = \minhits(n) \neq\varnothing$. In this case, any selected
 minimal hitting set $H\in\minhits(n)$ has a non-empty intersection with each
 of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ never blocks
@@ -328,10 +330,28 @@ of $\minaccs(Q/s)$, such that
 \end{description}
 It has to be shown for each of these cases that at least one test execution
 of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the $\efail$
-event or deadlocks.
+event or deadlocks. We do this by analysing the product graph of the reference
+process $P$ and the SUT process $Q$: any trace $s\in\trc(Q)\cap\trc(P)$ gives rise to 
+a path labelled by the events of $s$ 
+through this product graph. Any error can be detected after running through such a trace
+and then either observing an event outside $[P/s]^0$ (this is the violation described
+by Case~1) or identifying an illegal acceptance $A_Q$ as specified in Case~2. 
+It is not guaranteed, however, that trace $s$ is short enough to be executed by one of the 
+test cases $U_F(p)$. Therefore, it has to be shown that for any $s$ leading to an error
+situation specified by Case~1 or Case~2, there exists a trace $u$ of maximal length $pq-1$
+leading to the same error.
+
+
 
 \medskip
-\noindent {\bf Case~1.} Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
+\noindent {\bf Case~1.} 
+\fixme{There is an assumption here that
+the graph of a test execution is given by the cross-product of graphs.  But,
+test execution is not defined in this way. It is defined by parallelism and
+hiding. I think the definition of test execution needs to change.}
+\fxnote{jp: this is a misunderstanding: we are not looking at the product graph of $Q$ and $U_F(p)$, but at the product graph of $Q$ and $P$. I have added more explanatory 
+text in the paragraph  before Case~1.}
+Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
 but $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is
 a trace of every process. In this case, $s$ is also a trace of the product
 graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}, and $G/s =
@@ -348,13 +368,14 @@ U_F(pq-1,\#u,G(P)/u)$. Since $s.e\not\in\trc(P)$, $e$ is an element of
 $\Sigma-[P/u]^0 = \Sigma - [G(P)/s]^0$. Hence, in at least one execution,
 $U_F(pq-1,\#u,G(P)/u)$ executes its first branch (\ref{eq:ufa}) with this
 event $e$, so that the test fails. Again, the assumption of non-divergence of
-$Q$ is needed for this conclusion. \fixme{There is an assumption here that
-the graph of a test execution is given by the cross-product of graphs.  But,
-test execution is not defined in this way. It is defined by parallelism and
-hiding. I think the definition of test execution needs to change.}
+$Q$ is needed for this conclusion. 
 
 \medskip
-\noindent {\bf Case~2.} We note that trace $s$ is again a trace of the
+\noindent {\bf Case~2.} We note 
+\fixme{Again, nothing here is about this process, but about the graph, and
+the hiding that is needed is discarded.} 
+\fxnote{jp: see my explanation above}
+that trace $s$ is again a trace of the
 product graph $G$, but we do not know its length. Again, by applying
 Lemma~\ref{lemma:reachproduc}, we know that the state $G/s$ can be reached by
 a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider
@@ -379,13 +400,16 @@ because of Lemma~\ref{lemma:hseta}. As a consequence, there exists a test
 execution   where $Q/u$ selects acceptance $A_Q$ and $U_F(\#u,\#u,G(P)/u)$
 selects $H$. This execution deadlocks in process state
 $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
-\fixme{Again, nothing here is about this process, but about the graph, and
-the hiding that is needed is discarded.} this means that the test fails. This
-concludes the proof. \xbox
+this means that the test fails. This
+concludes the proof. 
+\xbox
 \end{proof}
 %
 Our notion of tests can be specialised to deal with traces refinement, as we
-explain next. Examples come later in Section~\ref{sec:case}. \fixme{I think
+explain in Section~\ref{sec:finitecomplete}. 
+The next section presents and example.
+\fixme{I think
 the example should come before more theory.}
+\fxnote{jp: done}
 
 % ==========================================================================
