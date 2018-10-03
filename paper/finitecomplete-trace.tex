@@ -72,14 +72,8 @@ $p$ and $\# s$?}\fxnote{jp: yes, I added $\#s \le p$ in the text.}
 %without blocking.
 
 % ==========================================================================
-The existence of complete, finite test suites is expressed in analogy to
-Theorem~\ref{th:failurestest}. A noteworthy difference is that the complete
-suite for trace refinement just needs the single adaptive test case
-$U_T(pq-1)$, while failures refinement requires the execution of $\{
-U_F(0),\dots,U_F(pq-1)\}$. The reason is that $U_T(pq-1)$ identifies trace
-errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes for
-erroneous acceptances at the end of each trace of length $(pq -1)$. Since
-$U_T(pq-1)$ never blocks any $Q$ event before terminating, the pass criterion
+Since
+$U_T(p)$ never blocks any $Q$-event before terminating, the pass criterion
 can be based on trace refinement instead of failures refinement as required
 in (\ref{eq:passF}).
 %
@@ -90,7 +84,7 @@ Q\ \pass\ U_T(p) \defs (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(p))
 \fixme{The proofs don't use this definition. It should change.}
 \fxnote{jp: I do not understand this remark -- we should discuss it on the phone.
 Please note the addition explanations I have added here below (\ref{eq:passT}).}
-%
+
 If the SUT process $Q$ deadlocks internally after a trace $s$ where also the reference
 process $P$ is in a state where deadlock is possible, this is captured by the fact
 that $\minaccs(n) = \{ \varnothing\}$ for $n = G(P)/s$. As a consequence, branch
@@ -100,7 +94,7 @@ and the  test execution terminates with $\epass$. If, however,
 $Q$ blocks after a trace $s'$
 where the reference process satisfies $\minaccs(P/s') \neq\varnothing$, branch 
 (\ref{eq:utb})  cannot be taken, and the test execution stops without producing
-$\epass$ or $\efail$. In contrast to the test for failures refinement, this is also interpreted here as a successful test execution, because unexpected blocking
+$\epass$ or $\efail$. In contrast to the test for failures refinement, this is   interpreted here as a successful test execution, because unexpected blocking
 of the SUT does not violate the trace refinement relation, as long as all traces 
 executed by the SUT are traces of the reference process. In particular, if 
 neither $\epass$ nor $\efail$ is ever produced, so that
@@ -109,7 +103,14 @@ $(\epass\then\Stop) \lessdet_T \Stop$ holds.
 
 
 
-
+The existence of complete, finite test suites is expressed in analogy to
+Theorem~\ref{th:failurestest}. A noteworthy difference is that the complete
+suite for trace refinement just needs the single adaptive test case
+$U_T(pq-1)$, while failures refinement requires the execution of $\{
+U_F(0),\dots,U_F(pq-1)\}$. The reason is that $U_T(pq-1)$ identifies trace
+errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes for
+erroneous acceptances at the end of each trace of length $(pq -1)$. 
+%
 \begin{theorem}\label{th:tracetest}
 Let $P$ be a non-terminating, divergence-free CSP process over alphabet $\Sigma$ whose
 normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
@@ -122,13 +123,113 @@ suite
 is complete with respect to ${\cal F} = (P,\lessdet_T,{\cal D})$.
 \xbox
 \end{theorem}
+%\begin{proof}
+%The theorem follows directly
+%from Step~1 in the proof of Lemma~\ref{lemma:mainfsound} and
+%Case~1 in the proof of Lemma~\ref{lemma:mainfexhaustive}.
+%\xbox
+%\end{proof}
+%%
+%Examples are provided after our discussion of size of the test suites.
+
+As before in the context of Theorem~\ref{th:failurestest}, 
+the proof of Theorem~\ref{th:tracetest} is structured into two lemmas, the first 
+establishing soundness, the second exhaustiveness.
+ 
+\fxnote{jp: Wen-ling and I have now provided a full proof for Theorem~\ref{th:tracetest}}
+% =============================================================================== 
+\begin{lemma}\label{lemma:mainfsoundtrace}
+A test suite $\TS_T$ generated from a CSP process $P$, as specified in
+Theorem~\ref{th:tracetest}, is passed by every CSP process $Q$ satisfying
+$P\lessdet_T Q$.
+\end{lemma}
 \begin{proof}
-The theorem follows directly
-from Step~1 in the proof of Lemma~\ref{lemma:mainfsound} and
-Case~1 in the proof of Lemma~\ref{lemma:mainfexhaustive}.
+Suppose that $P\lessdet_T Q$, so that $\trc(Q)\subseteq\trc(P)$, and assume that
+$s\in\trc(Q)$ with $\#s < pq$. Since $s$ is also a trace of $P$, we can conlude
+$$U_T(pq-1)/s = U_T(pq-1,\#s,G(P)/s)$$ because of (\ref{eq:ifpaT}). Now $\trc(Q)\subseteq\trc(P)$ 
+implies $[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$ cannot enter branch (\ref{eq:uta}) and produce a $\efail$-event. Therefore, only four options are
+available for the test execution    $(Q\parallel[\Sigma] U_T(p))/s$ to continue.
+
+\medskip
+\noindent
+{\bf Case~1.} $Q/s$ deadlocks and $\minaccs(G(P)/s) = \{ \varnothing \}$. Then
+$U_T(pq-1,\#s,G(P)/s)$ enters branch (\ref{eq:utb}), and the test execution 
+stops after event $\epass$.
+
+
+\medskip
+\noindent
+{\bf Case~2.} $Q/s$ deadlocks, but $\minaccs(G(P)/s)\neq\{\varnothing\}$. 
+Then the whole test execution blocks, and this is means that
+neither a $\epass$ nor a $\efail$ event is produced, so the test execution is passed.
+
+\medskip
+\noindent
+{\bf Case~3.} $Q/s$ selects an event $e\in[Q/s]^0$ and $\#s < pq-1$. Then the test case 
+$U_T(pq-1)$ in state
+$U_T(pq-1,\#s,G(P)/s)$ can also engage in $e$ by entering branch (\ref{eq:utc}),
+and the test execution continues without having produced a $\epass$ or a $\efail$ event.
+
+\medskip
+\noindent
+{\bf Case~4.} $\#s = pq-1$ holds. Then $U_T(pq-1,\#s,G(P)/s)$ can only enter
+branch (\ref{eq:utd}), and the test execution stops after $\epass$.
+
+This case analysis shows that every   execution of $(Q\parallel[\Sigma] U_T(p))$
+either stops after $\epass$ or produces neither $\epass$ nor $\efail$. This
+proves that $Q$ passes test $U_T(pq-1)$ according to the pass  criterion (\ref{eq:passT}).
 \xbox
 \end{proof}
-%
-Examples are provided after our discussion of size of the test suites.
+% ===============================================================================
 
+\begin{lemma}\label{lemma:mainfexhaustivetrace}
+A test suite $\TS_T$ specified as in Theorem~\ref{th:tracetest} is
+exhaustive for the fault model specified there and for conformance relation $\lessdet_T$.
+\end{lemma}
+\begin{proof}
+As before in the proofs for
+failures testing, we construct the product graph $G=G(P)\times G(Q)$ and recall
+that every trace $s\in\trc(P)\cap\trc(Q)$ is associated with a path through $G$ labelled
+with the same events as $s$, such that $G/s = (G(P)/s,G(Q)/s)$. Furthermore, we recall from Lemma~\ref{lemma:extendV} that graph state $(G(P)/s,G(Q)/s)$ can always be
+reached by a trace $u$ of length less or equal $pq-1$, where  the order of $G(P)$ is $p$ and that of $G(Q)$ is $q$.
+
+
+Suppose that $P\not\lessdet_T Q$. Then there exists a trace $s\in \trc(Q)\cap\trc(P)$ and an event $e\in [Q/s]^0$ such that $e\not\in [P/s]^0$. Let $u\in \trc(Q)\cap\trc(P)$
+be a trace with $\#u < pq$ and $G/u = (G(P)/s,G(Q)/s)$. Then 
+$$
+U_T(pq-1)/u = U_T(pq-1,\#u,G(P)/s).
+$$ 
+By assumption, 
+$e\in (\Sigma -[P/s]^0) = (\Sigma - [G(P)/s]^0)$. 
+Since  $G(Q)/u = G(Q)/s$,
+ $Q/u$ can engage into $e$. Then $U_T(pq-1,\#u,G(P)/s)$ will enter branch (\ref{eq:uta}), and the test execution stops after having produced $\efail$. This proves that
+  $Q$  fails test $U_T(pq-1)$.
+\xbox
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
  

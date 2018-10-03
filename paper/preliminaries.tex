@@ -274,7 +274,7 @@ equals $[P/s]^0$, because $P/s$ never refuses any of the events contained in
 this set. If $P/s$ is nondeterministic, it internally chooses one of its
 \emph{minimal acceptance sets} $A$ and never refuses any event in $A$, while
 {\it possibly} refusing the events from $[P/s]^0 - A$ and
-{\it always} refusing those from $\Sigma - [P/s]^0$.
+{\it always} refusing those from $\Sigma - [P/s]^0$. 
 
 
 Exploiting (\ref{eq:accref}),
@@ -289,8 +289,19 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \end{equation}
 \fixme{alcc: proof in the report perhaps? What do you need (5) for? }
 \fxnote{jp: I have clarified the introduction of acceptances and removed the statements
-we do not need in the rest of the paper. We need (5) here show that the set of
+we do not need in the rest of the paper. We need (5) here to show that the set of
 maximal refusals of $P/s$ equals $r(G(P/s))$.}
+
+Given any non-diverging, non-terminating, finite-state process $P$,
+the process can be re-con\-struc\-ted from its transition graph $G(P)$ with initial state $\ii n$ and transition function $t$, using 
+$P$'s normalised syntactic representation~\cite[pp.~277]{Roscoe:1997:TPC:550448} specified as follows.
+\begin{eqnarray*}
+\text{normalised}(P) & = & P_N(\ii n)
+\\
+P_N(n) & = & \Intchoice_{A\in\minaccs(n)\cup \{ [n]^0 \} } e:A\then P_N(t(n,e))
+\end{eqnarray*}
+With this definition, $P$ is semantically equivalent to $\text{normalised}(P)$ in the CSP failures semantics.
+
 
 % .....................................................................................
  \begin{figure}[t]
@@ -303,10 +314,7 @@ maximal refusals of $P/s$ equals $r(G(P/s))$.}
    \label{fig:tga}
  \end{figure}
 
-\fixme{alcc: the a from node 2 should go back to 0, I think.}
-\fxnote{jp: No, this is correct: state 0 corresponds to $P$, 1 to $Q\intchoice R$,
-2 to $P\intchoice R$, and 3 to $R$. 
-Therefore, 2 goes with $a$ to $(P/a) = Q\intchoice R$, that is, to node 1. }
+
 
 % .......................................................................................
 
@@ -321,15 +329,21 @@ transition from node 0 leads to node 1 representing the process state $P/a
 derived from $Q$ and $R$. Since these processes accept their initial events
 in external choice, $Q\intchoice R$ induces minimal acceptance sets $\{a,c\}$
 and $\{b,c\}$. We note that the event $c$ can never be refused, since it is
-contained in each minimal acceptance set.
+contained in each minimal acceptance set.\fixme{alcc: the a from node 2 should go back to 0, I think.}
+\fxnote{jp: No, this is correct: state 0 corresponds to $P$, 1 to $Q\intchoice R$,
+2 to $P\intchoice R$, and 3 to $R$. 
+Therefore, 2 goes with $a$ to $(P/a) = Q\intchoice R$, that is, to node 1. I think that
+this is now explained sufficiently clear  in the example.}
 
 Having engaged in $c$, the next process state is represented by node 2. Due
 to normalisation, there is only a single transition satisfying
 $t(1,c) = 2$. This transition, however, can have
 been caused by either $Q$ or $R$ engaging into $c$, so node 2 corresponds to
 process state $Q/c \intchoice R/c = P \intchoice R$. This is reflected by the
-two minimal acceptance sets labelling node 2. Similar considerations explain
-the other nodes and transitions in Fig.~\ref{fig:tga}.
+two minimal acceptance sets labelling node 2. 
+From node~2, event $c$ leads to node~3. Since $P$ does not engage into $c$,
+the $R$-component of $P\intchoice R$ must have processed $c$, so node~3 corresponds to process state $R/c = R$, and therefore it is labelled by $R$'s minimal acceptance
+$\{b,c\}$. 
 \xbox
 \end{example}
 %
@@ -461,9 +475,7 @@ every} node of $N$.
 
 \begin{lemma}
 \label{lemma:extendV} Let $P$ be a CSP process with normalised transition
-graph $G(P)$. %\fixme{alcc: can a
-%normalised graph for a process have states that are unreachable?}
-%\fxnote{jp: You are right: all states in G(P) are reachable by construction of the graph -- I have added this information to the section introducing the graphs.}
+graph $G(P)$. 
 Let
 $V\subseteq\Sigma^*$ be a finite prefix-closed set of sequences of events.
 Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is, $|t(\ii
