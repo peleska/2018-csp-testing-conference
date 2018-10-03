@@ -13,7 +13,7 @@ transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 
 \begin{figure}[htbp]
 \begin{center}
-\begin{minipage}{0.3\textwidth} 
+\begin{minipage}{0.2\textwidth} 
 	 \begin{eqnarray*}
 { }[0]^0 & = & \{ a \} \\
 { }[1]^0 & = & \{ a,b,c \} \\
@@ -22,7 +22,7 @@ transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 \end{eqnarray*}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{0.3\textwidth}
+	\begin{minipage}{0.33\textwidth}
 	 \begin{eqnarray*}
 \minhits(0) & = & \{ \{ a\} \} \\
 \minhits(1) & = & \{ \{a,b\}, \{c\}, \} \\
@@ -32,12 +32,17 @@ transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 
 	\end{minipage}
 	\hfill
-	\begin{minipage}{0.3\textwidth}
+	\begin{minipage}{0.2\textwidth}
 	 \begin{eqnarray*}
 t(0,a) & = & 1 \\
 t(1,a) & = & 0 \\
 t(1,b) & = & 0 \\
-t(1,c) & = & 2 \\
+t(1,c) & = & 2  
+\end{eqnarray*}
+	\end{minipage}
+		\hfill
+	\begin{minipage}{0.2\textwidth}
+	 \begin{eqnarray*}
 t(2,a) & = & 1 \\
 t(2,b) & = & 0 \\
 t(2,c) & = & 3 \\
@@ -45,6 +50,10 @@ t(3,b) & = & 0 \\
 t(3,c) &  =& 3
 \end{eqnarray*}
 	\end{minipage}
+	
+	
+	
+	
 \caption{Initials, minimal hitting sets, and transition function of the normalised transition graph displayed in Fig.~\ref{fig:tga}.}
 \label{fig:initialsminhitstrans}
 \end{center}

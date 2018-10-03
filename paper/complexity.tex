@@ -2,18 +2,38 @@
 \label{sec:complexity}
 % ================================================================================
 
-As can be seen from the specification of the test cases $U_F(k)$ (see
+In this 
 \fixme{In that section, $k$ is used for a different purpose. It is confusing.
-I would use $p$ here.} Section~\ref{sec:finitecompletefails}), the number of
+I would use $p$ here.} 
+\fxnote{jp: ok -- I also had to change this in Theorem~2, where $k$ was used as index from
+0 to $pq-1$. I now use $j$ as index for $U_F(j)$, because $p$ is the number of states in $G(P)$.}
+section, we
+ will   calculate upper bounds for the total number of test executions to be performed
+ when testing for failures refinement.   Theorem~\ref{th:failurestest} specifies
+ that all tests $U_F(j),\ 0\le j < pq$ need to be executed, where $p$ denotes the
+ number of nodes in the transition graph of the reference process $P$, and $q\ge p$ is an estimate for the number of nodes in the SUT's transition graph. Therefore, we will first calculate a bound for the number of test executions to be performed 
+ for test $U_F(j)$ and then summarise  these bounds over all $j$ from $0$ to $pq-1$.
+
+
+For the worst-case estimate, we
+assume that $P$ never allows for early deadlock (so $\minhits(P/s)$ is never empty) 
+and that the SUT $Q$ is a correct 
+failures refinement. Then all test executions $(Q\parallel[\Sigma] U_F(j))$
+stop after having run through a $Q$-trace of length $j+1$, because their is
+no early termination due to entering branches (\ref{eq:ufa}), (\ref{eq:ufb}), or due to
+an illegal deadlock of $Q$.
+As can be seen from the specification of the test cases $U_F(j)$ (see
+Section~\ref{sec:finitecompletefails}), the number of
 executions ending in a $\epass$ event corresponds to the number $\ell$ of
-traces $s$ of $P$ with length equal to\footnote{In this estimation, we
-disregard the case where the test terminates earlier due to entering branch
-(\ref{eq:ufb}).} $k$, multiplied by the number $h$ of minimal hitting sets in
-$\minhits(P/s)$.\fixme{But doesn't this add to the number of executions?} For
-the tests $U_T(k)$ verifying trace refinement (see
+traces $s$ of $P$ with length equal to  
+$j$, multiplied by the number $h$ of minimal hitting sets in
+$\minhits(P/s)$. For
+the tests $U_T(j)$ verifying trace refinement (see
 Section~\ref{sec:finitecomplete}), the number of executions equals $\ell$,
-since there is no equivalent in $U_T(k)$ to checking different hitting sets
+since there is no equivalent in $U_T(j)$ to checking different hitting sets
 in the last step of a test execution.
+\fixme{But doesn't this add to the number of executions?}
+\fxnote{jp: should be clear now from the revised test}
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
@@ -24,15 +44,15 @@ process
 RUN(\Sigma) = e:\Sigma \then RUN(\Sigma).
 \]
 The normalised transition graph of this process has a single state, and its initials
-are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(k)$ can
+are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(j)$ can
 never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly
-$\card{\Sigma}^k$ different traces of length $k$ exercising branch (\ref{eq:ufc})
+$\card{\Sigma}^j$ different traces of length $j$ exercising branch (\ref{eq:ufc})
 for each of their events.
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $h$}
 Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
-acceptances, the cardinality   $h = \minhits(P/s)$ has the upper bound
+acceptances, the cardinality   $h = \card{\minhits(P/s)}$ has the upper bound
 \[
 h \le \binom{n}{\lfloor\frac{n}{2}\rfloor}, \quad \text{where $n = \card{\Sigma}$.}
 \]
@@ -88,8 +108,8 @@ non-empty subsets of $\Sigma$.
 % -------------------------------------------------------------------------
 \subsection{Upper Bounds of Test Executions for Checking Failures Refinement}
 
-By Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(k)$ for
-$k = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
+By Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(j)$ for
+$j = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
 we use the formula for the sum of the geometric progression.
 %
 \[
@@ -97,10 +117,14 @@ h\cdot \big( \frac{1-\card{\Sigma}^{pq}}{1-\card{\Sigma}} \big),\
  \text{or, asymptotically,}\  O(\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}\cdot\card{\Sigma}^{(pq-1)}).
  \]
 %
-From Theorem~\ref{th:upperboundh} we know that the worst-case bound for $h$
-above cannot be further improved, since the full collection of minimal
-hitting sets needs to be checked to verify $conf$.\fixme{Theorem 4 is not
+From 
+\fixme{Theorem 4 is not
 about $conf$. I don't think you have tests for $conf$.}
+\fxnote{jp: I rephrased this -- hope that it's better understandable now.}
+Theorem~\ref{th:upperboundh} we know that the worst-case bound for $h$
+above cannot be further reduced, since the full collection of minimal
+hitting sets needs to be checked at the end of each execution of $U_F(j)$. 
+
 
 In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test 
 \fixme{In \cite{DBLP:conf/icfem/CavalcantiG07}, we work
@@ -141,22 +165,27 @@ the number of test executions to be performed.
 % -------------------------------------------------------------------------
 \subsection{Upper Bounds of Test Executions for Checking Trace Refinement}
 
-According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
+According 
+\fixme{Please, see comments
+above about this process.}\fxnote{jp: should be ok now after the above changes and clarifications.}
+to Theorem~\ref{th:tracetest}, a complete test suite checking trace
 refinement just contains the adaptive test case $U_T(pq-1)$. As derived for
-$U_F(k)$ above, the number of executions performed by $(Q\parallel[\Sigma]
-U_T(pq-1))$ is bounded by $\card{\Sigma}^{pq-1}$. \fixme{Please, see comments
-above about this process.}
+$U_F(j)$ above, the number of executions performed by $(Q\parallel[\Sigma]
+U_T(pq-1))$ is bounded by $\card{\Sigma}^{pq-1}$. 
+
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
 
-According to Theorem~\ref{th:failurestest}, the tests $U_F(k)$ need to be
-executed for $k = 0,\dots,pq-1$ to guarantee completeness. \fixme{Confusing
-use of $p$ and $q$ again.} This means that the SUT is verified with test
+According to Theorem~\ref{th:failurestest}, the tests $U_F(j)$ need to be
+executed for $j = 0,\dots,pq-1$ to guarantee completeness. \fixme{Confusing
+use of $p$ and $q$ again.}
+\fxnote{jp: fixed}
+ This means that the SUT is verified with test
 traces up to, and including, length $pq$: recall from the test specification,
-branch (\ref{eq:ufa}), that $U_F(k)$ will accept all traces $s.e$ with
-$s\in\trc(P), \#s = k, e\not\in\trc(P/s)$, so erroneous traces up to length
-$k+1$ are detected.
+branch (\ref{eq:ufa}), that $U_F(j)$ will accept all traces $s.e$ with
+$s\in\trc(P), \#s = j, e\not\in\trc(P/s)$, so erroneous traces up to length
+$j+1$ are detected.
 
 It is interesting to investigate whether this maximal length is really
 necessary, or whether one could elaborate alternative complete test
@@ -170,23 +199,35 @@ required when testing for refinement.
 \begin{example}\label{ex:pq}
 Consider the CSP reference process $P$ and an erroneous implementation $Q$
 specified as follows.
+
+\begin{center}
+\begin{minipage}{.4\textwidth}
 \begin{eqnarray*}
 P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
 \\
 P_1 & = & a \then P \extchoice b\then P
-\\ & &  \\
+\end{eqnarray*}
+\end{minipage}
+\hfill
+\begin{minipage}{.4\textwidth}
+\begin{eqnarray*}
 Q & = & a\then Q_1 \extchoice b\then Q_1
 \\
 Q_1 & = & a\then Q_2 \extchoice b\then Q_2
 \\
 Q_2 & = & a\then Q \intchoice b\then Q
 \end{eqnarray*}
+\end{minipage}
+\end{center}
+
+
+\medskip
 Obviously, $P$'s normalised transition graph has 2 nodes, while $Q$'s graph
 has 3. It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$,
 but $\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using FDR4 that
 the ``test passed condition''
 \[
-(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k))\hide \Sigma
+(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j))\hide \Sigma
 \]
 holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. So, the
 non-conformance of $Q$ cannot be detected by any test trace of length less or
@@ -197,6 +238,8 @@ is refused by $Q$. \xbox
 \fixme{But, there is no argument that the proofs based on graph products
 corresponds to this process. In particular the hiding does not seem to play a
 role.}
+\fxnote{jp: should be clear now, since we have explained in Section 3 that only 
+the graph product $G(P)\times G(Q)$ is   needed in the proofs}
 %
 Generalising Example~\ref{ex:pq}, it can be shown that for any pair
 $2\le p,q \in\mathbb{N}$,

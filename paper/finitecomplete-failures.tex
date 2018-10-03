@@ -27,24 +27,7 @@ $$
 G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
 $$
 and each integer $p\ge 0$, we define a test for failures refinement as shown
-below. %%
-%\begin{eqnarray}
-%U_F(p) & = & U_F(p,\varepsilon)
-%\\
-%U_F(p,s) & = & \big( \Extchoice e:(\Sigma - [P/s]^0) @ e \then \efail\then \Stop \big)
-%\label{eq:ufa}
-%\\ & & \extchoice \nonumber
-%\\ & & (\minaccs(P/s) = \{ \varnothing \})    \&   \big( \epass \then \Stop \big)
-%\label{eq:ufb}
-%\\ & & \extchoice \nonumber
-%\\ & & (\#s < p) \& \big( \Extchoice e:[P/s]^0 @ e \then U_F(p,s.e) \big)
-%\label{eq:ufc}
-%\\ & & \extchoice \nonumber
-%\\ & & (\#s = p \wedge \minhits(P/s)\neq\varnothing) \&  \nonumber
-%\\ & & \taba \big( \Intchoice_{H\in\minhits(P/s)} ( \Extchoice e:H @ e \then \epass \then\Stop   )  \big)
-%\label{eq:ufd}
-%\end{eqnarray}
-%
+below. 
 %
 \begin{eqnarray}
 \label{eq:UFP}
@@ -248,6 +231,7 @@ then $Q$ fails at least one test in $\TS$.
 %
 The following main theorem establishes the completeness of our test suite.
 
+% -------------------------------------------------------------------------
 \begin{theorem}\label{th:failurestest}
 Let $P$ be a non-terminating, divergence-free CSP process over alphabet $\Sigma$ whose
 normalised transition graph $G(P)$ has $p$ states. Define fault domain ${\cal
@@ -255,10 +239,11 @@ D}$ as the set of all divergence-free CSP processes over alphabet $\Sigma$,
 whose transition graph has at most $q$ states with $q \ge p$. Then the test
 suite
 \[
-\TS_F = \{ U_F(k)~|~0 \le k < pq  \}\quad\text{$U_F(k)$ specified in (\ref{eq:UFP})}
+\TS_F = \{ U_F(j)~|~0 \le j < pq  \}\quad\text{$U_F(j)$ specified in (\ref{eq:UFP})}
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
+% ------------------------------------------------------------------------
 %
 The proof of the theorem follows from the two lemmas below. The first states
 that test suite $\TS_F$ is sound, the second states that the suite is also
@@ -280,21 +265,22 @@ U_F(k))\hide \Sigma$.
 
 \paragraph{Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and $Q\
 conf\ P$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq
-\trc(P)$, any adaptive test $U_F(p)$ running in parallel with $Q$ will always
+\trc(P)$, any adaptive test $U_F(j)$ running in parallel with $Q$ will always
 enter the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the
-external choice construction for $U_F(p,k,n)$. If $U_F(p,k,n) = U_F(p)/s$
-with $s\in\trc(P)$, then Lemma~\ref{lemma:ufproperties} implies $U_F(p,k,n) =
-U_F(p,k,G(P)/s)$, so $[n]^0 = [G(P)/s]^0 = [P/s]^0$. As a consequence,
+external choice construction for $U_F(j,k,n)$. To see this, consider
+ $U_F(j,k,n) = U_F(j)/s$
+with $s\in\trc(Q)$. Lemma~\ref{lemma:ufproperties} implies $U_F(j,k,n) =
+U_F(j,k,G(P)/s)$, so $[n]^0 = [G(P)/s]^0 = [P/s]^0$. As a consequence,
 $[Q/s]^0\subseteq [P/s]^0 = [n]^0$, so branch~(\ref{eq:ufa}) can never be
-entered in the parallel execution of $Q$ and $U_F(p)$, and the $fail$ event
+entered in the parallel execution of $Q$ and $U_F(j)$, and the $fail$ event
 cannot occur.
 
 \paragraph{Step~2.} Since $Q\ conf\ P$, Lemma~\ref{lemma:hseta} implies
 that for all $s\in\trc(Q)\cap\trc(P)$, every $H \in \minhits(P/s)$ is a
 hitting set for $\minaccs(Q/s)$. From Lemma~\ref{lemma:ufproperties} we know
-that $U_F(p)/s = U_F(p,k,n)$ with $U_F(p,k,n) = U_F(p,\#s,G(P)/s)$, so
+that $U_F(j)/s = U_F(j,k,n)$ with $U_F(j,k,n) = U_F(j,\#s,G(P)/s)$, so
 $\minhits(n) = \minhits(P/s)$. The branch (\ref{eq:ufb}) of the test
-$U_F(p,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
+$U_F(j,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
 \varnothing$. The branch (\ref{eq:ufc}) always leads to test continuation
 without a verdict. \fixme{I think we need a stronger argument here, as to why
 it cannot deadlock.}
@@ -337,7 +323,7 @@ through this product graph. Any error can be detected after running through such
 and then either observing an event outside $[P/s]^0$ (this is the violation described
 by Case~1) or identifying an illegal acceptance $A_Q$ as specified in Case~2. 
 It is not guaranteed, however, that trace $s$ is short enough to be executed by one of the 
-test cases $U_F(p)$. Therefore, it has to be shown that for any $s$ leading to an error
+test cases $U_F(j)$ with $0\le j < pq$. Therefore, it has to be shown that for any $s$ leading to an error
 situation specified by Case~1 or Case~2, there exists a trace $u$ of maximal length $pq-1$
 leading to the same error.
 
@@ -349,7 +335,7 @@ leading to the same error.
 the graph of a test execution is given by the cross-product of graphs.  But,
 test execution is not defined in this way. It is defined by parallelism and
 hiding. I think the definition of test execution needs to change.}
-\fxnote{jp: this is a misunderstanding: we are not looking at the product graph of $Q$ and $U_F(p)$, but at the product graph of $Q$ and $P$. I have added more explanatory 
+\fxnote{jp: this is a misunderstanding: we are not looking at the product graph of $Q$ and $U_F(j)$, but at the product graph of $Q$ and $P$. I have added more explanatory 
 text in the paragraph  before Case~1.}
 Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
 but $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is

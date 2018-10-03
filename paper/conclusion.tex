@@ -101,24 +101,24 @@ non-terminating processes.
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
 As explained in the previous sections, passing a test is specified by
-$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for
+$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U(F(j)) \hide \Sigma$ for
 failures testing. If the SUT $Q$ is not a programmed piece of software or an
 integrated hardware or software system, but just another CSP process
 specification, it is of course possible to verify the pass criterion using
 the FDR4 model checker. For checking the refinement relation $P\lessdet_F Q$,
-the pass criterion has to be verified for $k=0,\dots,pq-1$, where $p$ and $q$
+the pass criterion has to be verified for $j=0,\dots,pq-1$, where $p$ and $q$
 indicate the number of nodes in $P$'s transition graph and the maximal number
 of nodes in $Q$'s graph, respectively (Theorem~\ref{th:failurestest}). Since
-the test cases $U_F(k)$ have such a simple structure, it is an interesting
+the test cases $U(F(j)$ have such a simple structure, it is an interesting
 question for further research whether checking $(\epass\then\Stop) \lessdet_F
-(Q\parallel[\Sigma] U_F(k)) \hide \Sigma$ for $k=0,\dots,pq-1$ can be faster
+(Q\parallel[\Sigma] U(F(j)) \hide \Sigma$ for $j=0,\dots,pq-1$ can be faster
 than directly checking $P\lessdet_F Q$, as one would do in the usual approach
 with FDR4. This is of particular interest, since the checks could be
 parallelised on several CPUs. Alternatively it is interesting to investigate
 whether the check\footnote{We are grateful to Bill Roscoe for suggesting this
 option.}
 \[
-(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] \Intchoice_{k=0}^{pq-1} U_F(k)) \hide \Sigma
+(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] \Intchoice_{j=0}^{pq-1} U_F(j)) \hide \Sigma
 \]
 may perform better than the check of $P\lessdet_F Q$, since the former allows for
 other optimisations in the model checker than the latter.
