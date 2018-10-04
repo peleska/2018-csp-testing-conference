@@ -196,105 +196,193 @@ test the SUT with traces of significantly shorter length.
 
 The following example, however, shows that the maximal length $pq$ is really
 required when testing for refinement.
-\begin{example}\label{ex:pq}
-Consider the CSP reference process $P$ and an erroneous implementation $Q$
-specified as follows.
+%\begin{example}\label{ex:pq}
+%Consider the CSP reference process $P$ and an erroneous implementation $Q$
+%specified as follows.
+%
+%\begin{center}
+%\begin{minipage}{.4\textwidth}
+%\begin{eqnarray*}
+%P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
+%\\
+%P_1 & = & a \then P \extchoice b\then P
+%\end{eqnarray*}
+%\end{minipage}
+%\hfill
+%\begin{minipage}{.4\textwidth}
+%\begin{eqnarray*}
+%Q & = & a\then Q_1 \extchoice b\then Q_1
+%\\
+%Q_1 & = & a\then Q_2 \extchoice b\then Q_2
+%\\
+%Q_2 & = & a\then Q \intchoice b\then Q
+%\end{eqnarray*}
+%\end{minipage}
+%\end{center}
+%
+%
+%\medskip
+%Obviously, $P$'s normalised transition graph has 2 nodes, while $Q$'s graph
+%has 3. It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$,
+%but $\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using FDR4 that
+%the ``test passed condition''
+%\[
+%(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j))\hide \Sigma
+%\]
+%holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. So, the
+%non-conformance of $Q$ cannot be detected by any test trace of length less or
+%equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
+%by a trace of length 6, because the last event offered by the test $U_F(5)$
+%is refused by $Q$. \xbox
+%\end{example}
 
+\begin{figure}[htbp]
 \begin{center}
 \begin{minipage}{.4\textwidth}
-\begin{eqnarray*}
-P & = & a \then P_1 \intchoice b \then P_1 \intchoice c \then P_1
-\\
-P_1 & = & a \then P \extchoice b\then P
-\end{eqnarray*}
+\includegraphics[width=1.2\textwidth]{theorem5p.pdf}
 \end{minipage}
 \hfill
-\begin{minipage}{.4\textwidth}
-\begin{eqnarray*}
-Q & = & a\then Q_1 \extchoice b\then Q_1
-\\
-Q_1 & = & a\then Q_2 \extchoice b\then Q_2
-\\
-Q_2 & = & a\then Q \intchoice b\then Q
-\end{eqnarray*}
+\begin{minipage}{.55\textwidth}
+\includegraphics[width=1.2\textwidth]{theorem5q.pdf}
 \end{minipage}
+\caption{Transition graphs of $P$ (left) and $Q$ (right) from Example~\ref{ex:pq}
+ for $p=3$ and $q=4$.}
+\label{fig:examplepq}
 \end{center}
+\end{figure}
+
+
+\begin{example}\label{ex:pq}
+Consider 
+\fxnote{jp: I have updated the example with $P$ and $Q$ as used in the proof of the theorem. This should make thinks more readable.}
+\fixme{The internal choice became external. To test for traces refinement, yo
+put forward just one adaptive tests. So, there is more going on here.I think
+it is because your tests are checking both traces and failures refinement.}
+\fxnote{jp: no -- you are right: we want {\it internal} choice for $P$. With external
+choice, this only shows that when testing for trace refinement, the length $pq$ is required.}
+the CSP reference process $P$ and an erroneous implementation $Q$
+specified as follows.
+
+\begin{eqnarray*}
+P & = &  P(0)
+\\
+P(k) & = & (k < p-1) \& \big( (a \then P(k)) \intchoice ( b \then P(k+1))\big)
+\\ & & \extchoice
+\\ & & (k = p-1) \& (a \then P(k))
+\\
+Q & = & Q(0)
+\\
+Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) 
+\\ & & \extchoice
+\\ & & ( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
+\end{eqnarray*}
+
 
 
 \medskip
-Obviously, $P$'s normalised transition graph has 2 nodes, while $Q$'s graph
-has 3. It is easy to see (and can be checked with FDR4) that $P\lessdet_T Q$,
-but $\neg(P\lessdet_F Q)$. Furthermore, it can also be shown using FDR4 that
-the ``test passed condition''
+The normalised transition graphs of $P$ and $Q$ are depicted in Fig.~\ref{fig:examplepq}
+for the case $p=3,\ q=4$. Using FDR4, it can be shown for concrete values of
+$p$ and $q$ that the  ``test passed conditions''
 \[
 (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j))\hide \Sigma
 \]
-holds for $U_F(0),\dots,U_F(4)$, but fails for $U_F(5)$. So, the
-non-conformance of $Q$ cannot be detected by any test trace of length less or
-equal to 5, but is revealed (as expected from Theorem~\ref{th:failurestest})
-by a trace of length 6, because the last event offered by the test $U_F(5)$
-is refused by $Q$. \xbox
+and
+\[
+(\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(j))\hide \Sigma
+\]
+hold for $j = 0,\dots,pq-2$. This means, that none of the test cases $U_F(j)$
+and $U_T(j)$ are capable of detecting failures and trace refinement violations, 
+respectively, if they only check traces up to length $pq-1$ (recall that this
+corresponds to $j\le pq-2$). 
+
+Process $Q$, however, neither conforms to $P$ in the failures refinement 
+relation, nor in the trace
+refinement relation. This can only be seen when executing the test $U_F(pq-1)$ and
+$U_T(pq-1)$, respectively. These test fail, so this shows that $P\not\lessdet_F Q$ and
+$P\not\lessdet_F Q$ according to Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this shows that
+the maximal trace
+length $pq$ to be investigated in the tests cannot be further reduced without losing
+the completeness property of the test suites.
+\xbox
 \end{example}
+
 \fixme{But, there is no argument that the proofs based on graph products
 corresponds to this process. In particular the hiding does not seem to play a
 role.}
 \fxnote{jp: should be clear now, since we have explained in Section 3 that only 
-the graph product $G(P)\times G(Q)$ is   needed in the proofs}
+the graph product $G(P)\times G(Q)$ is   needed in the proofs.}
 %
 Generalising Example~\ref{ex:pq}, it can be shown that for any pair
 $2\le p,q \in\mathbb{N}$,
-there exist reference processes with $p$ states
-and implementation processes with $q$ states, such that
+there exist reference processes $P$ with $p$ states
+and implementation processes $Q$ with $q$ states, such that
 a violation of the trace refinement property
 can only be detected with a trace of length $pq$. This is proven in the following
-theorem.
+theorem. In the proof, we use the processes $P$ and $Q$ introduced in Example~\ref{ex:pq}. 
 
+% ----------------------------------------------------------------------------
 \begin{theorem}\label{th:maxtracelen}
 Let $2\le p,q \in\mathbb{N}$. Then there exists a reference process $P$ and an
 implementation process $Q$ with the following properties.
 \begin{enumerate}
 \item $G(P)$ has $p$ states.
 \item $G(Q)$ has $q$ states.
-\item $P\not\lessdet_T Q$.
+\item $P\not\lessdet_T Q$, and therefore, also $P\not\lessdet_F Q$.
 \item $\forall s\in\trc(Q): \#s < pq\implies s\in\trc(P)$.
+\item $Q\ conf\ P$.
 \end{enumerate}
-As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement cannot be reduced without losing the test suite's completeness property.
+As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement or trace refinement 
+cannot be reduced without losing the test suite's completeness property.
 \end{theorem}
+% ----------------------------------------------------------------------------
 \begin{proof}
-Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$
-over alphabet $\Sigma =\{ a,b\}$ as follows.
-\begin{eqnarray*}
-P & = &  P(0)
-\\
-P(k) & = & \big( a \then P(k) \big) \extchoice (k < p-1) \& \big( b \then P(k+1)\big)
-\\
-Q & = & Q(0)
-\\
-Q(k) & = & (k < q-1) \& \big( a \then Q(k+1)    \big) \extchoice
-( k = q-1)\& \big( a\then Q(0) \extchoice b\then Q(0)  \big)
-\end{eqnarray*}
-\fixme{The internal choice became external. To test for traces refinement, yo
-put forward just one adaptive tests. So, there is more going on here.I think
-it is because your tests are checking both traces and failures refinement.}
+Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$ as in Example~\ref{ex:pq}. It is trivial to see that 
+$G(P)$ has $p$ nodes and $G(Q)$ has $q$ nodes, so statements 1 and 2 of the theorem hold.
+
 Using regular expression notation, the traces of $P$ can be specified as
 \[
 \trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
 \]
-where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subset\Sigma^*$,
+where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subseteq\Sigma^*$,
 including the traces of $M$ themselves.
 The traces of $Q$ can be specified by
 \[
 \trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
 \]
 It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; for example, the trace
-$(a^{q-1}b)^p$ is in $\trc(Q)\setminus\trc(P)$.
+$(a^{q-1}b)^p$ is in $\trc(Q)\setminus\trc(P)$, because $P$-traces may contain at most $p-1$ $b$-events. This proves statement~3 of the theorem.
 
 Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented
 by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$.
 Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$
 is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, since
 $\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events,
-where at most $p-1$ events $b$ have been inserted.
+where at most $p-1$ events $b$ have been inserted. This proves statement 4 of the theorem.
+
+To prove statement~5, we observe that the specification of $P$ implies
+\[
+\minaccs(P/s) = \left\{
+\begin{array}{ll}
+\{ \{a\}, \{b\} \} & \text{for all $s\in\trc(P)$ with $\#s<p-1$.}
+\\
+\{ \{a\} \} & \text{for all $s\in\trc(P)$ with $\#s\ge p-1$.}
+\end{array}
+\right.
+\]
+and
+\[
+\minaccs(Q/s) = \left\{
+\begin{array}{ll}
+\{ \{a\}  \} & \text{for all $s\in\trc(Q)$ with $\#s \neq 0\mod(q-1)$.}
+\\
+\{ \{a,b\} \} & \text{for all $s\in\trc(P)$ with $\#s = 0\mod(q-1)$.}
+\end{array}
+\right.
+\]
+As a  consequence, the minimal acceptance set $A_P = \{a\}$ which is
+contained in every $\minaccs(P/s)$ fulfils $A_P \subseteq A_Q$ for
+any $A_Q\in\minaccs(Q/s)$, when $s\in\trc(P)\cap \trc(Q)$. Now Lemma~\ref{lemma:tgtrcref}, 
+(\ref{eq:failrefb}) can be applied to conclude that $Q\ conf\ P$.
 \xbox
 \end{proof}
 %

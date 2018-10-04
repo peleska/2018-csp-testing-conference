@@ -1,0 +1,127 @@
+transparent normal
+
+p = 3
+q = 4
+
+channel a,b, pass, fail
+
+Sigma = {a,b}
+
+P = P1(0)
+P1(k) = (k < p-1)&((a -> P1(k)) |~| (b -> P1(k+1)))
+        []
+        (k == p-1)&(a -> P1(k))
+
+Q = Q1(0)
+Q1(k) = (k < q-1)&(a -> Q1(k+1))
+        []
+        (k == q-1)&(a -> Q1(0) [] b -> Q1(0))
+
+
+W = W1(0)
+W1(k) = (k < p*q - 1 )&([] e:Sigma @ e -> W1(k+1))
+        []
+        (k == p*q)&STOP
+
+SYSP = P [| Sigma |] W
+
+SYSQ = Q [| Sigma |] W
+
+
+
+-- Initials of P as map from node numbers to sets of events
+initials(0) = {a,b}
+initials(1) = {a,b}
+initials(2) = {a}
+
+
+-- transition function of G(P)
+t(0,a) = 0
+t(0,b) = 1
+t(1,a) = 1
+t(1,b) = 2
+t(2,a) = 2
+ 
+-- Minimal hitting sets of nodes
+minhit(0) = { {a,b} }
+minhit(1) = { {a,b} }
+minhit(2) = { {a} }
+
+
+-- minimal acceptance sets of nodes
+minacc(0) = { {a}, {b} }
+minacc(1) = { {a}, {b} }
+minacc(2) = { {a} }
+
+
+
+U_F(j) = U1(j,0,0)
+
+U1(j,k,n) = 
+  ([] e : diff(Sigma,initials(n)) @ e -> fail -> STOP )
+  []
+  (empty(minhit(n))) & (pass -> STOP)
+  []
+  (k < j) & ([] e : initials(n) @ e -> U1(j,k+1,t(n,e)))
+  []
+  (k == j and minhit(n) != {}) & 
+      ( |~| H : minhit(n) @ ([] e : H @ e -> pass -> STOP ))
+
+
+U_T(j) = UT1(j,0,0)
+UT1(j,k,n) = 
+([] e : diff(Sigma,initials(n)) @ e -> fail -> STOP )
+  []
+  (empty(minacc(n))) & (pass -> STOP)
+  []
+  (k < j) & ([] e : initials(n) @ e -> UT1(j,k+1,t(n,e)))
+  []
+  (k == j) & pass -> STOP
+
+
+TEST_PASSED = pass -> STOP
+
+TEST(j) = ( Q [| Sigma  |] U_F(j) ) \ Sigma
+TEST_T(j) = ( Q [| Sigma  |] U_T(j) ) \ Sigma
+
+
+
+assert SYSP [T= SYSQ
+
+assert SYSP [F= SYSQ
+
+assert TEST_PASSED [F= TEST(0)
+assert TEST_PASSED [F= TEST(1)
+assert TEST_PASSED [F= TEST(2)
+assert TEST_PASSED [F= TEST(3)
+assert TEST_PASSED [F= TEST(4)
+assert TEST_PASSED [F= TEST(5)
+assert TEST_PASSED [F= TEST(6)
+assert TEST_PASSED [F= TEST(7)
+assert TEST_PASSED [F= TEST(8)
+assert TEST_PASSED [F= TEST(9)
+assert TEST_PASSED [F= TEST(10)
+assert TEST_PASSED [F= TEST(11)
+
+assert TEST_PASSED [T= TEST_T(0)
+assert TEST_PASSED [T= TEST_T(1)
+assert TEST_PASSED [T= TEST_T(2)
+assert TEST_PASSED [T= TEST_T(3)
+assert TEST_PASSED [T= TEST_T(4)
+assert TEST_PASSED [T= TEST_T(5)
+assert TEST_PASSED [T= TEST_T(6)
+assert TEST_PASSED [T= TEST_T(7)
+assert TEST_PASSED [T= TEST_T(8)
+assert TEST_PASSED [T= TEST_T(9)
+assert TEST_PASSED [T= TEST_T(10)
+assert TEST_PASSED [T= TEST_T(11)
+
+
+
+
+
+
+
+
+
+
