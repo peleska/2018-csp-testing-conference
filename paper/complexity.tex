@@ -178,9 +178,7 @@ U_T(pq-1))$ is bounded by $\card{\Sigma}^{pq-1}$.
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
 
 According to Theorem~\ref{th:failurestest}, the tests $U_F(j)$ need to be
-executed for $j = 0,\dots,pq-1$ to guarantee completeness. \fixme{Confusing
-use of $p$ and $q$ again.}
-\fxnote{jp: fixed}
+executed for $j = 0,\dots,pq-1$ to guarantee completeness. 
  This means that the SUT is verified with test
 traces up to, and including, length $pq$: recall from the test specification,
 branch (\ref{eq:ufa}), that $U_F(j)$ will accept all traces $s.e$ with
@@ -236,6 +234,11 @@ required when testing for refinement.
 %is refused by $Q$. \xbox
 %\end{example}
 
+\fixme{Confusing
+use of $p$ and $q$ again.}
+\fxnote{jp: fixed}
+
+
 \begin{figure}[htbp]
 \begin{center}
 \begin{minipage}{.4\textwidth}
@@ -250,7 +253,6 @@ required when testing for refinement.
 \label{fig:examplepq}
 \end{center}
 \end{figure}
-
 
 \begin{example}\label{ex:pq}
 Consider 

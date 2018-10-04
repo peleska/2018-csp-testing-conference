@@ -4,7 +4,7 @@
 % ==========================================================================
 
 For establishing trace refinement, the following class of adaptive test cases
-will be used for a given reference process $P$ and  integers $p \ge 0$.
+will be used for a given reference process $P$ and  integers $j \ge 0$.
 Just as for the tests developed  in
 Section~\ref{sec:finitecompletefails} to verify failures refinement,
 the tests for trace refinement are
@@ -38,31 +38,31 @@ be calculated for generating these tests from $G(P)$. From
 %\end{eqnarray}
 
 \begin{eqnarray}
-U_T(p) & = & U_T(p,0,\ii n)
+U_T(j) & = & U_T(j,0,\ii n)
 \\
-U_T(p,k,n) & = & \big(  e:(\Sigma - [n]^0)   \then \efail\then \Stop \big)
+U_T(j,k,n) & = & \big(  e:(\Sigma - [n]^0)   \then \efail\then \Stop \big)
 \label{eq:uta}
 \\ & & \extchoice \nonumber
 \\ & & (\minaccs(n) = \{ \varnothing \})   \&   \big( \epass \then \Stop \big)
 \label{eq:utb}
 \\ & & \extchoice \nonumber
-\\ & & (k < p) \& \big( e:[P/s]^0   \then U_T(p,k+1,t(n,e)) \big)
+\\ & & (k < j) \& \big( e:[P/s]^0   \then U_T(j,k+1,t(n,e)) \big)
 \label{eq:utc}
 \\ & & \extchoice \nonumber
-\\ & & (k = p) \& \big( \epass\then \Stop  \big)
+\\ & & (k = j) \& \big( \epass\then \Stop  \big)
 \label{eq:utd}
 \end{eqnarray}
 %
-It is easy to see that the tests $U_T(p)$ satisfy the properties
+It is easy to see that the tests $U_T(j)$ satisfy the properties
 \begin{eqnarray}
 \label{eq:ifpaT}
-  &  & U_T(p)/s = U_T(p,\#s,G(P)/s)
+  &  & U_T(j)/s = U_T(j,\#s,G(P)/s)
 \\
 \label{eq:ifpbT}
-e\not\in [P/s]^0 & \implies & U_T(p)/s.e = (\efail\then\Stop)
+e\not\in [P/s]^0 & \implies & U_T(j)/s.e = (\efail\then\Stop)
 \end{eqnarray}
-proven in Lemma~\ref{lemma:ufproperties} for $U_F(p)$ for traces
-$s\in\trc(P)$ with $\#s \le p$. 
+proven in Lemma~\ref{lemma:ufproperties} for $U_F(j)$ for traces
+$s\in\trc(P)$ with $\#s \le j$. 
 \fixme{In (37), I think there is an implicit assumption about
 $p$ and $\# s$?}\fxnote{jp: yes, I added $\#s \le p$ in the text.}
 
@@ -73,23 +73,23 @@ $p$ and $\# s$?}\fxnote{jp: yes, I added $\#s \le p$ in the text.}
 
 % ==========================================================================
 Since
-$U_T(p)$ never blocks any $Q$-event before terminating, the pass criterion
+$U_T(j)$ never blocks any $Q$-event before terminating, the pass criterion
 can be based on trace refinement instead of failures refinement as required
 in (\ref{eq:passF}).
 %
 \begin{equation}
 \label{eq:passT}
-Q\ \pass\ U_T(p) \defs (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(p)) \hide \Sigma
+Q\ \pass\ U_T(j) \defs (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(j)) \hide \Sigma
 \end{equation}
 \fixme{The proofs don't use this definition. It should change.}
 \fxnote{jp: I do not understand this remark -- we should discuss it on the phone.
 Please note the additional explanations I have added here below (\ref{eq:passT}) and please read the full proof for Theorem3.}
-
+%
 If the SUT process $Q$ deadlocks internally after a trace $s$ where also the reference
 process $P$ is in a state where deadlock is possible, this is captured by the fact
 that $\minaccs(n) = \{ \varnothing\}$ for $n = G(P)/s$. As a consequence, branch
-(\ref{eq:utb}) of a test case execution state $U_T(p,k,n)$  
-with $\#s = k \le p$   can be entered
+(\ref{eq:utb}) of a test case execution state $U_T(j,k,n)$  
+with $\#s = k \le j$   can be entered
 and the  test execution terminates with $\epass$. If, however,  
 $Q$ blocks after a trace $s'$
 where the reference process satisfies $\minaccs(P/s') \neq\varnothing$, branch 
@@ -98,7 +98,7 @@ $\epass$ or $\efail$. In contrast to the test for failures refinement, this is  
 of the SUT does not violate the trace refinement relation, as long as all traces 
 executed by the SUT are traces of the reference process. In particular, if 
 neither $\epass$ nor $\efail$ is ever produced, so that
-$(Q\parallel[\Sigma] U_T(p)) \hide \Sigma = \Stop$, the test passes, because
+$(Q\parallel[\Sigma] U_T(j)) \hide \Sigma = \Stop$, the test passes, because
 $(\epass\then\Stop) \lessdet_T \Stop$ holds.
 
 
@@ -149,8 +149,8 @@ $P\lessdet_T Q$.
 Suppose that $P\lessdet_T Q$, so that $\trc(Q)\subseteq\trc(P)$, and assume that
 $s\in\trc(Q)$ with $\#s < pq$. Since $s$ is also a trace of $P$, we can conlude
 $$U_T(pq-1)/s = U_T(pq-1,\#s,G(P)/s)$$ because of (\ref{eq:ifpaT}). Now $\trc(Q)\subseteq\trc(P)$ 
-implies $[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$ cannot enter branch (\ref{eq:uta}) and produce a $\efail$-event. Therefore, only four options are
-available for the test execution    $(Q\parallel[\Sigma] U_T(p))/s$ to continue.
+implies $[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$ cannot enter branch (\ref{eq:uta}) and produce a $\efail$-event when running in parallel with $Q$ and synchronising over $\Sigma$. Therefore, only four options are
+available for the test execution    $(Q\parallel[\Sigma] U_T(j))/s$ to continue.
 
 \medskip
 \noindent
@@ -162,7 +162,7 @@ stops after event $\epass$.
 \medskip
 \noindent
 {\bf Case~2.} $Q/s$ deadlocks, but $\minaccs(G(P)/s)\neq\{\varnothing\}$. 
-Then the whole test execution blocks, and this is means that
+Then the whole test execution blocks, and this   means that
 neither a $\epass$ nor a $\efail$ event is produced, so the test execution is passed.
 
 \medskip
@@ -177,7 +177,7 @@ and the test execution continues without having produced a $\epass$ or a $\efail
 {\bf Case~4.} $\#s = pq-1$ holds. Then $U_T(pq-1,\#s,G(P)/s)$ can only enter
 branch (\ref{eq:utd}), and the test execution stops after $\epass$.
 
-This case analysis shows that every   execution of $(Q\parallel[\Sigma] U_T(p))$
+This case analysis shows that every   execution of $(Q\parallel[\Sigma] U_T(j))$
 either stops after $\epass$ or produces neither $\epass$ nor $\efail$. This
 proves that $Q$ passes test $U_T(pq-1)$ according to the pass  criterion (\ref{eq:passT}).
 \xbox
@@ -186,7 +186,7 @@ proves that $Q$ passes test $U_T(pq-1)$ according to the pass  criterion (\ref{e
 
 \begin{lemma}\label{lemma:mainfexhaustivetrace}
 A test suite $\TS_T$ specified as in Theorem~\ref{th:tracetest} is
-exhaustive for the fault model specified there and for conformance relation $\lessdet_T$.
+exhaustive for the fault model specified there.
 \end{lemma}
 \begin{proof}
 As before in the proofs for
