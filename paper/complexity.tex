@@ -298,8 +298,8 @@ corresponds to $j\le pq-2$).
 Process $Q$, however, neither conforms to $P$ in the failures refinement 
 relation, nor in the trace
 refinement relation. This can only be seen when executing the test $U_F(pq-1)$ and
-$U_T(pq-1)$, respectively. These test fail, so this shows that $P\not\lessdet_F Q$ and
-$P\not\lessdet_F Q$ according to Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this shows that
+$U_T(pq-1)$, respectively. These tests fail, so this shows that $P\not\lessdet_F Q$ and
+$P\not\lessdet_T Q$ according to Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this shows that
 the maximal trace
 length $pq$ to be investigated in the tests cannot be further reduced without losing
 the completeness property of the test suites.
@@ -359,13 +359,14 @@ is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, 
 $\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events,
 where at most $p-1$ events $b$ have been inserted. This proves statement 4 of the theorem.
 
-To prove statement~5, we observe that the specification of $P$ implies
+To prove statement~5, we observe that the specification of $P$ implies (the 
+expression $(s\cnt b)$ denotes the number of $b$-events occurring in trace $s$)
 \[
 \minaccs(P/s) = \left\{
 \begin{array}{ll}
-\{ \{a\}, \{b\} \} & \text{for all $s\in\trc(P)$ with $\#s<p-1$.}
+\{ \{a\}, \{b\} \} & \text{for all $s\in\trc(P)$ with $(s\cnt b) <p-1$.}
 \\
-\{ \{a\} \} & \text{for all $s\in\trc(P)$ with $\#s\ge p-1$.}
+\{ \{a\} \} & \text{for all $s\in\trc(P)$ with $(s\cnt b) = p-1$.}
 \end{array}
 \right.
 \]

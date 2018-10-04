@@ -77,7 +77,7 @@ t(3,c) &  =& 3
 \begin{example}
 \label{ex:uf1tests} Consider the following implementation $Z$ of process $P$
 from Example~\ref{example:CSP} that is erroneous from the point of view of
-failures refinement.
+failures refinement. In the specification of $Z$, it is assumed that $r_{max}\ge 0$. 
 \begin{eqnarray*}
 Z & = & a \then (Q_1 \intchoice R_1(r_{max},0))
 \\
@@ -95,9 +95,9 @@ external choice, so $P\not\lessdet_F Z$. Fig.~\ref{fig:tgZ} shows the
 normalised transition graph of $Z$ for $r_{max} = 3$.
  
 
-Running the test $U_F(k)$ against $Z$ for $k=0,\dots,20$ ($G(P)$ has $p = 4$
-states and $G(Z)$ has $q=5$, so $pq=20$ is an upper bound for the test depth
-to be used according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
+Running the test $U_F(j)$ against $Z$ for $j=0,\dots,19$ ($G(P)$ has $p = 4$
+states and $G(Z)$ has $q=5$, so $pq-1=19$ is the index of the last test to 
+be executed  according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
 U_F(3)$ are passed by $Z$, but $Z$ fails $U_F(4)$, because after execution of
 the trace
 \[
@@ -107,7 +107,7 @@ the test $U_F(4)$ offers hitting sets from $\minhits(3) = \{\{b\},\{c\}\}$
 in branch (\ref{eq:ufd}). Therefore,  there exists one test execution
 where $Z/s$ accepts only $\{b\}$ due to the internal choice (note
 from Fig.~\ref{fig:tgZ} that
-$G(Z)/s = 4$), while $U_F(4)/s$
+$G(Z)/s = \text{node}\ 4$), while $U_F(4)/s$
 only offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for
 branch (\ref{eq:ufa}).  As a consequence, this execution of
 $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be

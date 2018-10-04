@@ -26,53 +26,53 @@ For a given reference process $P$, its normalised transition graph
 $$
 G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
 $$
-and each integer $p\ge 0$, we define a test for failures refinement as shown
+and each integer $j\ge 0$, we define a test for failures refinement as shown
 below. 
 %
 \begin{eqnarray}
 \label{eq:UFP}
-U_F(p) & = & U_F(p,0,\ii n)
+U_F(j) & = & U_F(j,0,\ii n)
 \\
-U_F(p,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
+U_F(j,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
 \label{eq:ufa}
 \\ & & \extchoice \nonumber
 \\ & & (\minhits(n) =   \varnothing  )    \&   \big( \epass \then \Stop \big)
 \label{eq:ufb}
 \\ & & \extchoice \nonumber
-\\ & & (k < p) \& \big(e:[n]^0   \then U_F(p,k+1,t(n,e) \big)
+\\ & & (k < j) \& \big(e:[n]^0   \then U_F(j,k+1,t(n,e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (k = p \wedge \minhits(n)\neq\varnothing) \&  \nonumber
+\\ & & (k = j \wedge \minhits(n)\neq\varnothing) \&  \nonumber
 \\ & & \taba \big( \Intchoice_{H\in\minhits(n)} (e:H   \then \epass \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 
 % --------------------------------------------------------------------------
 \subsubsection*{Explanation of the Test Definition}
-A test is performed by running $U_F(p)$ concurrently with any SUT process
+A test is performed by running $U_F(j)$ concurrently with any SUT process
 $Q$, synchronising over $\Sigma$. So, a \emph{test execution} is a trace of the
 concurrent process
 %\[
-$Q\parallel[\Sigma] U_F(p)$.
+$Q\parallel[\Sigma] U_F(j)$.
 %\]
 
 It is assumed that the events $\efail$ and $\epass$, indicating a verdict
 FAIL and PASS for the test execution, are not included in $\Sigma$. Since we
 assume that $Q$ is free of livelocks, it is guaranteed that events $\efail$
-or $\epass$ always become visible, if they are the only events $U_F(p)/s$ is
-ready to engage in: if $U_F(p)/s$ can only produce $\epass$ or $\efail$, the
+or $\epass$ always become visible, if they are the only events $U_F(j)/s$ is
+ready to engage in: if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the
 occurrence of these events can never be blocked due to a livelock in $Q$
 occurring in the same step of the execution.
 
 
-The test is \emph{passed} by the SUT (written $Q\ \pass\ U_F(p)$) if, and
-only if, {\it every} execution of $Q\parallel[\Sigma] U_F(p)$ terminates with
+The test is \emph{passed} by the SUT (written $Q\ \pass\ U_F(j)$) if, and
+only if, {\it every} execution of $Q\parallel[\Sigma] U_F(j)$ terminates with
 the event $\epass$. This can also be  expressed by means of a failures
 refinement as defined below.
 %
 \begin{equation}
 \label{eq:passF}
-Q\ \pass\ U_F(p) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma
+Q\ \pass\ U_F(j) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide \Sigma
 \end{equation}
 %
 This type of pass relation is often called \emph{must test} in the
@@ -80,43 +80,49 @@ literature, because every test execution must end with the $\epass$
 event~\cite{Hennessy:1988:ATP:50497}.
 
 We note that it is necessary to use failures refinement in the definition
-above, and not just trace refinement:~$(Q\parallel[\Sigma] U_F(p)) \hide
+above, and not just trace refinement:~$(Q\parallel[\Sigma] U_F(j)) \hide
 \Sigma$ may have the same visible traces $\varepsilon$ and $\epass$ as the
 ``Test Passed Process'' $(\epass\then\Stop)$. However, the former may
 nondeterministically refuse $\epass$, due to a deadlock occurring when a
-faulty SUT process executes concurrently with $U_F(p,k,n)$ executing
-branch~(\ref{eq:ufd}), when the guard condition $(k = p\wedge
+faulty SUT process executes concurrently with $U_F(j,k,n)$ executing
+branch~(\ref{eq:ufd}), when the guard condition $(k = j\wedge
 \minhits(n)\neq\varnothing)$ evaluates to $\ist$. This is explained further
 in the next paragraphs.
+Alternatively, a faulty SUT $Q$ 
+might internally deadlock after a trace $s$ where $\#s < j$ and
+$\minhits(G(P)/s) \neq \varnothing$,
+so that $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
 
-Intuitively speaking, $U_F(p)$ is able to perform any trace $s$ of $P$, up to
-a length $p$. If, after having already run through $s\in\trc(P)$ with $\#s
-\le p$, an event is accepted by the SUT that is outside the initials of $P/s$
- (recall from Lemma~\ref{lemma:ufproperties} that $[n]^0 = [P/s]^0$ for $U_F(p)/s$),
+
+Intuitively speaking, $U_F(j)$ is able to perform any trace $s$ of $P$, up to
+a length $j$. If, after having already run through $s\in\trc(P)$ with $\#s
+\le j$, an event is accepted by the SUT that is outside the initials of $P/s$
+ (recall from Lemma~\ref{lemma:ufproperties} that $[n]^0 = [P/s]^0$ for $U_F(j)/s$),
 the test immediately terminates with FAIL-event $\efail$. This is handled by
 the branch (\ref{eq:ufa}) of the external choice. %in the process
-%$U_F(p,\#s,n)$ defined above.
+%$U_F(j,\#s,n)$ defined above.
 
 If $P/s$ is the $\Stop$ process or has $\Stop$ as an internal choice, this is
 revealed by $\minhits(G(P)/s) = \varnothing$ (recall
 (\ref{eq:minhitminaccempty}) and Lemma~\ref{lemma:ufproperties}). In this
 case, the test may terminate successfully (branch (\ref{eq:ufb}) of the
-external choice in $U_F(p,\#s,G(P)/s)$). If $P/s$ may also
+external choice in $U_F(j,\#s,G(P)/s)$). If $P/s$ may also
 nondeterministically engage into events in such a situation, branch
 (\ref{eq:ufc}) of the test is simultaneously enabled. If $Q/s$ is able to
 engage into an event from $\Sigma - [P/s]^0$, a test execution exists where
-$U_F(p,\#s,G(P)/s)$ branches into (\ref{eq:ufa}) and produces the $\efail$
+$U_F(j,\#s,G(P)/s)$ branches into (\ref{eq:ufa}) and produces the $\efail$
 event.
 
-If the length of $s$ is still less than $p$, the test accepts any event $e$
+If the length of $s$ is still less than $j$, the test accepts any event $e$
 from the initials $[P/s]^0 = [G(P)/s]^0$ and continues recursively as
-$U_F(p,\#s+1,G(P)/s.e)$ in branch~(\ref{eq:ufc}); this follows again from
+$U_F(j,\#s+1,G(P)/s.e)$ (note that $G(P)/s.e = t(G(P)/s,e)$) 
+in branch~(\ref{eq:ufc}); this follows again from
 Lemma~\ref{lemma:ufproperties}. A test of this type is called
 \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts
 its consecutive behaviour to the event selected by the SUT.
 
-Finally, we suppose that a test execution has run through a trace
-$s\in\trc(P)$ of length $p$, so that $U_F(p)/s = U_F(p,p,n)$ with $n =
+Now suppose that a test execution has run through a trace
+$s\in\trc(P)$ of length $j$, so that $U_F(j)/s = U_F(j,j,n)$ with $n =
 G(P)/s$. If $\minhits(n)\neq \varnothing$, the test changes its
 behaviour:~instead of offering {\it all} legal events from $[n]^0$ to the
 SUT, it nondeterministically chooses a minimal hitting set $H\in \minhits(n)$
@@ -125,77 +131,73 @@ into some event of $H$, this reveals a violation of failures
 refinement:~according to Lemma~\ref{lemma:hseta}, a conforming SUT should
 accept at least one event of each minimal hitting set in $\minhits(n)$.
 Therefore, the test execution only terminates with  $\epass$, if such an
-event is accepted by the SUT. Otherwise, it deadlocks.
+event is accepted by the SUT. Otherwise, it deadlocks, and the test fails.
 
-The specification of $U_F(p,k,n)$ implies that the test always stops after
-having engaged into a trace $s\in\trc(Q)$ of maximal length $p$ or $p+1$. If
+The specification of $U_F(j,k,n)$ implies that the test always stops after
+having engaged into a trace $s\in\trc(Q)$ of maximal length $j$ or $j+1$. If
 branch (\ref{eq:ufa}) is the last to be entered, the maximal length of $s$ is
-$p+1$, and the test execution stops with $\efail$. If branch (\ref{eq:ufb})
-is the last to be entered, the maximal length of $s$ is $p$, and the
+$j+1$, and the test execution stops with $\efail$. If branch (\ref{eq:ufb})
+is the last to be entered, the maximal length of $s$ is $j$, and the
 execution stops with $\epass$. If branch (\ref{eq:ufd}) is the last to be
 entered, the process either accepts another event $e$ of some minimal hitting
 set $H\in\minhits(n)$ with $n = G(P)/s$ according to
-Lemma~\ref{lemma:ufproperties}. Then the final length of $s$ is $p+1$, and
+Lemma~\ref{lemma:ufproperties}. Then the final length of $s$ is $j+1$, and
 the execution terminates with $\epass$. Or the test execution
-$(Q\parallel[\Sigma] U_F(p))/s$ deadlocks,  the final length of $s$ is $p$,
+$(Q\parallel[\Sigma] U_F(j))/s$ deadlocks,  the final length of $s$ is $j$,
 and the execution stops without a PASS or FAIL event. Such an execution is
 also interpreted as FAIL, because it reveals that $(\epass\then\Stop)
-\not\lessdet_F (Q\parallel[\Sigma] U_F(p)) \hide \Sigma$.
+\not\lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide \Sigma$.
 
 We observe that the number of possible executions of $Q\parallel[\Sigma]
-U_F(p)$ is finite, because the number of traces $s$ with maximal length
-$(p+1)$ is finite and the sets $[n]^0$, $(\Sigma - [n]^0)$, and $\minhits(n)$
+U_F(j)$ is finite, because the number of traces $s$ with maximal length
+$(j+1)$ is finite and the sets $[n]^0$, $(\Sigma - [n]^0)$, and $\minhits(n)$
 are finite. Moreover, we further recall that $\minhits(n)$ may be empty, in
 which case the indexed internal choice in (\ref{eq:ufd}) would be undefined.
 The guard in that branch, however, requires $\minhits(n)\neq\varnothing$, and
 branches (\ref{eq:ufa}) or (\ref{eq:ufb}) can be taken in this situation.
 
-%Before explaining the intuition behind this test definition in the paragraphs
-%below, we state its basic properties in the following lemma, to show the
-%relationships between $U_F(p)$ and the reference process $P$ from which the
-%former has been derived. \fixme{For a reader, it is better to see the
-%explanation first. Since this is easier to undo, I've changed it. }
+ 
 
 We state basic properties of our tests in the following lemma, to show the
-relationships between $U_F(p)$ and the reference process $P$ from which it is
+relationships between $U_F(j)$ and the reference process $P$ from which it is
 derived.
 
 \begin{lemma}\label{lemma:ufproperties}
-If $s\in\trc(P)$ satisfies $\#s\le p$, then
-$s, s.e\in\trc(U_F(p))$ for all $e\in\Sigma$, and the following properties hold.
+If $s\in\trc(P)$ satisfies $\#s\le j$, then
+$s, s.e\in\trc(U_F(j))$ for all $e\in\Sigma$, and the following properties hold.
 \begin{eqnarray}
 \label{eq:ifpa}
-  &  & U_F(p)/s = U_F(p,\#s,G(P)/s)
+  &  & U_F(j)/s = U_F(j,\#s,G(P)/s)
 \\
 \label{eq:ifpb}
-e\not\in [P/s]^0 & \implies & U_F(p)/s.e = (\efail\then\Stop)
+e\not\in [P/s]^0 & \implies & U_F(j)/s.e = (\efail\then\Stop)
 \\
 \label{eq:ifpc}
-U_F(p)/s = U(p,\# s,n)  & \implies & [n]^0 = [P/s]^0
+U_F(j)/s = U_F(j,\# s,n)  & \implies & [n]^0 = [P/s]^0
 \\
 \label{eq:ifpd}
-U_F(p)/s = U(p,\# s,n)  & \implies & \minhits(n) = \minhits(P/s)
+U_F(j)/s = U_F(j,\# s,n)  & \implies & \minhits(n) = \minhits(P/s)
 \end{eqnarray}
 \end{lemma}
 \begin{proof}
 We prove (\ref{eq:ifpa}) by induction over the length of $s$. For $\#s = 0$,
-the statement holds because $U_F(p)$ starts with the initial node $\ii n$ of
+the statement holds because $U_F(j)$ starts with the initial node $\ii n$ of
 $G(P)$. Suppose that the statement holds for all traces $s$ with length $\# s
-\le k < p$, so that $U_F(p)/s = U_F(p,\#s,G(P)/s)$. Now let $s.e$ be a trace
+\le k < j$, so that $U_F(j)/s = U_F(j,\#s,G(P)/s)$. Now let $s.e$ be a trace
 of $P$, so that $e\in [P/s]^0$. Since $[G(P)/s]^0 = [P/s]^0$ for all traces
-$s$ of $P$, we conclude that $e\in  [G(P)/s]^0$, so $U_F(p,\#s,G(P)/s)$ can
+$s$ of $P$, we conclude that $e\in  [G(P)/s]^0$, so $U_F(j,\#s,G(P)/s)$ can
 engage into $e$ by executing branch (\ref{eq:ufc}). Since $t$ is the
 transition function of $G(P)$ and $e\in [G(P)/s]^0$, $t(G(P)/s,e)$ is
 defined, and $t(G(P)/s,e) = G(P)/s.e$. This leads to a new recursion, so that
-$U_F(p)/s.e = U_F(p,\#s,G(P)/s)/e = U_F(p,\#s+1,G(P)/s.e)$ as required.
+$U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e = U_F(j,\#s+1,G(P)/s.e)$ as required.
 
-To prove (\ref{eq:ifpb}), we apply (\ref{eq:ifpa}) to conclude that $U_F(p)/s
-= U_F(p,\#s,G(P)/s)$, because $s$ is a trace of $P$. Noting again that
+To prove (\ref{eq:ifpb}), we apply (\ref{eq:ifpa}) to conclude that $U_F(j)/s
+= U_F(j,\#s,G(P)/s)$, because $s$ is a trace of $P$. Noting again that
 $[G(P)/s]^0 = [P/s]^0$, this implies that $e\not\in [G(P)/s]^0$, so
-$U_F(p,\#s,G(P)/s)$ can engage in $e$ by entering branch (\ref{eq:ufa}). The
+$U_F(j,\#s,G(P)/s)$ can engage in $e$ by entering branch (\ref{eq:ufa}). The
 specification of this branch implies that
 $$
-U_F(p)/s.e = U_F(p,\#s,G(P)/s)/e = (\efail\then\Stop).
+U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e = (\efail\then\Stop).
 $$
 %
 Statement (\ref{eq:ifpc}) follows trivially from (\ref{eq:ifpa}), because
@@ -205,18 +207,18 @@ $[G(P)/s]^0 = [P/s]^0$ for all traces $s$ of $P$. Finally, statement
 $P$. \xbox
 \end{proof}
 %
-Note that it is not guaranteed for $U_F(p)$ to run through the traces $s,
+Note that it is not guaranteed for $U_F(j)$ to run through the traces $s,
 s.e$ in Lemma~\ref{lemma:ufproperties}, if $\minhits(P/u) = \varnothing$ for
-some prefix $u$ of $s$: in such a case, $U_F(p)$ may stop with a $\epass$
+some prefix $u$ of $s$: in such a case, $U_F(j)$ may stop with a $\epass$
 event by entering branch (\ref{eq:ufb}). Therefore,
 Lemma~\ref{lemma:ufproperties} just states the existence of
-$U_F(p)$-executions $s, s.e$ satisfying the properties stated there.
+$U_F(j)$-executions $s, s.e$ satisfying the properties stated there.
 
 % =========================================================================
 \subsection{A Finite Complete Test Suite for Failures Refinement}
 % =========================================================================
 
-A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a
+A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ counsists of a
 reference process $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T,
 \lessdet_F\}$, and a fault domain ${\cal D}$, which is a set of CSP processes
 over $P$'s alphabet that may or may not conform to $P$.
@@ -259,7 +261,7 @@ first is that the test execution cannot reach branch~(\ref{eq:ufa}) and raise
 a $fail$ event.  The second is that it cannot deadlock without raising a
 $pass$ event. This case would also be interpreted as FAIL, since then
 $\epass\then\Stop$ is not failures refined by $(Q\parallel[\Sigma]
-U_F(k))\hide \Sigma$.
+U_F(j))\hide \Sigma$.
 % alcc: part of the explanation above was in the following lemma, but it is already
 % relevant here.
 
@@ -315,7 +317,7 @@ of $\minaccs(Q/s)$, such that
 \end{equation}
 \end{description}
 It has to be shown for each of these cases that at least one test execution
-of some $(Q\parallel[\Sigma] U_F(k))$ with $k < pq$ ends with the $\efail$
+of some $(Q\parallel[\Sigma] U_F(j))$ with $j < pq$ ends with the $\efail$
 event or deadlocks. We do this by analysing the product graph of the reference
 process $P$ and the SUT process $Q$: any trace $s\in\trc(Q)\cap\trc(P)$ gives rise to 
 a path labelled by the events of $s$ 
