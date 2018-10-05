@@ -39,7 +39,7 @@ to mark it with an inc event.}
 contrast to that, our test cases specified in
 Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
 adaptive. This has the advantage that test executions $(Q\parallel[\Sigma]
-U_F(p))$ for failures refinement never block before the final step specified
+U_F(j))$ for failures refinement never block before the final step specified
 by branch (\ref{eq:ufd}), and so we do not need inconclusive test results.
 It should be noted, however, that it is
 necessary for our test verdicts to recognise also deadlocks in the final test
@@ -49,9 +49,9 @@ adding a timeout event to the testing environment which indicates deadlock
 situations. For real-time systems, this is an accepted technique, because the
 SUT has to respond within a pre-defined latency interval, otherwise its
 behaviour is considered to be blocked and regarded as a failure.
-The tests executions $(Q\parallel[\Sigma] U_T(p))$ 
+The tests executions $(Q\parallel[\Sigma] U_T(j))$ 
 \fixme{Missing hiding.}
-\fxnote{jp: Here, the hiding operator is not necessary: the possible test executions are really the traces of $Q$ parallel $U_T(p)$. The hiding is only needed to specify the verdict.}  
+\fxnote{jp: Here, the hiding operator is not necessary: the possible test executions are really the traces of $Q$ parallel $U_T(j)$. The hiding is only needed to specify the verdict.}  
 for trace refinement never
 block at all before stopping after the verdict $\epass$ or $\efail$, unless the
 SUT process $Q$ has an unexpected deadlock state. 
@@ -60,10 +60,10 @@ no?}\fxnote{jp: you are right, I changed the text here and added explanations ab
 in formula (\ref{eq:passT}).}
 Recall from the explanations given in Section~\ref{sec:finitecomplete} that the 
 blocking situation also leads to passing the test, because 
-$(\epass\then \Stop)\lessdet_T (Q\parallel[\Sigma] U_T(p))\hide\Sigma$ still holds
-if $(Q\parallel[\Sigma] U_T(p))\hide\Sigma$ only produces the empty trace.
+$(\epass\then \Stop)\lessdet_T (Q\parallel[\Sigma] U_T(j))\hide\Sigma$ still holds
+if $(Q\parallel[\Sigma] U_T(j))\hide\Sigma$ only produces the empty trace.
 
-The adaptive behaviour of both our test case types $U_F(p)$ and $U_T(p)$,
+The adaptive behaviour of both our test case types $U_F(j)$ and $U_T(j)$,
 however, induces the obligation to check that {\it all}
 possible executions have been
 performed before the test can be considered as passed. Typically, it is
@@ -101,7 +101,7 @@ non-terminating processes.
 % ==============================================================================
 \subsubsection*{Implications for CSP Model Checking}
 As explained in the previous sections, passing a test is specified by
-$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U(F(j)) \hide \Sigma$ for
+$(\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide \Sigma$ for
 failures testing. If the SUT $Q$ is not a programmed piece of software or an
 integrated hardware or software system, but just another CSP process
 specification, it is of course possible to verify the pass criterion using
@@ -109,9 +109,9 @@ the FDR4 model checker. For checking the refinement relation $P\lessdet_F Q$,
 the pass criterion has to be verified for $j=0,\dots,pq-1$, where $p$ and $q$
 indicate the number of nodes in $P$'s transition graph and the maximal number
 of nodes in $Q$'s graph, respectively (Theorem~\ref{th:failurestest}). Since
-the test cases $U(F(j)$ have such a simple structure, it is an interesting
+the test cases $U_F(j)$ have such a simple structure, it is an interesting
 question for further research whether checking $(\epass\then\Stop) \lessdet_F
-(Q\parallel[\Sigma] U(F(j)) \hide \Sigma$ for $j=0,\dots,pq-1$ can be faster
+(Q\parallel[\Sigma] U_F(j)) \hide \Sigma$ for $j=0,\dots,pq-1$ can be faster
 than directly checking $P\lessdet_F Q$, as one would do in the usual approach
 with FDR4. This is of particular interest, since the checks could be
 parallelised on several CPUs. Alternatively it is interesting to investigate
