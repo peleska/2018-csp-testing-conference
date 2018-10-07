@@ -23,7 +23,7 @@ every conformance violation, provided that the SUT behaviour is captured by a
 member of the fault domain.
 
 Generation techniques for complete test suites have been developed for
-various formalisms. Here, we tackle \emph{Communicating Sequential
+various formalisms. We tackle \emph{Communicating Sequential
 Processes~(CSP)}~\cite{Hoare:1985:CSP:3921,Roscoe2010}. This is a mature
 process algebra that has been shown to be well-suited for the description of
 reactive control systems in many publications over almost five decades. Many
@@ -79,12 +79,12 @@ To the best of our knowledge, this article is the first to present {\it
 finite}, complete test suites associated with this class of fault domains and
 conformance relations.
 
-Our 
+Our
 \fixme{alcc: I'm slightly uncomfortable with this claim. Can the environment
 really control outputs? Do you not have tau (internal) events in FSM? I'm
 unsure, but you guys know about FSMs much more than I do.}
 \fxnote{jp: I think that this description is ok. With FSMs as used in the testing community, there are no tau events, and parallel composition $M_1\cap M_2$
-is just language intersection. Therefore, 
+is just language intersection. Therefore,
 when composing $M_1$ and $M_2$ to $M_1\cap M_2$,
 $M_1$ cannot refuse to engage into I/O-event $x/y$,
 if $M_2$ has $x/y$ as the only initial event in its language.  }

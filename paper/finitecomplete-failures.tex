@@ -27,7 +27,7 @@ $$
 G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
 $$
 and each integer $j\ge 0$, we define a test for failures refinement as shown
-below. 
+below.
 %
 \begin{eqnarray}
 \label{eq:UFP}
@@ -87,12 +87,10 @@ nondeterministically refuse $\epass$, due to a deadlock occurring when a
 faulty SUT process executes concurrently with $U_F(j,k,n)$ executing
 branch~(\ref{eq:ufd}), when the guard condition $(k = j\wedge
 \minhits(n)\neq\varnothing)$ evaluates to $\ist$. This is explained further
-in the next paragraphs.
-Alternatively, a faulty SUT $Q$ 
-might internally deadlock after a trace $s$ where $\#s < j$ and
-$\minhits(G(P)/s) \neq \varnothing$,
-so that $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
-
+in the next paragraphs. Alternatively, a faulty SUT $Q$ might internally
+deadlock after a trace $s$ where $\#s < j$ and $\minhits(G(P)/s) \neq
+\varnothing$, so that the process $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks
+as well.
 
 Intuitively speaking, $U_F(j)$ is able to perform any trace $s$ of $P$, up to
 a length $j$. If, after having already run through $s\in\trc(P)$ with $\#s
@@ -115,8 +113,8 @@ event.
 
 If the length of $s$ is still less than $j$, the test accepts any event $e$
 from the initials $[P/s]^0 = [G(P)/s]^0$ and continues recursively as
-$U_F(j,\#s+1,G(P)/s.e)$ (note that $G(P)/s.e = t(G(P)/s,e)$) 
-in branch~(\ref{eq:ufc}); this follows again from
+$U_F(j,\#s+1,G(P)/s.e)$ (note that $G(P)/s.e = t(G(P)/s,e)$)
+in branch~(\ref{eq:ufc}); this follows from
 Lemma~\ref{lemma:ufproperties}. A test of this type is called
 \emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts
 its consecutive behaviour to the event selected by the SUT.
@@ -156,7 +154,7 @@ which case the indexed internal choice in (\ref{eq:ufd}) would be undefined.
 The guard in that branch, however, requires $\minhits(n)\neq\varnothing$, and
 branches (\ref{eq:ufa}) or (\ref{eq:ufb}) can be taken in this situation.
 
- 
+
 
 We state basic properties of our tests in the following lemma, to show the
 relationships between $U_F(j)$ and the reference process $P$ from which it is
@@ -284,10 +282,12 @@ that $U_F(j)/s = U_F(j,k,n)$ with $U_F(j,k,n) = U_F(j,\#s,G(P)/s)$, so
 $\minhits(n) = \minhits(P/s)$. The branch (\ref{eq:ufb}) of the test
 $U_F(j,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
 \varnothing$. The branch (\ref{eq:ufc}) always leads to test continuation
-without a verdict. \fixme{I think we need a stronger argument here, as to why
-it cannot deadlock.}
-\fxnote{jp: I do not understand the question -- let's discuss this on the phone.}
- For the last branch, we note that it can only be entered
+without a verdict. Since, $s$ is a trace of $P$ and $Q$, we know that there
+is a behaviour of $Q$ that will accept an event $e$ in that branch and allow
+the test to proceed. \fixme{I think we need a stronger argument here, as to
+why it cannot deadlock.} \fxnote{jp: I do not understand the question --
+let's discuss this on the phone. See what I wrote. I'm still worried because
+of nondeterminism. } For the last branch, we note that it can only be entered
 if $\minhits(P/s) = \minhits(n) \neq\varnothing$. In this case, any selected
 minimal hitting set $H\in\minhits(n)$ has a non-empty intersection with each
 of the minimal acceptances of $Q/s$. As a consequence, $Q/s$ never blocks
@@ -318,27 +318,20 @@ of $\minaccs(Q/s)$, such that
 \end{description}
 It has to be shown for each of these cases that at least one test execution
 of some $(Q\parallel[\Sigma] U_F(j))$ with $j < pq$ ends with the $\efail$
-event or deadlocks. We do this by analysing the product graph of the reference
-process $P$ and the SUT process $Q$: any trace $s\in\trc(Q)\cap\trc(P)$ gives rise to 
-a path labelled by the events of $s$ 
-through this product graph. Any error can be detected after running through such a trace
-and then either observing an event outside $[P/s]^0$ (this is the violation described
-by Case~1) or identifying an illegal acceptance $A_Q$ as specified in Case~2. 
-It is not guaranteed, however, that trace $s$ is short enough to be executed by one of the 
-test cases $U_F(j)$ with $0\le j < pq$. Therefore, it has to be shown that for any $s$ leading to an error
-situation specified by Case~1 or Case~2, there exists a trace $u$ of maximal length $pq-1$
-leading to the same error.
-
-
+event or deadlocks. We do this by analysing the product graph of the
+reference process $P$ and the SUT process $Q$: any trace
+$s\in\trc(Q)\cap\trc(P)$ gives rise to a path labelled by the events of $s$
+through this product graph. Any error can be detected after running through
+such a trace and then either observing an event outside $[P/s]^0$ (this is
+the violation described by Case~1) or identifying an illegal acceptance $A_Q$
+as specified in Case~2. It is not guaranteed, however, that trace $s$ is
+short enough to be executed by one of the test cases $U_F(j)$ with $0\le j <
+pq$. So, it has to be shown that for any $s$ leading to an error situation
+specified by Case~1 or Case~2, there exists a trace $u$ of maximal length
+$pq-1$ leading to the same error.
 
 \medskip
-\noindent {\bf Case~1.} 
-\fixme{There is an assumption here that
-the graph of a test execution is given by the cross-product of graphs.  But,
-test execution is not defined in this way. It is defined by parallelism and
-hiding. I think the definition of test execution needs to change.}
-\fxnote{jp: this is a misunderstanding: we are not looking at the product graph of $Q$ and $U_F(j)$, but at the product graph of $Q$ and $P$. I have added more explanatory 
-text in the paragraph  before Case~1.}
+\noindent {\bf Case~1.}
 Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
 but $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is
 a trace of every process. In this case, $s$ is also a trace of the product
@@ -356,48 +349,40 @@ U_F(pq-1,\#u,G(P)/u)$. Since $s.e\not\in\trc(P)$, $e$ is an element of
 $\Sigma-[P/u]^0 = \Sigma - [G(P)/s]^0$. Hence, in at least one execution,
 $U_F(pq-1,\#u,G(P)/u)$ executes its first branch (\ref{eq:ufa}) with this
 event $e$, so that the test fails. Again, the assumption of non-divergence of
-$Q$ is needed for this conclusion. 
+$Q$ is needed for this conclusion.
 
 \medskip
-\noindent {\bf Case~2.} We note 
-\fixme{Again, nothing here is about this process, but about the graph, and
-the hiding that is needed is discarded.} 
-\fxnote{jp: see my explanation above}
-that trace $s$ is again a trace of the
+\noindent {\bf Case~2.} We note that trace $s$ is again a trace of the
 product graph $G$, but we do not know its length. Again, by applying
 Lemma~\ref{lemma:reachproduc}, we know that the state $G/s$ can be reached by
 a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider
 the test $U_F(\# u)$, for which $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because
-of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$   always performs branch
-(\ref{eq:ufc}) until the trace $u$ has been completely processed.
-$U_F(\#u,\#u,G(P)/u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
-only:~assumption (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has
-at least one non-empty minimal acceptance. From (\ref{eq:minhitminaccempty})
-we know that this is equivalent to $\minhits(P/s) =
-\minhits(G(P)/s)\neq\varnothing$, and we observe that $G(P)/s = G(P)/u$, so
-$\minhits(G(P)/u)\neq\varnothing$. As a consequence, branch (\ref{eq:ufb})
-cannot be taken because its guard condition evaluates to $\isf$  for
-$U_F(\#u,\#u,G(P)/u)$. The guard condition $(k < j)$ for branch
-(\ref{eq:ufc}) evaluates to $\isf$ for $U_F(\#u,\#u,G(P)/u)$, too. If branch
-(\ref{eq:ufa}) is executed, the test always fails. If branch (\ref{eq:ufd})
-is executed, the test fails for the execution where a minimal hitting set
-$H\in\minhits(P/u)$ is chosen by $U_F(\#u,\#u,G(P)/u)$ that has an empty
-intersection with the minimal acceptance $A_Q$ from condition
-(\ref{eq:accsnotcontained}). The existence of such an $H$ is guaranteed
-because of Lemma~\ref{lemma:hseta}. As a consequence, there exists a test
-execution   where $Q/u$ selects acceptance $A_Q$ and $U_F(\#u,\#u,G(P)/u)$
-selects $H$. This execution deadlocks in process state
-$(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the $\epass$-event;
-this means that the test fails. This
-concludes the proof. 
+of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$  always performs branch
+(\ref{eq:ufc}) until the trace $u$ has been completely processed. \fixme{If
+the SUT accepts it? See previous fixme.} $U_F(\#u,\#u,G(P)/u)$ may execute
+branches (\ref{eq:ufa}) or (\ref{eq:ufd}) only:~assumption
+(\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has at least one
+non-empty minimal acceptance. From (\ref{eq:minhitminaccempty}) we know that
+this is equivalent to $\minhits(P/s) = \minhits(G(P)/s)\neq\varnothing$, and
+we observe that $G(P)/s = G(P)/u$, so $\minhits(G(P)/u)\neq\varnothing$. As a
+consequence, branch (\ref{eq:ufb}) cannot be taken because its guard
+condition evaluates to $\isf$  for $U_F(\#u,\#u,G(P)/u)$. The guard condition
+$(k < j)$ for branch (\ref{eq:ufc}) evaluates to $\isf$ for
+$U_F(\#u,\#u,G(P)/u)$, too. If branch (\ref{eq:ufa}) is executed, the test
+always fails. If branch (\ref{eq:ufd}) is executed, the test fails for the
+execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen by
+$U_F(\#u,\#u,G(P)/u)$ that has an empty intersection with the minimal
+acceptance $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of
+such an $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a
+consequence, there exists a test execution   where $Q/u$ selects acceptance
+$A_Q$ and $U_F(\#u,\#u,G(P)/u)$ selects $H$. This execution deadlocks in
+process state $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the
+$\epass$-event; this means that the test fails. This concludes the proof.
 \xbox
 \end{proof}
 %
 Our notion of tests can be specialised to deal with traces refinement, as we
-explain in Section~\ref{sec:finitecomplete}. 
+explain in Section~\ref{sec:finitecomplete}.
 The next section presents and example.
-\fixme{I think
-the example should come before more theory.}
-\fxnote{jp: done}
 
 % ==========================================================================

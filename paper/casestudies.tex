@@ -2,18 +2,18 @@
 \section{Testing for Failures Refinement -- an Example}
 \label{sec:case}
 % =======================================================================
- 
+
 Generating the test cases $U_F(p)$ specified in  (\ref{eq:UFP}) for the reference
 process $P$ discussed in Example~\ref{example:CSP},
 results in the   instantiations of initials, minimal hitting sets, and
-transition function shown in Fig.~\ref{fig:initialsminhitstrans}; 
+transition function shown in Fig.~\ref{fig:initialsminhitstrans};
 this can be directly derived from $P$'s normalised
 transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 
 
 \begin{figure}[htbp]
 \begin{center}
-\begin{minipage}{0.2\textwidth} 
+\begin{minipage}{0.2\textwidth}
 	 \begin{eqnarray*}
 { }[0]^0 & = & \{ a \} \\
 { }[1]^0 & = & \{ a,b,c \} \\
@@ -27,7 +27,7 @@ transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 \minhits(0) & = & \{ \{ a\} \} \\
 \minhits(1) & = & \{ \{a,b\}, \{c\}, \} \\
 \minhits(2) & = & \{  \{a,b\},  \{a,c\},\} \\
-\minhits(3) & = & \{ \{ b\}, \{c\} \} 
+\minhits(3) & = & \{ \{ b\}, \{c\} \}
 \end{eqnarray*}
 
 	\end{minipage}
@@ -37,7 +37,7 @@ transition graph with nodes $N =\{0,1,2,3\}$ displayed in Fig.~\ref{fig:tga}.
 t(0,a) & = & 1 \\
 t(1,a) & = & 0 \\
 t(1,b) & = & 0 \\
-t(1,c) & = & 2  
+t(1,c) & = & 2
 \end{eqnarray*}
 	\end{minipage}
 		\hfill
@@ -60,7 +60,7 @@ t(3,c) &  =& 3
 \end{figure}
 
 
- 
+
 
 % .....................................................................................
  \begin{figure}
@@ -77,7 +77,7 @@ t(3,c) &  =& 3
 \begin{example}
 \label{ex:uf1tests} Consider the following implementation $Z$ of process $P$
 from Example~\ref{example:CSP} that is erroneous from the point of view of
-failures refinement. In the specification of $Z$, it is assumed that $r_{max}\ge 0$. 
+failures refinement. In the specification of $Z$, it is assumed that $r_{max}\ge 0$.
 \begin{eqnarray*}
 Z & = & a \then (Q_1 \intchoice R_1(r_{max},0))
 \\
@@ -93,10 +93,10 @@ When $R_1(r_{max},k)$ runs through several recursions and $k = r_{max}$,
 however, $R_1(r_{max},k)$ makes an internal choice, instead of offering an
 external choice, so $P\not\lessdet_F Z$. Fig.~\ref{fig:tgZ} shows the
 normalised transition graph of $Z$ for $r_{max} = 3$.
- 
+
 
 Running the test $U_F(j)$ against $Z$ for $j=0,\dots,19$ ($G(P)$ has $p = 4$
-states and $G(Z)$ has $q=5$, so $pq-1=19$ is the index of the last test to 
+states and $G(Z)$ has $q=5$, so $pq-1=19$ is the index of the last test to
 be executed  according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
 U_F(3)$ are passed by $Z$, but $Z$ fails $U_F(4)$, because after execution of
 the trace
@@ -113,12 +113,10 @@ branch (\ref{eq:ufa}).  As a consequence, this execution of
 $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
 $\{c \}$, while $U_F(4)/s$ choses to accept only $\{a,b\}$. Therefore,
-\fixme{The hiding is missing.} 
-\fxnote{jp: done}
 \[
 (\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F(4)) \hide\Sigma,
 \]
 and the test fails. \xbox
 \end{example}
- 
+
 % ======================================================================

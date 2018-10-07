@@ -32,51 +32,43 @@ as a third test result, applicable to the situations where the intended trace
 of the execution was blocked, due to legal, but nondeterministic behaviour of the
 SUT.
 
-In 
-\fixme{From the proofs of the main theorems, and what you say below, I
+In \fixme{From the proofs of the main theorems, and what you say below, I
 thought you did have verdicts coming from deadlock, and you simply chose not
-to mark it with an inc event.} 
-contrast to that, our test cases specified in
+to mark it with an inc event.} contrast to that, our test cases specified in
 Section~\ref{sec:finitecompletefails} and \ref{sec:finitecomplete} are
 adaptive. This has the advantage that test executions $(Q\parallel[\Sigma]
 U_F(j))$ for failures refinement never block before the final step specified
-by branch (\ref{eq:ufd}), and so we do not need inconclusive test results.
-It should be noted, however, that it is
-necessary for our test verdicts to recognise also deadlocks in the final test
-step and interpret them as FAIL, as described in
-Section~\ref{sec:finitecompletefails}. In practice, this is realised by
-adding a timeout event to the testing environment which indicates deadlock
-situations. For real-time systems, this is an accepted technique, because the
-SUT has to respond within a pre-defined latency interval, otherwise its
-behaviour is considered to be blocked and regarded as a failure.
-The tests executions $(Q\parallel[\Sigma] U_T(j))$ 
-\fixme{Missing hiding.}
-\fxnote{jp: Here, the hiding operator is not necessary: the possible test executions are really the traces of $Q$ parallel $U_T(j)$. The hiding is only needed to specify the verdict.}  
-for trace refinement never
-block at all before stopping after the verdict $\epass$ or $\efail$, unless the
-SUT process $Q$ has an unexpected deadlock state. 
-\fxfatal{And also, if the SUT blocks, the test should block,
-no?}\fxnote{jp: you are right, I changed the text here and added explanations above after the verdict explanation
-in formula (\ref{eq:passT}).}
-Recall from the explanations given in Section~\ref{sec:finitecomplete} that the 
-blocking situation also leads to passing the test, because 
-$(\epass\then \Stop)\lessdet_T (Q\parallel[\Sigma] U_T(j))\hide\Sigma$ still holds
-if $(Q\parallel[\Sigma] U_T(j))\hide\Sigma$ only produces the empty trace.
+by branch (\ref{eq:ufd}), and so we do not need inconclusive test results. It
+should be noted, however, that it is necessary for our test verdicts to
+recognise also deadlocks in the final test step and interpret them as FAIL,
+as described in Section~\ref{sec:finitecompletefails}. In practice, this is
+realised by adding a timeout event to the testing environment which indicates
+deadlock situations. For real-time systems, this is an accepted technique,
+because the SUT has to respond within a pre-defined latency interval,
+otherwise its behaviour is considered to be blocked and regarded as a
+failure. The tests executions $(Q\parallel[\Sigma] U_T(j))$ \fixme{Missing
+hiding.} \fxnote{jp: Here, the hiding operator is not necessary: the possible
+test executions are really the traces of $Q$ parallel $U_T(j)$. The hiding is
+only needed to specify the verdict.}for trace refinement never block at all
+before stopping after the verdict $\epass$ or $\efail$, unless the SUT
+process $Q$ has an unexpected deadlock state. Recall from the explanations
+given in Section~\ref{sec:finitecomplete} that the blocking situation also
+leads to passing the test, because $(\epass\then \Stop)\lessdet_T
+(Q\parallel[\Sigma] U_T(j))\hide\Sigma$ still holds if $(Q\parallel[\Sigma]
+U_T(j))\hide\Sigma$ only produces the empty trace.
 
 The adaptive behaviour of both our test case types $U_F(j)$ and $U_T(j)$,
-however, induces the obligation to check that {\it all}
-possible executions have been
-performed before the test can be considered as passed. Typically, it is
-therefore assumed that a \emph{complete testing
-assumption}~\cite{hierons_testing_2004} \fixme{I think you need this for the
-failures refinement tests as well.}\fxnote{jp: yes, I re-arranged the text accordingly.} holds, which means that every possible
-behaviour of the SUT is performed after a finite number of test executions.
-In practice, this is realised by executing each test several times, recording
-the traces that have been performed, and using hardware or software coverage
-analysers to determine whether all possible test execution behaviours of the
-SUT have been observed. Therefore, adaptive test cases come at the price of
-having to apply some grey-box testing techniques enabling us to decide
-whether all SUT behaviours have been observed.
+however, induces the obligation to check that {\it all} possible executions
+have been performed before the test can be considered as passed. Typically,
+it is therefore assumed that a \emph{complete testing
+assumption}~\cite{hierons_testing_2004} holds, which means that every
+possible behaviour of the SUT is performed after a finite number of test
+executions. In practice, this is realised by executing each test several
+times, recording the traces that have been performed, and using hardware or
+software coverage analysers to determine whether all possible test execution
+behaviours of the SUT have been observed. Therefore, adaptive test cases come
+at the price of having to apply some grey-box testing techniques enabling us
+to decide whether all SUT behaviours have been observed.
 
 % ==============================================================================
 \subsubsection*{Discussion of Fault Domains}
@@ -150,10 +142,8 @@ exhaustiveness with fewer probes.
 The authors would like to thank Bill Roscoe and Thomas Gibson-Robinson for
 their advice on using the FDR4 model checker and for very helpful discussions
 concerning the potential implications of this paper in the field of model
-checking. We are
-grateful to Li-Da Tong from National Sun Yat-sen University, Taiwan, for
-suggesting the applicability of Sperner's Theorem in the context of the work
-presented here. Moreover, we thank Adenilso Simao from the University of S{\~a}o Paulo
-for several helpful suggestions. 
-The work of Ana Cavalcanti is funded by the Royal Academy of
-Engineering and UK EPSRC Grant EP/R025134/1.
+checking. We are also grateful to Li-Da Tong from National Sun Yat-sen
+University, Taiwan, for suggesting the applicability of Sperner's Theorem in
+the context of the work presented here. Moreover, we thank Adenilso Simao for
+several helpful suggestions. The work of Ana Cavalcanti is funded by the
+Royal Academy of Engineering and UK EPSRC Grant EP/R025134/1.

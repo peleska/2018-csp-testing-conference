@@ -252,12 +252,13 @@ so $G(P)$ allows us to re-construct the failures semantics of $P$.
 \label{sec:accs}
 
 When investigating  tests for failures refinement, the notion of
-\emph{acceptances}, which is dual to refusals,
-is also useful. While the original introduction of acceptances presented 
-in~\cite[pp.~75]{Hennessy:1988:ATP:50497} was independent of refusals, 
-we use the definition from~\cite[pp.~278]{Roscoe:1997:TPC:550448}.   A \emph{minimal acceptance} of a CSP process state $P/s$ 
-is the complement of a maximal refusal of the same state. The set of minimal acceptances 
-of $P/s$ is denoted by $\minaccs(P/s)$ and formally defined as 
+\emph{acceptances}, which is dual to refusals, is also useful. While the
+original introduction of acceptances presented
+in~\cite[pp.~75]{Hennessy:1988:ATP:50497} was independent of refusals, we use
+the definition from~\cite[pp.~278]{Roscoe:1997:TPC:550448}.   A \emph{minimal
+acceptance} of a CSP process state $P/s$ is the complement of a maximal
+refusal of the same state. The set of minimal acceptances of $P/s$ is denoted
+by $\minaccs(P/s)$ and formally defined as
 %
 \begin{equation}\label{eq:accref}
 \minaccs(P/s) = \{ \Sigma - R~|~R\in \maxrefs(P/s)  \}
@@ -269,12 +270,12 @@ With this definition, a (not necessarily minimal) \emph{acceptance} of $P/s$ is 
 \accs(P/s)  = \{ B\subseteq [P/s]^0~|~\exists A\in\minaccs(P/s):  A \subseteq B   \}
 \end{equation}
 %
-Acceptances have the following intuitive interpretation.  If the behaviour of  $P/s$ is deterministic, its only acceptance
-equals $[P/s]^0$, because $P/s$ never refuses any of the events contained in
-this set. If $P/s$ is nondeterministic, it internally chooses one of its
-\emph{minimal acceptance sets} $A$ and never refuses any event in $A$, while
-{\it possibly} refusing the events from $[P/s]^0 - A$ and
-{\it always} refusing those from $\Sigma - [P/s]^0$. 
+Acceptances have the following intuitive interpretation.  If the behaviour of
+$P/s$ is deterministic, its only acceptance equals $[P/s]^0$, because $P/s$
+never refuses any of the events in this set. If $P/s$ is nondeterministic, it
+internally chooses one of its \emph{minimal acceptance sets} $A$ and never
+refuses any event in $A$, while {\it possibly} refusing the events from
+$[P/s]^0 - A$ and {\it always} refusing those from $\Sigma - [P/s]^0$.
 
 
 Exploiting (\ref{eq:accref}),
@@ -287,21 +288,18 @@ note that (\ref{eq:refsAndR}) and (\ref{eq:accref}) imply
 \begin{equation}\label{eq:maxrefsminaccs}
 \minaccs(G(P)/s) = \{ \Sigma - R | R\in r(G(P)/s) \} = \minaccs(P/s).
 \end{equation}
-\fixme{alcc: proof in the report perhaps? What do you need (5) for? }
-\fxnote{jp: I have clarified the introduction of acceptances and removed the statements
-we do not need in the rest of the paper. We need (5) here to show that the set of
-maximal refusals of $P/s$ equals $r(G(P/s))$.}
-
-Given any non-diverging, non-terminating, finite-state process $P$,
-the process can be re-con\-struc\-ted from its transition graph $G(P)$ with initial state $\ii n$ and transition function $t$, using 
-$P$'s normalised syntactic representation~\cite[pp.~277]{Roscoe:1997:TPC:550448} specified as follows.
+%
+Given any non-diverging, non-terminating, finite-state process $P$, it can be
+re-con\-struc\-ted from its graph $G(P)$ with initial state $\ii
+n$ and transition function $t$, using $P$'s normalised syntactic
+representation~\cite[pp.~277]{Roscoe:1997:TPC:550448} specified as follows.
 \begin{eqnarray*}
 \text{normalised}(P) & = & P_N(\ii n)
 \\
 P_N(n) & = & \Intchoice_{A\in\minaccs(n)\cup \{ [n]^0 \} } e:A\then P_N(t(n,e))
 \end{eqnarray*}
-With this definition, $P$ is semantically equivalent to $\text{normalised}(P)$ in the CSP failures semantics.
-
+With this definition, it is established that $P$ is semantically equivalent
+to the process $\text{normalised}(P)$ in the CSP failures semantics.
 
 % .....................................................................................
  \begin{figure}[t]
@@ -329,22 +327,17 @@ transition from node 0 leads to node 1 representing the process state $P/a
 derived from $Q$ and $R$. Since these processes accept their initial events
 in external choice, $Q\intchoice R$ induces minimal acceptance sets $\{a,c\}$
 and $\{b,c\}$. We note that the event $c$ can never be refused, since it is
-contained in each minimal acceptance set.\fixme{alcc: the a from node 2 should go back to 0, I think.}
-\fxnote{jp: No, this is correct: state 0 corresponds to $P$, 1 to $Q\intchoice R$,
-2 to $P\intchoice R$, and 3 to $R$. 
-Therefore, 2 goes with $a$ to $(P/a) = Q\intchoice R$, that is, to node 1. I think that
-this is now explained sufficiently clear  in the example.}
+contained in each minimal acceptance set.
 
 Having engaged in $c$, the next process state is represented by node 2. Due
-to normalisation, there is only a single transition satisfying
-$t(1,c) = 2$. This transition, however, can have
-been caused by either $Q$ or $R$ engaging into $c$, so node 2 corresponds to
-process state $Q/c \intchoice R/c = P \intchoice R$. This is reflected by the
-two minimal acceptance sets labelling node 2. 
-From node~2, event $c$ leads to node~3. Since $P$ does not engage into $c$,
-the $R$-component of $P\intchoice R$ must have processed $c$, so node~3 corresponds to process state $R/c = R$, and therefore it is labelled by $R$'s minimal acceptance
-$\{b,c\}$. 
-\xbox
+to normalisation, there is only a single transition satisfying $t(1,c) = 2$.
+This transition, however, can have been caused by either $Q$ or $R$ engaging
+into $c$, so node 2 corresponds to process state $Q/c \intchoice R/c = P
+\intchoice R$. This is reflected by the two minimal acceptance sets labelling
+node 2. From node~2, event $c$ leads to node~3. Since $P$ does not engage
+into $c$, the $R$-component of $P\intchoice R$ must have processed $c$, so
+node~3 corresponds to process state $R/c = R$, and therefore it is labelled
+by $R$'s minimal acceptance $\{b,c\}$. \xbox
 \end{example}
 %
 Summarising, refinement relations between finite-state CSP processes $P, Q$ can be be
@@ -355,14 +348,14 @@ G(P) & = & ( N_P, {\ii n}_P, \Sigma, t_P : N_P\times\Sigma \pfun N_P, r_P : N_P 
 G(Q) & = & ( N_Q, {\ii n}_Q, \Sigma, t_Q : N_Q\times\Sigma \pfun N_Q, r_Q : N_Q \fun \mathbb{P}\mathbb{P}(\Sigma))
 \end{eqnarray*}
 %
-as established by the results  in the following lemma.
-There, result (\ref{eq:trcrefa}) reflects trace refinement in terms of graph
-traces; (\ref{eq:failconf}) expresses failures refinement in terms of traces
-refinement and $conf$; (\ref{eq:failrefa}) states how $conf$ can be expressed
-by means of the maximal refusal functions of the graphs involved; and
-(\ref{eq:failrefb}) states the same in terms of the minimal acceptances that
-can be derived from the maximal refusal functions by means of
-(\ref{eq:maxrefsminaccs}).
+as established by the results  in the following lemma. There, result
+(\ref{eq:trcrefa}) reflects trace refinement in terms of graph traces; result
+(\ref{eq:failconf}) expresses failures refinement in terms of traces
+refinement and $conf$; result (\ref{eq:failrefa}) states how $conf$ can be
+expressed by means of the maximal refusal functions of the graphs involved;
+and result (\ref{eq:failrefb}) states the same in terms of the minimal
+acceptances that can be derived from the maximal refusal functions by means
+of (\ref{eq:maxrefsminaccs}).
 %
 \begin{lemma}
   \label{lemma:tgtrcref}
@@ -391,10 +384,9 @@ can be derived from the maximal refusal functions by means of
 \begin{proof}
 Recall that $P\lessdet_T Q$ is defined as $\trc(Q)\subseteq \trc(P)$ and that
 $\trc(P)=\trc(G(P))$ and $\trc(Q)=\trc(G(Q))$. This shows (\ref{eq:trcrefa}).
-\fixme{alcc: (11) is already proved in my paper with mcg. No need to repeat
-it here. I suggest just to add a reference.} \fxnote{jp: done}Formula (\ref{eq:failconf}) has been
-shown in~\cite{DBLP:conf/icfem/CavalcantiG07}.
-
+Result (\ref{eq:failconf}) has been shown
+in~\cite{DBLP:conf/icfem/CavalcantiG07}.
+%
 %\medskip
 %\noindent
 %To prove (\ref{eq:failconf}), we derive
@@ -428,9 +420,7 @@ shown in~\cite{DBLP:conf/icfem/CavalcantiG07}.
 %P\lessdet_T Q \wedge Q\ conf\ P
 %& Definition of $\lessdet_T$ and $conf$
 %\end{argue}
-
-\medskip
-\noindent
+%
 To prove (\ref{eq:failrefa}), we derive
 \begin{argue}
 Q\ conf\ P
@@ -475,13 +465,11 @@ every} node of $N$.
 
 \begin{lemma}
 \label{lemma:extendV} Let $P$ be a CSP process with normalised transition
-graph $G(P)$. 
-Let
-$V\subseteq\Sigma^*$ be a finite prefix-closed set of sequences of events.
-Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$, that is, $|t(\ii
-n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences from $V$, extended
-by any event of $\Sigma$. Then $G(P)$ reaches at least $(k+1)$ nodes under
-$V\cup V.\Sigma$.
+graph $G(P)$. Let $V\subseteq\Sigma^*$ be a finite prefix-closed set of
+sequences of events. Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$,
+that is, $|t(\ii n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences
+from $V$, extended by any event of $\Sigma$. We can then conclude that $G(P)$
+reaches at least $(k+1)$ nodes under $V\cup V.\Sigma$.
 \end{lemma}
 \begin{proof}
 Suppose that $n'\in (N - t(\ii n,V))$.  Since all nodes in $N$ are reachable,
@@ -575,19 +563,17 @@ NP-hard~\cite{5533149}. We see below, however, that it reduces the effort of
 testing for failures refinement from a factor of $2^{|\Sigma|}$ to a factor
 that equals the number of minimal hitting sets.
 
-
-
 % -------------------------------------------------------------------------
 \subsubsection*{Minimal Hitting Sets of Normalised Transition Graphs}
-Since minimal acceptances can be used to label the nodes of a normalised transition graph, and since $\minaccs(P/s) = \minaccs(G(P)/s)$ according to (\ref{eq:maxrefsminaccs}), the notation of minimal hitting sets also
-carries over to graphs: we write $\minhits(n)$ for nodes $n$ of $G(P)$ and observe that
+Since, as previously explained, minimal acceptances can be used to label the
+nodes of a normalised transition graph, and since $\minaccs(P/s) =
+\minaccs(G(P)/s)$ according to (\ref{eq:maxrefsminaccs}), the notation of
+minimal hitting sets also carries over to graphs: we write $\minhits(n)$ for
+nodes $n$ of $G(P)$ and observe that
 \begin{equation}
 \label{eq:minhitsGP}
 \minhits(G(P)/s) = \minhits(P/s) \ \text{for all}\ s\in \trc(P).
 \end{equation}
-\fixme{You already used this above. Perhaps you want to move this to before
-Lemma 4?}\fxnote{jp: done}
-
 
 % ------------------------------------------------------------------------
 \subsubsection*{Characterisation of $conf$ by Minimal Hitting Sets}
@@ -611,13 +597,13 @@ a (not necessariliy minimal) hitting set of $\minaccs(Q/s)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-Throughout the proof, we apply (\ref{eq:maxrefsminaccs}) and (\ref{eq:minhitsGP}), 
-so that $\minaccs(P/s)$ and $\minaccs(G(P)/s)$, as well as 
-$\minhits(P/s)$ and $\minhits(G(P)/s)$ can be used interchangeably.
+We apply (\ref{eq:maxrefsminaccs}) and (\ref{eq:minhitsGP}), so that
+$\minaccs(P/s)$ and $\minaccs(G(P)/s)$, as well as $\minhits(P/s)$ and
+$\minhits(G(P)/s)$ are used interchangeably.
 
-
-For showing ``$1 \Rightarrow 2$'', assume   $Q\ conf\ P$ and $s\in\trc(P)\cap
-\trc(Q)$. Lemma~\ref{lemma:tgtrcref} (\ref{eq:failrefb}), states that
+For showing ``$1 \Rightarrow 2$'', we assume $Q\ conf\ P$ and
+$s\in\trc(P)\cap \trc(Q)$. Lemma~\ref{lemma:tgtrcref} (\ref{eq:failrefb}),
+states that
 \[
 \forall A_Q\in\minaccs(G(Q)/s):
 \exists A_P\in\minaccs(G(P)/s): A_P\subseteq A_Q
@@ -644,16 +630,8 @@ Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*),
 $\overline H$ is a hitting set of $\minaccs(G(P)/s)$ which has an  empty
 intersection with $A$. Minimising $\overline H$ yields   a minimal hitting
 set $H\in \minhits(P/s)$ which is {\it not} a hitting set of
-$\minaccs(G(Q)/s)$, a contradiction to Assumption~2. 
-%We note that we use
-%$\minhits(G(P)/s) = \minhits(P/s)$, as well $\minaccs(G(Q)/s) =
-%\minaccs(Q/s)$, which follow from the identification of process states with
-%states of the normalised graph for the proof discussed in the previous
-%section. 
-This completes the proof of the lemma. 
-\fixme{Please, check that
-you're happy with this observation.}
-\fxnote{jp: I think the new first sentence of the proof should now be sufficient. Therefore, I removed your addition.}
+$\minaccs(G(Q)/s)$, a contradiction to Assumption~2.
+This completes the proof of the lemma.
 \xbox
 \end{proof}
 %
@@ -679,7 +657,7 @@ holds.
 In preparation for complexity results to be presented in
 Section~\ref{sec:complexity}, we consider how many minimal hitting sets can
 maximally exist for a given collection of minimal acceptances. To this end,
-the following definitions and results are useful.\fixme{Shouldn't the footnote go to the acknowledgements?}\fxnote{jp: done}
+the following definitions and results are useful.
 
 A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a
 given finite universe $\Sigma$ that do not contain each other, that is, $H_1
