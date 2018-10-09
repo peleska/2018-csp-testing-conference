@@ -283,14 +283,15 @@ Since  $P\lessdet_T Q$ by assumption, $s$ is a trace of $P$, thus
 $U_F(j)/s = U_F(j,\#s,G(P)/s)$ according to Lemma~\ref{lemma:ufproperties}. Therefore,
 $U_F(j)/s$  can enter  branch (\ref{eq:ufc}) with any event from $[G(P)/s]^0$.
 Since we assume that $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks, this means that
-$[G(P)/s]^0$ is {\it not} a hitting set of $\minhits(Q/s)$, because otherwise at least
+$[G(P)/s]^0$ is {\it not} a hitting set of $\minaccs(Q/s)$, because otherwise at least
 on $e\in [G(P)/s]^0$ would be accepted by $Q/s$. Now suppose that $\minhits(G(P)/s) = \varnothing$. Then   branch (\ref{eq:ufb}) can be entered, and the test 
 stops after $\epass$. Otherwise, if $\minhits(G(P)/s) \neq \varnothing$, let
 $H\in\minhits(G(P)/s)$. Since $H$ only contains elements that are contained in some minimal acceptance of $P/s$, and all these minimal acceptances are subsets of 
 $[G(P)/s]^0$, $H$ is a subset of $[G(P)/s]^0$ as well. Since $[G(P)/s]^0$, however, 
-is not an element of $\minhits(Q/s)$, also $H$ is not contained in $\minhits(Q/s)$.
+is not a hitting set of $\minaccs(Q/s)$, also $H$ is not a hitting set of 
+$\minaccs(Q/s)$.
 Now this is a contradiction to Lemma~\ref{lemma:hseta}, since $Q\ conf\ P$ by assumption,
-so $H$ should also be a (not necessarily minimal) hitting set in $\minhits(Q/s)$.
+so $H$ should also be a (not necessarily minimal) hitting set in $\minaccs(Q/s)$.
 This proves that the test execution cannot block  at branch (\ref{eq:ufc})
 without being able to pass the test by entering branch (\ref{eq:ufb}).
 
