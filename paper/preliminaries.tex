@@ -141,7 +141,7 @@ Conversely, with the maximal refusals $\maxrefs(P/s)$ at hand, we can
 reconstruct the refusals in the set $\refs(P/s)$ as described by
 %
 \begin{equation}\label{eq:refMaxRef}
-\refs(P/s) = \{ R'\in\power(\Sigma)~|~\exists R\in \maxrefs(P/s): R'\subseteq R \}.
+\refs(P/s) = \{ R'\in 2^\Sigma~|~\exists R\in \maxrefs(P/s): R'\subseteq R \}.
 \end{equation}
 %
 Deterministic process states $P/s$ have exactly the one maximal refusal
@@ -543,25 +543,85 @@ semantics and normalised transition graphs that are used in the next section.
 \subsubsection*{Definition}
 The main idea of the underlying test strategy for failures refinement is
 based on solving a \emph{hitting set problem}. Given a finite collection of
-finite sets $C = \{ A_1,\dots,A_n\}$, such that each $A_i$ is a subset of a
+finite sets ${\cal C} = \{ A_1,\dots,A_n\}$, such that each $A_i$ is a subset of a
 universe $\Sigma$, a \emph{hitting set} $H\subseteq\Sigma$ is a set
 satisfying the following property.
 %
 \begin{equation}
   \label{eq:hit}
-  \forall A\in C: H\cap A \neq\varnothing.
+  \forall A\in {\cal C}: H\cap A \neq\varnothing.
 \end{equation}
 %
 A \emph{minimal hitting set} is a hitting set that cannot be further reduced
-without losing the characteristic property (\ref{eq:hit}). By $\minhits(C)$
-we denote the collection of minimal hitting sets for a collection $C$. For
-the pathological case where $C$ contains an empty set, $\minhits(C)$ is also
+without losing the characteristic property (\ref{eq:hit}). By $\minhits({\cal C})$
+we denote the collection of minimal hitting sets for a collection ${\cal C}$. For
+the pathological case where $C$ contains an empty set, $\minhits({\cal C})$ is also
 empty.
 
 The problem of determining minimal hitting sets is %%% \cite{Book1975-BOOKRM,5533149}
 NP-hard~\cite{5533149}. We see below, however, that it reduces the effort of
 testing for failures refinement from a factor of $2^{|\Sigma|}$ to a factor
 that equals the number of minimal hitting sets.
+
+
+% -----------------------------------------------------------------------------
+\subsubsection*{Minimal Hitting Sets of Minimal Acceptances}
+In this article, we are interested in the minimal hitting sets of minimal acceptances;
+for these, the abbreviated notation
+\[
+\minhits(P/s) = \minhits(\minaccs(P/s))
+\]
+is used. 
+
+The minimal hitting sets of minimal acceptances may be alternatively
+characterised by means of the failures of a process. To this end,
+define for any collection ${\cal C}\subseteq 2^\Sigma$ of subsets from
+$\Sigma$
+\begin{equation}\label{eq:minsub}
+\minsub({\cal C}) = \{ A\in {\cal C}~|~\forall B\in {\cal C}:
+B\subseteq A\Rightarrow B = A \}.
+\end{equation}
+This definition has originally been in~\cite{DBLP:conf/icfem/CavalcantiG07}:
+the collection 
+$\minsub({\cal C})$ contains all those sets of the collection ${\cal C}$ that are not true subsets of other members of ${\cal C}$. With this definition, the relation
+between failures and minimal hitting sets of minimal acceptances is established in the following lemma.
+%
+\begin{lemma}
+    
+For any trace $s$ of CSP process $P$, define 
+\[
+{\cal A}_s = \{ A\subseteq \Sigma~|~(s,A)\not\in\fails(P)  \}.
+\]
+Then
+\[
+\minhits(P/s) = \minsub {\cal A}_s \ \text{for all traces $s$ of $P$}.
+\]
+\end{lemma}
+\begin{proof}
+We derive
+\begin{argue}
+(s,A)\not\in {\text{failures}}(P)
+\\
+\Leftrightarrow A\not\in {\text{Ref}}(P/s)
+\\
+\Leftrightarrow  \forall R\in {\text{maxRef}}(P/s): A\not\subseteq R
+\\
+\Leftrightarrow   \forall B\in {\text{minAcc}}(P/s): A\not\subseteq (\Sigma\setminus B)& this follows from (\ref{eq:accref})
+\\
+\Leftrightarrow  \forall B\in {\text{minAcc}}(P/s): A\cap B\neq \varnothing
+\\
+\Leftrightarrow  A \text{ is a (not necessarily minimal)}
+              \text{ hitting set of } {\text{minAcc}}(P/s)
+\end{argue}
+%
+Specialising this derivation valid for arbitrary $A$ satisfying $(s,A)\not\in {\text{failures}}(P)$ to
+minimal $A$ with this property proves the statement of the lemma.
+\xbox
+\end{proof}
+
+
+
+
 
 % -------------------------------------------------------------------------
 \subsubsection*{Minimal Hitting Sets of Normalised Transition Graphs}
@@ -649,6 +709,8 @@ $\minhits(P/s) = \varnothing$. Trivially,
 \end{equation}
 holds.
 
+
+
 % =========================================================================
 \subsection{Sperner Families}
 \label{sec:sperner}
@@ -659,11 +721,17 @@ Section~\ref{sec:complexity}, we consider how many minimal hitting sets can
 maximally exist for a given collection of minimal acceptances. To this end,
 the following definitions and results are useful.
 
-A \emph{Sperner Family} is a collection $S \subseteq 2^\Sigma$ of sets from a
+A \emph{Sperner Family} is a collection ${\cal S} \subseteq 2^\Sigma$ of sets from a
 given finite universe $\Sigma$ that do not contain each other, that is, $H_1
 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq
-H_2\in S$. Specialising antichains known from partial orders to finite sets
-partially ordered by $\subseteq$ results in Sperner families. We observe that
+H_2\in {\cal S}$. Specialising antichains known from partial orders to finite sets
+partially ordered by $\subseteq$ results in Sperner families. 
+
+Given an {\it arbitrary} collection of subsets ${\cal C}\subset 2^\Sigma$,
+the sub-collection $\minsub({\cal C})$ defined in (\ref{eq:minsub}) 
+is a Sperner Family contained
+in ${\cal C}$.
+We further observe that
 \begin{itemize}
 \item the maximal refusals of a CSP process state,
 \item the minimal acceptances of a CSP process state, and
@@ -682,20 +750,20 @@ $P = \Intchoice_{A\in S}\big( e:A \then P(e) \big)$.
 The cardinality of Sperner Families is determined by the following theorem.
 \begin{theorem}[Sperner's Theorem~\cite{sperner_satz_1928}]
 \label{th:sperner}
-Given a  Sperner family $S$
+Given a  Sperner family ${\cal S}$
 over an $n$-element universe $\Sigma$, its cardinality is bound by
 \[
-\card{S} \le \binom{n}{\lfloor\frac{n}{2}\rfloor}.
+\card{{\cal S}} \le \binom{n}{\lfloor\frac{n}{2}\rfloor}.
 \]
 The upper bound is reached if, and only if, one of the following cases apply:
 \begin{enumerate}
-\item For even $n$, if $S$ consists of all subsets of $\Sigma$ with
+\item For even $n$, if ${\cal S}$ consists of all subsets of $\Sigma$ with
     cardinality $n/2$;
 \item For odd $n$, if one of the following cases holds;
 \begin{enumerate}
-\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/2$;
+\item ${\cal S}$ consists of all subsets of $\Sigma$ with cardinality $(n+1)/2$;
     or
-\item $S$ consists of all subsets of $\Sigma$ with cardinality $(n-1)/2$.
+\item ${\cal S}$ consists of all subsets of $\Sigma$ with cardinality $(n-1)/2$.
 \end{enumerate}
 \end{enumerate}
 \xbox
