@@ -212,6 +212,27 @@ event by entering branch (\ref{eq:ufb}). Therefore,
 Lemma~\ref{lemma:ufproperties} just states the existence of
 $U_F(j)$-executions $s, s.e$ satisfying the properties stated there.
 
+% -------------------------------------------------------------------------
+\subsubsection*{Complete Testing Assumption}
+As explained above, passing a test case $U_F(j)$ requires that none of 
+the possible executions $(Q\parallel[\Sigma] U_F(j))$ stops after $\efail$ or
+stops without having produced event $\epass$. Therefore, it is necessary to determine
+whether all possible executions have been covered in the repeated runs of 
+$(Q\parallel[\Sigma] U_F(j))$.  
+The theoretical completeness results are therefore based on
+a  \emph{complete testing
+assumption}~\cite{hierons_testing_2004,DBLP:conf/icfem/CavalcantiG07}, 
+ which means that every
+possible behaviour of the SUT is performed after a finite number of test
+executions. In practice, this is realised by executing each test several
+times, recording the traces that have been performed, and using hardware or
+software coverage analysers to determine whether all possible test execution
+behaviours of the SUT have been observed. Therefore, 
+testing nondeterministic SUTs 
+  comes
+at the price of having to apply some grey-box testing techniques enabling us
+to decide whether all SUT behaviours have been observed.
+
 % =========================================================================
 \subsection{A Finite Complete Test Suite for Failures Refinement}
 % =========================================================================
@@ -378,8 +399,8 @@ Lemma~\ref{lemma:reachproduc}, we know that the state $G/s$ can be reached by
 a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider
 the test $U_F(\# u)$, for which $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because
 of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$  always performs branch
-(\ref{eq:ufc}) until the trace $u$ has been completely processed. \fixme{If
-the SUT accepts it? See previous fixme.} $U_F(\#u,\#u,G(P)/u)$ may execute
+(\ref{eq:ufc}) until the trace $u$ has been completely processed.  
+ $U_F(\#u,\#u,G(P)/u)$ may execute
 branches (\ref{eq:ufa}) or (\ref{eq:ufd}) only:~assumption
 (\ref{eq:accsnotcontained}) in Case~2 implies that $P/s$ has at least one
 non-empty minimal acceptance. From (\ref{eq:minhitminaccempty}) we know that
@@ -389,16 +410,20 @@ consequence, branch (\ref{eq:ufb}) cannot be taken because its guard
 condition evaluates to $\isf$  for $U_F(\#u,\#u,G(P)/u)$. The guard condition
 $(k < j)$ for branch (\ref{eq:ufc}) evaluates to $\isf$ for
 $U_F(\#u,\#u,G(P)/u)$, too. If branch (\ref{eq:ufa}) is executed, the test
-always fails. If branch (\ref{eq:ufd}) is executed, the test fails for the
-execution where a minimal hitting set $H\in\minhits(P/u)$ is chosen by
-$U_F(\#u,\#u,G(P)/u)$ that has an empty intersection with the minimal
-acceptance $A_Q$ from condition (\ref{eq:accsnotcontained}). The existence of
+always fails. If branch (\ref{eq:ufd}) is executed, the test   deadlocks and therefore 
+fails for the
+execution where 
+$Q/u$ selects the minimal acceptance $A_Q$ as specified in (\ref{eq:accsnotcontained})
+and $U_F(\#u,\#u,G(P)/u)$ selects 
+a minimal hitting set $H\in\minhits(P/u)$ which has an empty intersection with   $A_Q$.
+The existence of
 such an $H$ is guaranteed because of Lemma~\ref{lemma:hseta}. As a
-consequence, there exists a test execution   where $Q/u$ selects acceptance
-$A_Q$ and $U_F(\#u,\#u,G(P)/u)$ selects $H$. This execution deadlocks in
-process state $(Q\parallel[\Sigma]U_F(\# u))/u$, so it cannot produce the
-$\epass$-event; this means that the test fails. This concludes the proof.
-\xbox
+consequence,   $(Q\parallel[\Sigma]U_F(\# u))/u$,   cannot produce the
+$\epass$-event in this execution; 
+this means that the test fails. The complete testing assumption guarantees that 
+this execution really occurs if $(Q\parallel[\Sigma]U_F(\# u))$ is executed sufficiently often.
+This concludes the proof.
+\xbox 
 \end{proof}
 %
 Our notion of tests can be specialised to deal with traces refinement, as we
