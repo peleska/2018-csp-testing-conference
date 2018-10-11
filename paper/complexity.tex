@@ -3,29 +3,119 @@
 % ================================================================================
 
 In this section, we calculate upper bounds for the total number of test
-executions to be performed when testing for failures refinement.
+executions to be performed when testing for failures refinement 
+and---as a corollary---trace refinement.
 Theorem~\ref{th:failurestest} specifies that all tests $U_F(j),\ 0\le j < pq$
 need to be executed, where $p$ denotes the number of nodes in the transition
 graph of the reference process $P$, and $q\ge p$ is an estimate for the
-number of nodes in the SUT's transition graph. Therefore, we will first
+maximal number of nodes in the SUT's transition graph. Therefore, we will first
 calculate a bound for the number of test executions to be performed for test
 $U_F(j)$ and then summarise  these bounds over all $j$ from $0$ to $pq-1$.
 
-For the worst-case estimate, we assume that $P$ never allows for early
-deadlock (so $\minhits(P/s)$ is never empty) and that the SUT $Q$ is a
-correct failures refinement. Therefore, all test executions
-$(Q\parallel[\Sigma] U_F(j))$ stop after having run through a trace of $Q$ of
-length $j+1$, because their is no early termination due to entering branches
-(\ref{eq:ufa}), (\ref{eq:ufb}), or due to an illegal deadlock of $Q$. As can
-be seen from the specification of the test cases $U_F(j)$ (see
-Section~\ref{sec:finitecompletefails}), the number of executions ending in a
-$\epass$ event corresponds to the number $\ell$ of traces $s$ of $P$ with
-length equal to $j$, multiplied by the number $h$ of minimal hitting sets in
-$\minhits(P/s)$. For the tests $U_T(j)$ verifying trace refinement (see
-Section~\ref{sec:finitecomplete}), the number of executions equals $\ell$,
-since there is no equivalent in $U_T(j)$ to checking different hitting sets
-in the last step of a test execution. \fixme{But doesn't this add to the
-number of executions?} \fxnote{jp: should be clear now from the revised test}
+For the worst-case estimate, we first introduce a CSP reference process $\pmax$
+which 
+turns out to be--given a fixed alphabet $\Sigma$---the test 
+model leading to the maximal number 
+of test executions for every $U_F(j)$ when considering large alphabets. In the case
+of small alphabets and large values of $pq-1$, it will turn out below that a variant
+of $\pmax$ will lead to the maximal number of executions. The conditions for this
+can also be clearly specified.
+
+
+
+%we assume that $P$ never allows for early
+%deadlock (so $\minhits(P/s)$ is never empty) and that the SUT $Q$ is a
+%correct failures refinement. Therefore, all test executions
+%$(Q\parallel[\Sigma] U_F(j))$ stop after having run through a trace of $Q$ of
+%length $j+1$, because their is no early termination due to entering branches
+%(\ref{eq:ufa}), (\ref{eq:ufb}), or due to an illegal deadlock of $Q$. As can
+%be seen from the specification of the test cases $U_F(j)$ (see
+%Section~\ref{sec:finitecompletefails}), the number of executions ending in a
+%$\epass$ event corresponds to the number $\ell$ of traces $s$ of $P$ with
+%length equal to $j$, multiplied by the number $h$ of minimal hitting sets in
+%$\minhits(P/s)$. For the tests $U_T(j)$ verifying trace refinement (see
+%Section~\ref{sec:finitecomplete}), the number of executions equals $\ell$,
+%since there is no equivalent in $U_T(j)$ to checking different hitting sets
+%in the last step of a test execution. \fixme{But doesn't this add to the
+%number of executions?} \fxnote{jp: should be clear now from the revised test}
+
+
+
+
+% -------------------------------------------------------------------------
+\subsection{A Reference Process With Maximal Test Complexity}
+
+Given an alphabet $\Sigma$ of size $\card{\Sigma} = n\ge 2$, define
+a collection of subsets of $\Sigma$ by
+\[
+{\cal C} = \{ A\subseteq\Sigma~|~\card{A} = n - \lfloor\frac{n}{2}\rfloor + 1 \}.
+\]
+%
+With this choice of ${\cal C}$, define
+\begin{equation}\label{eq:pmax}
+\pmax = \Intchoice_{A\in{\cal C}} e:A\then \pmax
+\end{equation}
+%
+The important properties of $\pmax$ are summarised in the following lemma.
+%
+\begin{lemma}\label{lemma:pmax}
+Given alphabet $\Sigma$ with cardinality $\card{\Sigma} = n\ge 2$,
+process $\pmax$ fulfils
+%
+\begin{eqnarray}
+{}[\pmax/s]^0 & = & \Sigma \quad\text{for all $s\in \Sigma^*$}
+\label{eq:pmaxa}
+\\
+\trc(\pmax) & = & \Sigma^*
+\label{eq:pmaxb}
+\\
+\minaccs(P/s) & = & {\cal C} \quad\text{for all $s\in \Sigma^*$}
+\label{eq:pmaxc}
+\\
+\minhits(P/s) & = & \minhits({\cal C}) \quad\text{for all $s\in \Sigma^*$}
+\label{eq:pmaxe}
+\\
+\card{\minhits(P/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor} 
+\quad \text{for all $s\in \Sigma^*$}
+\label{eq:pmaxd}
+\end{eqnarray}
+\end{lemma}
+\begin{proof}
+ Since  
+$
+\bigcup_{A\in{\cal C}} A = \Sigma
+$
+by construction of ${\cal C}$, $[\pmax]^0 = \Sigma$. Since $\pmax/e = \pmax$ for all
+$e\in\Sigma$, this proves statements (\ref{eq:pmaxa}) and (\ref{eq:pmaxb}).
+The internal choice construct used in the specification of $\pmax$ implies
+$\minaccs(\pmax) = {\cal C}$. Again, $\pmax/e = \pmax$ for all
+$e\in\Sigma$ implies $\minaccs(\pmax/s) = {\cal C}$ for all traces of $\pmax$, so this shows (\ref{eq:pmaxc}). Statement (\ref{eq:pmaxe}) is a direct consequence
+of (\ref{eq:pmaxc}).
+
+Let $H$ be any minimal hitting set of ${\cal C}$. Then
+$H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because
+otherwise $\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any
+subset $A\subseteq \Sigma\setminus H$ with cardinality
+$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in ${\cal C}$, but satisfy
+$A\cap H=\varnothing$. Since
+$\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we
+conclude
+ that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
+ intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
+so $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$. This 
+shows  (\ref{eq:pmaxd}) and completes the proof.
+\xbox
+\end{proof}
+
+The test cases $U_F(j)$ generated from $\pmax$ have the structure
+\begin{eqnarray*}
+\label{eq:UFP}
+U_F(j) & = & U_F(j,0,\ii n)
+\\
+U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
+\\ & & \extchoice  
+\\ & & (k = j) \& \big( \Intchoice_{H\in\minhits({\cal C})} (e:H   \then \epass \then\Stop   )  \big)
+\end{eqnarray*}
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
@@ -67,7 +157,7 @@ $n-\lfloor{\frac{n}{2}}\rfloor+1$. Then the CSP process
 \[
 P = \Intchoice_{A\in {\cal C}} e:A\then P
 \]
-fulfils $\minaccs(P) = {\cal C}$. Let $H$ be any minimal hitting set of $C$. Then
+fulfils $\minaccs(P) = {\cal C}$. Let $H$ be any minimal hitting set of ${\cal C}$. Then
 $H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because
 otherwise $\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any
 subset $A\subseteq \Sigma\setminus H$ with cardinality
