@@ -29,7 +29,7 @@ number of executions?} \fxnote{jp: should be clear now from the revised test}
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
-The first factor $\ell$ has worst-case upper bound $\ell\le \card{\Sigma}^k$.
+The first factor $\ell$ has worst-case upper bound $\ell\le \card{\Sigma}^j$.
 As an example where this upper bound is really met, we consider the reference
 process
 \[
@@ -62,22 +62,22 @@ there exists a CSP process $P$ with
 \]
 \end{theorem}
 \begin{proof}
-Let $C$ be the collection of all subsets of $\Sigma$ with cardinality
+Let ${\cal C}$ be the collection of all subsets of $\Sigma$ with cardinality
 $n-\lfloor{\frac{n}{2}}\rfloor+1$. Then the CSP process
 \[
-P = \Intchoice_{A\in C} e:A\then P(e)
+P = \Intchoice_{A\in {\cal C}} e:A\then P
 \]
-fulfils $\minaccs(P) = C$. Let $H$ be any minimal hitting set of $C$. Then
+fulfils $\minaccs(P) = {\cal C}$. Let $H$ be any minimal hitting set of $C$. Then
 $H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because
 otherwise $\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any
 subset $A\subseteq \Sigma\setminus H$ with cardinality
-$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in $C$, but satisfy
+$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in ${\cal C}$, but satisfy
 $A\cap H=\varnothing$. Since
 $\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we
 conclude
  that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
- intersects  every element of $C$.  Therefore, every minimal hitting set of $C$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
-so $\card{\minhits(C)} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$.
+ intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
+so $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$.
 \xbox
 \end{proof}
 %
@@ -96,6 +96,28 @@ h \le \binom{2m}{m} \approx \frac{4^m}{\sqrt{\pi m}} =
 We note that, due to this approximation result,
 $h$ is   smaller than $2^{\card{\Sigma}}-1$, the cardinality of the
 non-empty subsets of $\Sigma$.
+
+\begin{theorem}\label{th:numexecP}
+Let $U_F(j)$ be a test case derived from the 
+process $P$ specified in the proof of Theorem~\ref{th:upperboundh}. Then
+$U_F(j)$ has
+\[
+\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot \card{\Sigma}^j
+\]
+executions.
+\end{theorem}
+\begin{proof}
+Since the union of all minimal acceptances of $P$ equals $\Sigma$, 
+the initials of $P$ satisfy $[P]^0 = \Sigma$. By construction, $P/e = P$
+for any $e\in\Sigma$, so $\trc(P) = \Sigma^*$ and $[P/s]^0 = \Sigma$
+for all $s\in\Sigma^*$. As a consequence, $U_F(j)$
+may execute $\card{\Sigma}^j$ different traces, each time executing branch (\ref{eq:ufc}),
+before finally entering branch (\ref{eq:ufd}). As shown in Theorem~\ref{th:upperboundh},
+$\card{\minhits(P/s)} =  \binom{n}{\lfloor\frac{n}{2}\rfloor}$, so there are
+$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ possible executions of branch (\ref{eq:ufd})
+after every trace of length $j$. This proves the theorem.
+\xbox
+\end{proof}
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bounds of Test Executions for Checking Failures Refinement}
