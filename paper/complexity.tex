@@ -113,18 +113,9 @@ From Theorem~\ref{th:upperboundh} we know that the worst-case bound for $h$
 above cannot be further reduced, since the full collection of minimal hitting
 sets needs to be checked at the end of each execution of $U_F(j)$.
 
-In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test \fixme{In
-\cite{DBLP:conf/icfem/CavalcantiG07}, we work with minimal acceptances. I
-didn't check \cite{Hennessy:1988:ATP:50497}.} \fxnote{jp: we have studied
-\cite{DBLP:conf/icfem/CavalcantiG07} now in more detail -- you are right, of
-course, but there is a confusion of terms: you are also using the minimal
-hitting sets we handle here in our joint paper, but you used the term
-``minimal acceptance'' for them. This is not in line with the definition of
-minimal acceptances as presented in \cite{Hennessy:1988:ATP:50497} and in
-Roscoe's books. Here, in our joint paper, minimal acceptances are introduced
-as defined in Roscoe's books. I have changed the text accordingly.} {\it
-every} non-empty subset of $\Sigma$ whose events cannot be completely refused
-in a given process state of the reference model; this leads to a worst-case
+In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test {\it every}
+non-empty subset of $\Sigma$ whose events cannot be completely refused in a
+given process state of the reference model; this leads to a worst-case
 estimate of $2^{\card{\Sigma}}-1$ for the number of different sets to be
 offered to the SUT in the last step of the test execution, so our approach
 reduces the number of test executions in comparison

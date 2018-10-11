@@ -571,24 +571,23 @@ for these, the abbreviated notation
 \[
 \minhits(P/s) = \minhits(\minaccs(P/s))
 \]
-is used. 
-
-The minimal hitting sets of minimal acceptances may be alternatively
-characterised by means of the failures of a process. To this end,
-define for any collection ${\cal C}\subseteq 2^\Sigma$ of subsets from
-$\Sigma$
+is used. The minimal hitting sets of minimal acceptances may be alternatively
+characterised by means of the failures of a process as is done
+in~\cite{DBLP:conf/icfem/CavalcantiG07}. To this end,
+in~\cite{DBLP:conf/icfem/CavalcantiG07}, the authors define, for any
+collection ${\cal C}\subseteq 2^\Sigma$ of subsets from $\Sigma$
 \begin{equation}\label{eq:minsub}
 \minsub({\cal C}) = \{ A\in {\cal C}~|~\forall B\in {\cal C}:
 B\subseteq A\Rightarrow B = A \}.
 \end{equation}
-This definition has originally been in~\cite{DBLP:conf/icfem/CavalcantiG07}:
-the collection 
-$\minsub({\cal C})$ contains all those sets of the collection ${\cal C}$ that are not true subsets of other members of ${\cal C}$. With this definition, the relation
-between failures and minimal hitting sets of minimal acceptances is established in the following lemma.
+The collection $\minsub({\cal C})$ contains all those sets of 
+${\cal C}$ that are not true subsets of other members of ${\cal C}$. With
+this definition, the relation between failures and minimal hitting sets of
+minimal acceptances is established in the following lemma.
 %
 \begin{lemma}
-    
-For any trace $s$ of CSP process $P$, define 
+
+For any trace $s$ of CSP process $P$, define
 \[
 {\cal A}_s = \{ A\subseteq \Sigma~|~(s,A)\not\in\fails(P)  \}.
 \]
@@ -725,10 +724,10 @@ A \emph{Sperner Family} is a collection ${\cal S} \subseteq 2^\Sigma$ of sets fr
 given finite universe $\Sigma$ that do not contain each other, that is, $H_1
 \not\subseteq H_2 \wedge H_2 \not\subseteq H_1$ holds for each pair $H_1\neq
 H_2\in {\cal S}$. Specialising antichains known from partial orders to finite sets
-partially ordered by $\subseteq$ results in Sperner families. 
+partially ordered by $\subseteq$ results in Sperner families.
 
 Given an {\it arbitrary} collection of subsets ${\cal C}\subset 2^\Sigma$,
-the sub-collection $\minsub({\cal C})$ defined in (\ref{eq:minsub}) 
+the sub-collection $\minsub({\cal C})$ defined in (\ref{eq:minsub})
 is a Sperner Family contained
 in ${\cal C}$.
 We further observe that
