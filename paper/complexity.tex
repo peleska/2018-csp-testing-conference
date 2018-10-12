@@ -45,6 +45,9 @@ can also be clearly specified.
 % -------------------------------------------------------------------------
 \subsection{A Reference Process With Maximal Test Complexity}
 
+
+% -----------------------------------------------------------------------------
+\subsubsection*{Process Definition and Basic Properties}
 Given an alphabet $\Sigma$ of size $\card{\Sigma} = n\ge 2$, define
 a collection of subsets of $\Sigma$ by
 \[
@@ -78,6 +81,9 @@ process $\pmax$ fulfils
 \card{\minhits(P/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor} 
 \quad \text{for all $s\in \Sigma^*$}
 \label{eq:pmaxd}
+\\
+\card{H} & = & \lfloor\frac{n}{s}\rfloor \quad \text{for all $H\in {\cal C}$}
+\label{eq:pmaxf}
 \end{eqnarray}
 \end{lemma}
 \begin{proof}
@@ -101,13 +107,23 @@ $A\cap H=\varnothing$. Since
 $\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we
 conclude
  that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
- intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
-so $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$. This 
+ intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements; this shows (\ref{eq:pmaxf})
+and $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$. The latter 
 shows  (\ref{eq:pmaxd}) and completes the proof.
 \xbox
 \end{proof}
 
-The test cases $U_F(j)$ generated from $\pmax$ have the structure
+% -----------------------------------------------------------------------------
+\subsubsection*{Test Cases of $\pmax$}
+The test cases $U_F(j)$ generated from $\pmax$ 
+can never enter branch (\ref{eq:ufa}), because $\pmax/s$ has initials $\Sigma$ for
+all traces $s\in\trc(\pmax)$ according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxa}).
+Moreover, they can never enter branch (\ref{eq:ufb}), because $\minhits(\pmax/s)$
+is never empty according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxd}).
+Finally, the minimal hitting sets used to probe the SUT at the end of a
+non-blocking  test execution are always the hitting sets of ${\cal C}$ 
+according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxe}).
+This results in a test case structure
 \begin{eqnarray*}
 \label{eq:UFP}
 U_F(j) & = & U_F(j,0,\ii n)
@@ -116,6 +132,41 @@ U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
 \\ & & \extchoice  
 \\ & & (k = j) \& \big( \Intchoice_{H\in\minhits({\cal C})} (e:H   \then \epass \then\Stop   )  \big)
 \end{eqnarray*}
+
+When considering the number of test executions to be performed by 
+$U_F(j)$ against some SUT $Q$ for all $j=0,\dots,pq-1$, the maximal number of 
+test executions is only reached if $Q$ is a correct refinement of the reference
+process or if it fails in the very last execution of the very last $U_F(j)$ 
+executed against $Q$. If an erroneous behaviour of $Q$ is revealed before this
+very last execution, the test suite is stopped and $Q$ is fixed before
+executing the suite again.
+Therefore, we consider only correct SUTs $Q$ when determining the
+maximal number of executions that can be executed.
+
+For the  $U_F(j)$ generated from $\pmax$, the number of test executions
+ to be performed is maximal if $\pmax\lessdet_F Q$ and 
+$\trc(Q) = \Sigma^*$. In such a situation, no test execution blocks early, because
+$Q/s$ can always engage into some $e\in\Sigma$   while $\#s<j$ and will never block
+in the last step when $\#s = j$ and a hitting set $H\in\minhits({\cal C})$ is 
+offered by the test case. The resulting number of executions is
+%
+\begin{equation}
+\label{eq:maxexec}
+\card{\Sigma}^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot \lfloor\frac{n}{2}\rfloor,
+\end{equation}
+%
+because all traces up to length $j$ can be executed with $U_F(j)$ entering branch
+(\ref{eq:ufc}), and each of these traces is followed by one event
+from each of the hitting sets of ${\cal C}$, and each of these hitting sets 
+contains $\lfloor\frac{n}{2}\rfloor$ elements.
+
+The number of executions specified in (\ref{eq:maxexec}) is indeed maximal for
+all reference processes $P$ fulfilling $\minhits(P/s)\neq\varnothing$ for all
+traces $s$. All these processes can never enter branch (\ref{eq:ufb}), and,
+if an execution with an SUT entered branch (\ref{eq:ufa}), this would only lead to early termination of the whole test suite, because a failure has been detected.
+As a consequence, $\card{\Sigma}^{j}$ is the maximal number of traces to be executed 
+up to length $j$, and from Theorem~\ref{th:sperner} we know that the number
+$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ of hitting sets to be tested at the end of each trace of length $j$ is already maximal.
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
