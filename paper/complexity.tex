@@ -50,9 +50,9 @@ can also be clearly specified.
 \subsubsection*{Process Definition and Basic Properties}
 Given an alphabet $\Sigma$ of size $\card{\Sigma} = n\ge 2$, define
 a collection of subsets of $\Sigma$ by
-\[
+\begin{equation}\label{eq:defC}
 {\cal C} = \{ A\subseteq\Sigma~|~\card{A} = n - \lfloor\frac{n}{2}\rfloor + 1 \}.
-\]
+\end{equation}
 %
 With this choice of ${\cal C}$, define
 \begin{equation}\label{eq:pmax}
@@ -82,7 +82,7 @@ process $\pmax$ fulfils
 \quad \text{for all $s\in \Sigma^*$}
 \label{eq:pmaxd}
 \\
-\card{H} & = & \lfloor\frac{n}{s}\rfloor \quad \text{for all $H\in {\cal C}$}
+\minhits({\cal C})  & = & \{ H\subseteq \Sigma~|~\card{H} = \lfloor\frac{n}{2}\rfloor\}
 \label{eq:pmaxf}
 \end{eqnarray}
 \end{lemma}
@@ -133,6 +133,11 @@ U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
 \\ & & (k = j) \& \big( \Intchoice_{H\in\minhits({\cal C})} (e:H   \then \epass \then\Stop   )  \big)
 \end{eqnarray*}
 
+
+
+% -----------------------------------------------------------------------------
+\subsubsection*{Maximal Number of Test Executions for $\pmax$}
+
 When considering the number of test executions to be performed by 
 $U_F(j)$ against some SUT $Q$ for all $j=0,\dots,pq-1$, the maximal number of 
 test executions is only reached if $Q$ is a correct refinement of the reference
@@ -152,13 +157,12 @@ offered by the test case. The resulting number of executions is
 %
 \begin{equation}
 \label{eq:maxexec}
-\card{\Sigma}^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot \lfloor\frac{n}{2}\rfloor,
+n^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor},
 \end{equation}
 %
 because all traces up to length $j$ can be executed with $U_F(j)$ entering branch
 (\ref{eq:ufc}), and each of these traces is followed by one event
-from each of the hitting sets of ${\cal C}$, and each of these hitting sets 
-contains $\lfloor\frac{n}{2}\rfloor$ elements.
+from each of the hitting sets of ${\cal C}$.
 
 The number of executions specified in (\ref{eq:maxexec}) is indeed maximal for
 all reference processes $P$ fulfilling $\minhits(P/s)\neq\varnothing$ for all
@@ -167,6 +171,118 @@ if an execution with an SUT entered branch (\ref{eq:ufa}), this would only lead 
 As a consequence, $\card{\Sigma}^{j}$ is the maximal number of traces to be executed 
 up to length $j$, and from Theorem~\ref{th:sperner} we know that the number
 $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ of hitting sets to be tested at the end of each trace of length $j$ is already maximal.
+
+Summing up  formula 
+(\ref{eq:maxexec}) over all test cases $U_F(0),\dots,U_F(pq-1)$ to be executed and applying the formula for the sum of a geometric progression,  this results in
+%
+\begin{equation}\label{eq:pmaxcomplexity}
+\sum_{j=0}^{pq-1} n^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor}  = 
+\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}\quad\text{with $n=\card{\Sigma}$}
+\end{equation}
+%
+as the maximal number of test executions to be performed when testing an error-free
+SUT $Q$ against reference process $\pmax$. This maximum is met when $Q$ equals $\Sigma^*$.
+ 
+
+
+% -----------------------------------------------------------------------------
+\subsubsection*{Considering Empty Collections of Minimal Hitting Sets} 
+
+The argument so far has shown that reference process $\pmax$ requires the most test 
+executions among all CSP processes $P$ whose collections of minimal hitting sets  
+$\minhits(P/s)$ are never empty for any trace $s$, so that the branch 
+(\ref{eq:ufb}) of the related test cases $U_F(j)$ can never be entered.  
+Lemma~\ref{lemma:failureshittingsets} implies that an empty collection 
+$\minhits(P/s)$
+is equivalent to $(s,A)\in\fails(P)$ for all $A\subseteq\Sigma$. This is equivalent to
+$\maxrefs(P/s) = \{ \Sigma \}$ or $\minaccs(P/s) = \{ \varnothing\}$.
+
+It remains to 
+consider the question whether reference processes $Z$ possessing failures $(s,\Sigma)$
+may require more test executions for their associated tests $U_F(j)$ than the bound
+given for $\pmax$ in (\ref{eq:pmaxcomplexity}). To this end, we consider the following process $Z$ whose behaviour is quite close to that of $\pmax$ with the only difference
+that after some pre-defined trace $\ol s \in\Sigma^*$ with $\#\ol s < pq$, 
+the process has $\Stop$ as
+an internal choice, so that $Z/s = \big(\Intchoice_{A\in{\cal C}} e:A\then \pmax\big) \intchoice \Stop$, and, consequently, $\minhits(Z/s) = \varnothing$.
+
+In the following specification of $Z$, given traces $s_1,s_2\in\Sigma^*$, the Boolean 
+expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$.
+\begin{eqnarray*}
+Z & = & Z_1(\varepsilon)
+\\
+Z_1(s) & = & (s < \ol s)\&\big( \Intchoice_{A\in{\cal C}} e:A\then Z_1(s.e)  \big)
+\\ & & \extchoice
+\\ & & (s \not< \ol s) \& \pmax
+\\ & & \extchoice
+\\ & & (s = \ol s) \& \big( \Intchoice_{A\in{\cal C}} e:A\then \max  \big)
+\intchoice \Stop
+\end{eqnarray*}
+%
+It is easy to see that $\trc(Z) = \trc(\pmax) =\Sigma^*$ and that for all 
+traces $s\neq\ol s$, $\minhits(Z/s) = \minhits(P/s) = \minhits({\cal C})$ as specified
+in Lemma~\ref{lemma:pmax}.
+
+When comparing the test cases $U_F(j)$ generated from $\pmax$ and the test cases
+$U_F^Z(j)$ created from $Z$, we note that
+\begin{enumerate}
+\item For $j < \#\ol s$, the test cases  $U_F(j)$ and $U_F^Z(j)$ are identical.
+\item For $j = \#\ol s$, branch (\ref{eq:ufb}) can be entered by $U_F^Z(j)/\ol s$, while it is blocked for $U_F(j)/\ol s$, and branch (\ref{eq:ufd}) is blocked
+for  $U_F^Z(j)/\ol s$, while it can be entered by $U_F(j)/\ol s$. As a consequence,
+the maximal number of executions that can be performed by $U_F^Z(j)$ against the SUT 
+is 
+\begin{equation}
+(n^{j} - 1)\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor} + 1
+\end{equation}
+according to (\ref{eq:maxexec}): we win one additional execution by entering 
+branch (\ref{eq:ufb}) after $\ol s$ and lose $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ executions
+by no longer being able to enter branch (\ref{eq:ufd}) after $\ol s$.
+
+\item For $j > \#\ol s$, one execution is won by entering 
+branch (\ref{eq:ufb}) after $\ol s$, no executions are lost.
+\end{enumerate}
+%
+Summing up over $j = 0,\dots,pq-1$, this results in a difference of 
+%
+\begin{equation}
+(pq  - \#\ol s) - \binom{n}{\lfloor\frac{n}{2}\rfloor}
+\end{equation}
+executions for the test cases $U_F^Z(j),\ j=0,\dots,pq-1$ in comparison to 
+the test cases $U_F(j),\ j=0,\dots,pq-1$. To assess this formula, see the function
+table for the first 19  arguments of $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ shown
+in Table~\ref{table:binom}.
+%
+\begin{table}[htp]
+\caption{Function table of $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ for arguments
+$n = 2,\dots,20$.}
+\begin{center}
+\begin{tabular}{c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+$n$ & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13  & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\\hline
+$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ &
+     2 & 3 & 6& 10 & 20 & 35 & 70 & 126 & 252 &
+     462&924&1716&3432&6435&12870&24310&48620&92378&184756
+\end{tabular}
+\end{center}
+\label{table:binom}
+\end{table}
+%
+The analysis above leads to the following complexity result.
+%
+\begin{theorem}
+Given a process alphabet $\Sigma$ with cardinality $
+\card{\Sigma} = n$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
+the normalised transition graph of $P$ has $p$ states, and the fault domain 
+${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then, if $pq < \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
+test suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ according to Theorem~\ref{th:failurestest}
+requires at most 
+%
+\begin{equation*}
+\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}
+\end{equation*}
+%
+test executions.
+\xbox
+\end{theorem}
+
 
 % -------------------------------------------------------------------------
 \subsection{Estimation of $\ell$}
