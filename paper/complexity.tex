@@ -206,13 +206,13 @@ the process has $\Stop$ as
 an internal choice, so that $Z/s = \big(\Intchoice_{A\in{\cal C}} e:A\then \pmax\big) \intchoice \Stop$, and, consequently, $\minhits(Z/s) = \varnothing$.
 
 In the following specification of $Z$, given traces $s_1,s_2\in\Sigma^*$, the Boolean 
-expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$.
+expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$. Expression $s_1\le s_2$ holds if and only if $ s_1 < s_2 \vee s_1 = s_2$ is true.
 \begin{eqnarray*}
 Z & = & Z_1(\varepsilon)
 \\
 Z_1(s) & = & (s < \ol s)\&\big( \Intchoice_{A\in{\cal C}} e:A\then Z_1(s.e)  \big)
 \\ & & \extchoice
-\\ & & (s \not< \ol s) \& \pmax
+\\ & & (s \not\le \ol s) \& \pmax
 \\ & & \extchoice
 \\ & & (s = \ol s) \& \big( (\Intchoice_{A\in{\cal C}} e:A\then \pmax)  
 \intchoice \Stop\big)
