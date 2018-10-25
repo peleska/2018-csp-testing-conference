@@ -200,10 +200,62 @@ $\maxrefs(P/s) = \{ \Sigma \}$ or $\minaccs(P/s) = \{ \varnothing\}$.
 It remains to 
 consider the question whether reference processes $Z$ possessing failures $(s,\Sigma)$
 may require more test executions for their associated tests $U_F(j)$ than the bound
-given for $\pmax$ in (\ref{eq:pmaxcomplexity}). To this end, we consider the following process $Z$ whose behaviour is quite close to that of $\pmax$ with the only difference
-that after some pre-defined trace $\ol s \in\Sigma^*$ with $\#\ol s < pq$, 
-the process has $\Stop$ as
-an internal choice, so that $Z/s = \big(\Intchoice_{A\in{\cal C}} e:A\then \pmax\big) \intchoice \Stop$, and, consequently, $\minhits(Z/s) = \varnothing$.
+given for $\pmax$ in (\ref{eq:pmaxcomplexity}). To this end, we consider an {\it arbitrary} process  $Z$ and study the potential increase of test executions if
+the behaviour of $Z$ is changed to $(Z/\ol s)\intchoice \Stop$ after some specific 
+trace $\ol s\in\trc(Z)$ with $\minhits(P/\ol s) \neq \varnothing$. This modified process is denoted by $Z({\ol s})$
+an can be specified by\footnote{We use the following prefix operators
+for given   traces $s_1,s_2\in\Sigma^*$: the Boolean 
+expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$. Expression $s_1\le s_2$ holds if and only if $ s_1 < s_2 \vee s_1 = s_2$ is true.}
+\begin{eqnarray}
+Z({\ol s}) & = & Z({\ol s},\varepsilon)
+\\
+\label{eq:zstop}
+Z(\ol s,s) & = & (s = \ol s) \& ((Z/s)\intchoice \Stop)
+\\ & & \Extchoice    \nonumber
+\\  
+\label{eq:zstoppref}
+& & (s < \ol s \wedge \minhits(P/s) = \varnothing) \& 
+\big(  (e:[P/s]^0 \then  Z(\ol s, s.e)) \intchoice \Stop \big)
+\\ & & \Extchoice   \nonumber
+\\ 
+\label{eq:zcont}
+& &           (s < \ol s\wedge \minhits(P/s) \neq \varnothing ) \& 
+\\ & & \nonumber
+\big(\Intchoice_{A\in\minaccs(P/s)\cup \{ [P/s]^0 \}}
+e : A \then Z(\ol s, s.e)          \big)
+\\ & & \Extchoice   \nonumber
+\\
+\label{eq:zlikep}
+& & (s \not\le \ol s) \& (P/s)
+\end{eqnarray}
+%
+If $Z(\ol s,s)$ has executed trace $\ol s$, its branch (\ref{eq:zstop}) is entered, 
+so the process 
+nondeterministically decides whether to continue like $Z/s$ or to stop. As a consequence,
+$Z(\ol s)/\ol s = Z(\ol s,\ol s)$ only has $\varnothing$ as minimal acceptance, and its
+  collection of minimal hitting sets is empty.
+ While $Z(\ol s)$ still executes a true prefix
+of $\ol s$, it behaves exactly as $Z$, executing either branch (\ref{eq:zstoppref}) or
+(\ref{eq:zcont}): the latter branch is taken if $P/s$ has at least one minimal hitting set,
+so that it cannot refuse all elements of $[P/s]^0$. In such a case, $P/s$ can be
+represented in a normalised form, where an initial event is selected from an internal
+choice over all minimal acceptances and over $[P/s]^0$ (the choice $[P/s]^0$ is needed
+because the union over all minimal acceptances is not necessarily identical 
+to $[P/s]^0$)~\cite[pp.~277]{Roscoe:1997:TPC:550448}. 
+The former branch is taken if $P/s$ can block all of its initials.
+As a consequence, in both branches, $Z(\ol s,s)$ 
+has the same nondeterministic behaviour and the same initials as $P/s$, as long as
+a prefix of $\ol s$ is executed. As soon as $Z(\ol s)$ has run through a trace $s$ that is no longer a prefix of $\ol s$, 
+the process continues exactly as $Z$ would do after having run through $s$. This situation
+is captured by branch (\ref{eq:zlikep}).
+Summarising, $Z(\ol s)$ behaves like $P$ for all but the
+one trace   $\ol s$.
+
+
+
+% -----------------------------------------------------------------------------
+\subsubsection*{Considering Empty Collections of Minimal Hitting Sets -- Old version} 
+
 
 In the following specification of $Z$, given traces $s_1,s_2\in\Sigma^*$, the Boolean 
 expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$. Expression $s_1\le s_2$ holds if and only if $ s_1 < s_2 \vee s_1 = s_2$ is true.
