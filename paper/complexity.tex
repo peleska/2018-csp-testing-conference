@@ -251,6 +251,18 @@ is captured by branch (\ref{eq:zlikep}).
 Summarising, $Z(\ol s)$ behaves like $P$ for all but the
 one trace   $\ol s$.
 
+Let us now  compare test executions of $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ for
+various values of $j$, where ${\ol U}_F(j)$ denotes a failures test case derived from 
+reference process $Z(\ol s)$, to executions of $(Z\parallel[\Sigma] U_F(j))$, where
+$U_F(j)$ has been derived from $Z$.
+\begin{enumerate}
+\item For $j<\#\ol s$, $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ has the same executions 
+as $(Z\parallel[\Sigma] U_F(j))$.
+
+\item For $j = \#\ol s$, $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ has $\card{\minhits(Z/\ol s)}$ fewer executions than $(Z(\ol s)\parallel[\Sigma] U_F(j))$, because 
+$Z(\ol s,\ol s)$ has an empty set of hitting sets. As a consequence, test case
+${\ol U}_F(\#\ol s)$ cannot enter branch  
+\end{enumerate}
 
 
 % -----------------------------------------------------------------------------
