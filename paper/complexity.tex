@@ -181,7 +181,7 @@ Summing up  formula
 \end{equation}
 %
 as the maximal number of test executions to be performed when testing an error-free
-SUT $Q$ against reference process $\pmax$. This maximum is met when $Q$ equals $\Sigma^*$.
+SUT $Q$ against reference process $\pmax$. This maximum is met when $\trc(Q) = \Sigma^*$.
  
 
 
@@ -202,7 +202,7 @@ consider the question whether reference processes $Z$ possessing failures $(s,\S
 may require more test executions for their associated tests $U_F(j)$ than the bound
 given for $\pmax$ in (\ref{eq:pmaxcomplexity}). To this end, we consider an {\it arbitrary} process  $Z$ and study the potential increase of test executions if
 the behaviour of $Z$ is changed to $(Z/\ol s)\intchoice \Stop$ after some specific 
-trace $\ol s\in\trc(Z)$ with $\minhits(P/\ol s) \neq \varnothing$. This modified process is denoted by $Z({\ol s})$
+trace $\ol s\in\trc(Z)$ with $\minhits(Z/\ol s) \neq \varnothing$. This modified process is denoted by $Z({\ol s})$
 an can be specified by\footnote{We use the following prefix operators
 for given   traces $s_1,s_2\in\Sigma^*$: the Boolean 
 expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$. Expression $s_1\le s_2$ holds if and only if $ s_1 < s_2 \vee s_1 = s_2$ is true.}
@@ -214,19 +214,19 @@ Z(\ol s,s) & = & (s = \ol s) \& ((Z/s)\intchoice \Stop)
 \\ & & \Extchoice    \nonumber
 \\  
 \label{eq:zstoppref}
-& & (s < \ol s \wedge \minhits(P/s) = \varnothing) \& 
-\big(  (e:[P/s]^0 \then  Z(\ol s, s.e)) \intchoice \Stop \big)
+& & (s < \ol s \wedge \minhits(Z/s) = \varnothing) \& 
+\big(  (e:[Z/s]^0 \then  Z(\ol s, s.e)) \intchoice \Stop \big)
 \\ & & \Extchoice   \nonumber
 \\ 
 \label{eq:zcont}
-& &           (s < \ol s\wedge \minhits(P/s) \neq \varnothing ) \& 
+& &           (s < \ol s\wedge \minhits(Z/s) \neq \varnothing ) \& 
 \\ & & \nonumber
-\big(\Intchoice_{A\in\minaccs(P/s)\cup \{ [P/s]^0 \}}
+\big(\Intchoice_{A\in\minaccs(Z/s)\cup \{ [Z/s]^0 \}}
 e : A \then Z(\ol s, s.e)          \big)
 \\ & & \Extchoice   \nonumber
 \\
 \label{eq:zlikep}
-& & (s \not\le \ol s) \& (P/s)
+& & (s \not\le \ol s) \& (Z/s)
 \end{eqnarray}
 %
 If $Z(\ol s,s)$ has executed trace $\ol s$, its branch (\ref{eq:zstop}) is entered, 
@@ -236,15 +236,15 @@ $Z(\ol s)/\ol s = Z(\ol s,\ol s)$ only has $\varnothing$ as minimal acceptance, 
   collection of minimal hitting sets is empty.
  While $Z(\ol s)$ still executes a true prefix
 of $\ol s$, it behaves exactly as $Z$, executing either branch (\ref{eq:zstoppref}) or
-(\ref{eq:zcont}): the latter branch is taken if $P/s$ has at least one minimal hitting set,
-so that it cannot refuse all elements of $[P/s]^0$. In such a case, $P/s$ can be
+(\ref{eq:zcont}): the latter branch is taken if $Z/s$ has at least one minimal hitting set,
+so that it can never refuse all elements of $[Z/s]^0$. In such a case, $Z/s$ can be
 represented in a normalised form, where an initial event is selected from an internal
-choice over all minimal acceptances and over $[P/s]^0$ (the choice $[P/s]^0$ is needed
+choice over all minimal acceptances and over $[Z/s]^0$ (the choice $[Z/s]^0$ is needed
 because the union over all minimal acceptances is not necessarily identical 
-to $[P/s]^0$)~\cite[pp.~277]{Roscoe:1997:TPC:550448}. 
-The former branch is taken if $P/s$ can block all of its initials.
+to $[Z/s]^0$)~\cite[pp.~277]{Roscoe:1997:TPC:550448}. 
+The former branch is taken if $Z/s$ can block all of its initials.
 As a consequence, in both branches, $Z(\ol s,s)$ 
-has the same nondeterministic behaviour and the same initials as $P/s$, as long as
+has the same nondeterministic behaviour and the same initials as $Z/s$, as long as
 a prefix of $\ol s$ is executed. As soon as $Z(\ol s)$ has run through a trace $s$ that is no longer a prefix of $\ol s$, 
 the process continues exactly as $Z$ would do after having run through $s$. This situation
 is captured by branch (\ref{eq:zlikep}).
@@ -259,10 +259,97 @@ $U_F(j)$ has been derived from $Z$.
 \item For $j<\#\ol s$, $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ has the same executions 
 as $(Z\parallel[\Sigma] U_F(j))$.
 
-\item For $j = \#\ol s$, $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ has $\card{\minhits(Z/\ol s)}$ fewer executions than $(Z(\ol s)\parallel[\Sigma] U_F(j))$, because 
-$Z(\ol s,\ol s)$ has an empty set of hitting sets. As a consequence, test case
-${\ol U}_F(\#\ol s)$ cannot enter branch  
+\item For $j = \#\ol s$, $(Z(\ol s)\parallel[\Sigma] {\ol U}_F(j))$ has 
+$(\card{\minhits(Z/\ol s)} - 1)$ fewer executions than $(Z\parallel[\Sigma] U_F(j))$, because 
+$Z(\ol s,\ol s)$ has an empty set of hitting sets, since 
+$Z(\ol s,\ol s) = (Z/\ol s)\intchoice\Stop$. As a consequence, test case
+${\ol U}_F(\#\ol s)$ can only enter branches 
+(\ref{eq:ufa})  or (\ref{eq:zcont}) after having run through trace
+$\ol s$. The former branch is available if and only if it is available in $U_F(\#\ol s)$, the latter just stops the test after issuing the $\epass$ event.
+
+\item For $j > \#\ol s$, one execution is won by entering 
+branch (\ref{eq:ufb}) after $\ol s$, no executions are lost.
 \end{enumerate}
+%
+Summing up over all test cases for $j=0,\dots,pq-1$, the difference in test executions generated
+from $Z(\ol s)$ and those generated from  $Z$ is
+\begin{equation}
+ pq - \#\ol s       - \card{\minhits(Z/\ol s)}.
+\end{equation}
+%
+This expression is maximal for $\card{\minhits(Z/\ol s)} = 1$ (recall that
+the definition of $Z(\ol s)$ requires $\card{\minhits(Z/\ol s)} > 0$). 
+The number of hitting sets in $\minhits(Z/\ol s)$ is one if and only if the
+minimal acceptances of $Z/\ol s$ have exactly one element in their common intersection.
+The maximal length of 
+$\ol s$ where the expression remains strictly positive is then $pq - 2$.
+
+
+The construction of $Z(\ol s)$ can be generalised by using $k$ traces 
+${\ol s}_i, \ i = 1\dots,k$ of the same length $\ol j$, 
+after that the modified process behaves as 
+$(Z/{\ol s}_i)\intchoice \Stop$. Generalising the case distinction above, 
+\begin{enumerate}
+\item the number of test executions remains unchanged for $j < \ol j$,
+\item the number of   executions lost for $j = \ol j$ is at least 
+$k$ (assuming that for all $i$, $\card{\minhits(Z/{\ol s}_i)} = 1$), and
+\item the number of executions won for $j > \ol j$ is $k$.
+\end{enumerate}
+%
+The number $k$ of traces ${\ol s}_i,\ i=1,\dots,k$ is bounded by the maximal number
+of traces that can be executed by $(Z\parallel[\Sigma] U_F(j))$, which is bounded by
+$\card{\Sigma}^{\ol j}$ (this bound is reached, for example, 
+for process $\pmax$ discussed above). If $k$ equals this maximal number, there is no need
+to execute test case ${\ol U}_F(\ol j)$ any longer, because it can only stop after $\epass$, whenever a trace of length $\ol j$ is executed. 
+
+Summing up over all test cases for such a $k \le \card{\Sigma}^{\ol j}$, this results in 
+an upper bound of
+\begin{equation}
+ \card{\Sigma}^{\ol j}(pq - \ol j      - 1)
+\end{equation}
+additional test executions in comparison to the number of executions needed for all tests
+of $Z$. Now we can apply this construction to all traces lengths from $0$ to $pq-2$ (we have 
+explained above that test executions are lost for trace lengths greater than $pq-2$). This results in an upper bound of
+\begin{equation}
+\sum_{j=0}^{pq-2}  n^j(pq - j      - 1) =  
+\frac{n^{pq} + pq - npq -1}{(n - 1)^2}
+\quad\text{with $n = \card{\Sigma}$}
+\end{equation}
+additional test executions that can be gained by applying the construction technique
+explained above for $Z(\ol s)$, extended to all traces of length less or equal to $pq-2$.
+%
+Summarising this result and the one previously obtained in (\ref{eq:maxexec}),
+the following complexity bounds are obtained.
+%
+\begin{theorem}
+Given a process alphabet $\Sigma$ with cardinality $
+\card{\Sigma} = n$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
+the normalised transition graph of $P$ has $p$ states, and the fault domain 
+${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then the number of test executions to be performed   using the complete test 
+suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ as specified in Theorem~\ref{th:failurestest} has the following bounds.
+%
+\begin{enumerate}
+\item If $pq \le \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
+test suite  
+requires at most 
+%
+\begin{equation*}
+\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}
+\end{equation*}
+%
+test executions. This upper bound is reached for process $\pmax$ specified above.
+
+\item If $pq > \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
+test suite  
+requires less than 
+\begin{equation*}
+pq\frac{1-n^{pq}}{1-n} +
+\frac{n^{pq} + pq - npq -1}{(n - 1)^2} \qquad\text{@todo}
+\end{equation*}
+executions.
+\end{enumerate}
+\xbox
+\end{theorem}
 
 
 % -----------------------------------------------------------------------------
