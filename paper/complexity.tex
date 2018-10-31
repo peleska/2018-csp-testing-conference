@@ -2,24 +2,24 @@
 \label{sec:complexity}
 % ================================================================================
 
-In this section, we calculate upper bounds for the total number of test
-executions to be performed when testing for failures refinement 
-and---as a corollary---trace refinement.
-Theorem~\ref{th:failurestest} specifies that all tests $U_F(j),\ 0\le j < pq$
-need to be executed, where $p$ denotes the number of nodes in the transition
-graph of the reference process $P$, and $q\ge p$ is an estimate for the
-maximal number of nodes in the SUT's transition graph. Therefore, we will first
-calculate a bound for the number of test executions to be performed for test
-$U_F(j)$ and then summarise  these bounds over all $j$ from $0$ to $pq-1$.
-
-For the worst-case estimate, we first introduce a CSP reference process $\pmax$
-which 
-turns out to be--given a fixed alphabet $\Sigma$---the test 
-model leading to the maximal number 
-of test executions for every $U_F(j)$ when considering large alphabets. In the case
-of small alphabets and large values of $pq-1$, it will turn out below that a variant
-of $\pmax$ will lead to the maximal number of executions. The conditions for this
-can also be clearly specified.
+%In this section, we calculate estimates for the maximal number of test
+%executions to be performed when testing for failures refinement 
+%and---as a corollary---trace refinement.
+%Theorem~\ref{th:failurestest} specifies that all tests $U_F(j),\ 0\le j < pq$
+%need to be executed, where $p$ denotes the number of nodes in the transition
+%graph of the reference process $P$, and $q\ge p$ is an estimate for the
+%maximal number of nodes in the SUT's transition graph. Therefore, we will first
+%calculate a bound for the number of test executions to be performed for test
+%$U_F(j)$ and then summarise  these bounds over all $j$ from $0$ to $pq-1$.
+%
+%For the worst-case estimate, we first introduce a CSP reference process $\pmax$
+%which 
+%turns out to be--given a fixed alphabet $\Sigma$---the test 
+%model leading to the maximal number 
+%of test executions for every $U_F(j)$ when considering large alphabets. In the case
+%of small alphabets and large values of $pq-1$, it will turn out below that a variant
+%of $\pmax$ will lead to the maximal number of executions. The conditions for this
+%can also be clearly specified.
 
 
 
@@ -43,11 +43,11 @@ can also be clearly specified.
 
 
 % -------------------------------------------------------------------------
-\subsection{A Reference Process With Maximal Test Complexity}
+\subsection{Estimates for the Maximal Number of Failures Test Executions}
 
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Process Definition and Basic Properties}
+\subsubsection*{A Reference Process}
 Given an alphabet $\Sigma$ of size $\card{\Sigma} = n\ge 2$, define
 a collection of subsets of $\Sigma$ by
 \begin{equation}\label{eq:defC}
@@ -59,7 +59,7 @@ With this choice of ${\cal C}$, define
 \pmax = \Intchoice_{A\in{\cal C}} e:A\then \pmax
 \end{equation}
 %
-The important properties of $\pmax$ are summarised in the following lemma.
+The relevant properties of $\pmax$ are summarised in the following lemma.
 %
 \begin{lemma}\label{lemma:pmax}
 Given alphabet $\Sigma$ with cardinality $\card{\Sigma} = n\ge 2$,
@@ -166,7 +166,7 @@ from each of the hitting sets of ${\cal C}$.
 
 The number of executions specified in (\ref{eq:maxexec}) is indeed maximal for
 all reference processes $P$ fulfilling $\minhits(P/s)\neq\varnothing$ for all
-traces $s$. All these processes can never enter branch (\ref{eq:ufb}), and,
+traces $s$: All these processes can never enter branch (\ref{eq:ufb}), and,
 if an execution with an SUT entered branch (\ref{eq:ufa}), this would only lead to early termination of the whole test suite, because a failure has been detected.
 As a consequence, $\card{\Sigma}^{j}$ is the maximal number of traces to be executed 
 up to length $j$, and from Theorem~\ref{th:sperner} we know that the number
@@ -182,7 +182,13 @@ Summing up  formula
 %
 as the maximal number of test executions to be performed when testing an error-free
 SUT $Q$ against reference process $\pmax$. This maximum is met when $\trc(Q) = \Sigma^*$.
- 
+If one is only interested in the order of magnitude, the maximal nmber of executions 
+may be re-written as 
+%
+\begin{equation} 
+\label{eq:maxO}
+O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot n^{pq-1}\big)\quad\text{with $n=\card{\Sigma}$}.
+\end{equation} 
 
 
 % -----------------------------------------------------------------------------
@@ -264,7 +270,7 @@ $(\card{\minhits(Z/\ol s)} - 1)$ fewer executions than $(Z\parallel[\Sigma] U_F(
 $Z(\ol s,\ol s)$ has an empty set of hitting sets, since 
 $Z(\ol s,\ol s) = (Z/\ol s)\intchoice\Stop$. As a consequence, test case
 ${\ol U}_F(\#\ol s)$ can only enter branches 
-(\ref{eq:ufa})  or (\ref{eq:zcont}) after having run through trace
+(\ref{eq:ufa})  or (\ref{eq:ufb}) after having run through trace
 $\ol s$. The former branch is available if and only if it is available in $U_F(\#\ol s)$, the latter just stops the test after issuing the $\epass$ event.
 
 \item For $j > \#\ol s$, one execution is won by entering 
@@ -296,288 +302,77 @@ $k$ (assuming that for all $i$, $\card{\minhits(Z/{\ol s}_i)} = 1$), and
 \item the number of executions won for $j > \ol j$ is $k$.
 \end{enumerate}
 %
-The number $k$ of traces ${\ol s}_i,\ i=1,\dots,k$ is bounded by the maximal number
-of traces that can be executed by $(Z\parallel[\Sigma] U_F(j))$, which is bounded by
-$\card{\Sigma}^{\ol j}$ (this bound is reached, for example, 
-for process $\pmax$ discussed above). If $k$ equals this maximal number, there is no need
+The number $k$ of traces ${\ol s}_i,\ i=1,\dots,k$ with fixed length $\#{\ol s}_i=\ol j$ is bounded by the maximal number
+of traces that can be executed by $(Z\parallel[\Sigma] U_F(\ol j))$, which is bounded by
+$\card{\Sigma}^{\ol j}$. If $k$ equals this maximal number, there is no need
 to execute test case ${\ol U}_F(\ol j)$ any longer, because it can only stop after $\epass$, whenever a trace of length $\ol j$ is executed. 
 
-Summing up over all test cases for such a $k \le \card{\Sigma}^{\ol j}$, this results in 
+Summing up over all test cases ${\ol U}_F(j),\ j = \ol j,\dots,pq-1$, for a given 
+ $k \le \card{\Sigma}^{\ol j}$, this results in 
 an upper bound of
 \begin{equation}
  \card{\Sigma}^{\ol j}(pq - \ol j      - 1)
 \end{equation}
 additional test executions in comparison to the number of executions needed for all tests
-of $Z$. Now we can apply this construction to all traces lengths from $0$ to $pq-2$ (we have 
-explained above that test executions are lost for trace lengths greater than $pq-2$). This results in an upper bound of
-\begin{equation}
-\sum_{j=0}^{pq-2}  n^j(pq - j      - 1) =  
-\frac{n^{pq} + pq - npq -1}{(n - 1)^2}
-\quad\text{with $n = \card{\Sigma}$}
-\end{equation}
-additional test executions that can be gained by applying the construction technique
-explained above for $Z(\ol s)$, extended to all traces of length less or equal to $pq-2$.
-%
-Summarising this result and the one previously obtained in (\ref{eq:maxexec}),
-the following complexity bounds are obtained.
+of $Z$. The maximal value of this term is reached for $\ol j = pq - 2$: this is the maximal exponent where $(pq - \ol j      - 1)$ is still greater than zero. We conclude that the
+maximal increase of test executions to be gained if processes possess failures $(s,\Sigma)$
+is of the order $\card{\Sigma}^{pq - 2}$. This can be neglected in comparison to 
+the worst case applicable for processes that do not possess any failures $(s,\Sigma)$, because 
+formula (\ref{eq:maxO}) shows that the number of test executions required for the latter   is of order $\card{\Sigma}^{pq - 1}$.
+
+These considerations lead to the following theorem
 %
 \begin{theorem}
 Given a process alphabet $\Sigma$ with cardinality $
 \card{\Sigma} = n$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
 the normalised transition graph of $P$ has $p$ states, and the fault domain 
-${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then the number of test executions to be performed   using the complete test 
-suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ as specified in Theorem~\ref{th:failurestest} has the following bounds.
+${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then the maximal 
+number of test executions to be performed   using the complete test 
+suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ as specified in Theorem~\ref{th:failurestest} is of order
 %
-\begin{enumerate}
-\item If $pq \le \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
-test suite  
-requires at most 
-%
-\begin{equation*}
-\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}
-\end{equation*}
-%
-test executions. This upper bound is reached for process $\pmax$ specified above.
-
-\item If $pq > \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
-test suite  
-requires less than 
-\begin{equation*}
-pq\frac{1-n^{pq}}{1-n} +
-\frac{n^{pq} + pq - npq -1}{(n - 1)^2} \qquad\text{@todo}
-\end{equation*}
-executions.
-\end{enumerate}
+\begin{equation*} 
+O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot n^{pq-1}\big)\quad\text{with $n=\card{\Sigma}$}.
+\end{equation*} 
 \xbox
 \end{theorem}
-
-
-% -----------------------------------------------------------------------------
-\subsubsection*{Considering Empty Collections of Minimal Hitting Sets -- Old version} 
-
-
-In the following specification of $Z$, given traces $s_1,s_2\in\Sigma^*$, the Boolean 
-expression $ s_1 < s_2$ evaluates to $\ist$ if and only if $s_1$ is a true prefix of $s_2$. Expression $s_1\le s_2$ holds if and only if $ s_1 < s_2 \vee s_1 = s_2$ is true.
-\begin{eqnarray*}
-Z & = & Z_1(\varepsilon)
-\\
-Z_1(s) & = & (s < \ol s)\&\big( \Intchoice_{A\in{\cal C}} e:A\then Z_1(s.e)  \big)
-\\ & & \extchoice
-\\ & & (s \not\le \ol s) \& \pmax
-\\ & & \extchoice
-\\ & & (s = \ol s) \& \big( (\Intchoice_{A\in{\cal C}} e:A\then \pmax)  
-\intchoice \Stop\big)
-\end{eqnarray*}
 %
-It is easy to see that $\trc(Z) = \trc(\pmax) =\Sigma^*$ and that for all 
-traces $s\neq\ol s$, $\minhits(Z/s) = \minhits(P/s) = \minhits({\cal C})$ as specified
-in Lemma~\ref{lemma:pmax}.
-
-When comparing the test cases $U_F(j)$ generated from $\pmax$ and the test cases
-$U_F^Z(j)$ created from $Z$, we note that
-\begin{enumerate}
-\item For $j < \#\ol s$, the test cases  $U_F(j)$ and $U_F^Z(j)$ are identical.
-\item For $j = \#\ol s$, branch (\ref{eq:ufb}) can be entered by $U_F^Z(j)/\ol s$, while it is blocked for $U_F(j)/\ol s$, and branch (\ref{eq:ufd}) is blocked
-for  $U_F^Z(j)/\ol s$, while it can be entered by $U_F(j)/\ol s$. As a consequence,
-the maximal number of executions that can be performed by $U_F^Z(j)$ against the SUT 
-is 
-\begin{equation}
-(n^{j} - 1)\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor} + 1
-\end{equation}
-according to (\ref{eq:maxexec}): we win one additional execution by entering 
-branch (\ref{eq:ufb}) after $\ol s$ and lose $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ executions
-by no longer being able to enter branch (\ref{eq:ufd}) after $\ol s$.
-
-\item For $j > \#\ol s$, one execution is won by entering 
-branch (\ref{eq:ufb}) after $\ol s$, no executions are lost.
-\end{enumerate}
-%
-Summing up over $j = 0,\dots,pq-1$, this results in a difference of 
-%
-\begin{equation}
-(pq  - \#\ol s) - \binom{n}{\lfloor\frac{n}{2}\rfloor}
-\end{equation}
-executions for the test cases $U_F^Z(j),\ j=0,\dots,pq-1$ in comparison to 
-the test cases $U_F(j),\ j=0,\dots,pq-1$. To assess this formula, see the function
-table for the first 19  arguments of $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ shown
-in Table~\ref{table:binom}.
-%
-\begin{table}[htp]
-\caption{Function table of $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ for arguments
-$n = 2,\dots,20$.}
-\begin{center}
-\begin{tabular}{c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
-$n$ & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13  & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\\hline
-$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ &
-     2 & 3 & 6& 10 & 20 & 35 & 70 & 126 & 252 &
-     462&924&1716&3432&6435&12870&24310&48620&92378&184756
-\end{tabular}
-\end{center}
-\label{table:binom}
-\end{table}
-%
-The analysis above leads to the following complexity result.
-%
-\begin{theorem}
-Given a process alphabet $\Sigma$ with cardinality $
-\card{\Sigma} = n$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
-the normalised transition graph of $P$ has $p$ states, and the fault domain 
-${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then, if $pq < \binom{n}{\lfloor\frac{n}{2}\rfloor}$, the complete
-test suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ according to Theorem~\ref{th:failurestest}
-requires at most 
-%
-\begin{equation*}
-\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}
-\end{equation*}
-%
-test executions.
-\xbox
-\end{theorem}
-
-
-% -------------------------------------------------------------------------
-\subsection{Estimation of $\ell$}
-The first factor $\ell$ has worst-case upper bound $\ell\le \card{\Sigma}^j$.
-As an example where this upper bound is really met, we consider the reference
-process
-\[
-RUN(\Sigma) = e:\Sigma \then RUN(\Sigma).
-\]
-The normalised transition graph of this process has a single state, and its initials
-are $[RUN(\Sigma)]^0 = \Sigma$. Therefore, the associated test process $U_F(j)$ can
-never enter branches (\ref{eq:ufa}) and (\ref{eq:ufb}), but there are exactly
-$\card{\Sigma}^j$ different traces of length $j$ exercising branch (\ref{eq:ufc})
-for each of their events.
-
-% -------------------------------------------------------------------------
-\subsection{Estimation of $h$}
-Given a set $\minaccs(P/s) = \{ A_1,\dots, A_\alpha \}$ of   minimal
-acceptances, the cardinality   $h = \card{\minhits(P/s)}$ has the upper bound
-\[
-h \le \binom{n}{\lfloor\frac{n}{2}\rfloor}, \quad \text{where $n = \card{\Sigma}$.}
-\]
-This follows from Theorem~\ref{th:sperner}, since $\minhits(P/s)$ is a
-Sperner Family~(see Section~\ref{sec:sperner}). The next theorem shows that
-this upper bound can really be reached by collections of minimal hitting sets
-associated with a CSP process state.
-
-\begin{theorem}
-\label{th:upperboundh}
-Let  $\Sigma$  be an alphabet with cardinality $n\ge 2$.  Then
-there exists a CSP process $P$ with
-\[
-\card{\text{minHit}(P)} = \binom{n}{\lfloor\frac{n}{2}\rfloor}.
-\]
-\end{theorem}
-\begin{proof}
-Let ${\cal C}$ be the collection of all subsets of $\Sigma$ with cardinality
-$n-\lfloor{\frac{n}{2}}\rfloor+1$. Then the CSP process
-\[
-P = \Intchoice_{A\in {\cal C}} e:A\then P
-\]
-fulfils $\minaccs(P) = {\cal C}$. Let $H$ be any minimal hitting set of ${\cal C}$. Then
-$H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because
-otherwise $\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any
-subset $A\subseteq \Sigma\setminus H$ with cardinality
-$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in ${\cal C}$, but satisfy
-$A\cap H=\varnothing$. Since
-$\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we
-conclude
- that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
- intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements,
-so $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$.
-\xbox
-\end{proof}
-%
-To get an approximation of the maximal size of $\minhits(P/s)$ for large $n$,
-recall Stirling's approximation~\cite[p.~112]{Graham:1994:CMF:562056}
-\[
-m! \approx \sqrt{2\pi m} \cdot \big( \frac{m}{e} \big)^m, \quad\text{where $e$ denotes the Euler Number.}
-\]
-Applying this approximation when $n = \card{\Sigma}$ is even and $m = (n/2)$
-results in
-\[
-h \le \binom{2m}{m} \approx \frac{4^m}{\sqrt{\pi m}} =
-\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}.
-\]
-%
-We note that, due to this approximation result,
-$h$ is   smaller than $2^{\card{\Sigma}}-1$, the cardinality of the
-non-empty subsets of $\Sigma$.
-
-\begin{theorem}\label{th:numexecP}
-Let $U_F(j)$ be a test case derived from the 
-process $P$ specified in the proof of Theorem~\ref{th:upperboundh}. Then
-$U_F(j)$ has
-\[
-\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot \card{\Sigma}^j
-\]
-executions.
-\end{theorem}
-\begin{proof}
-Since the union of all minimal acceptances of $P$ equals $\Sigma$, 
-the initials of $P$ satisfy $[P]^0 = \Sigma$. By construction, $P/e = P$
-for any $e\in\Sigma$, so $\trc(P) = \Sigma^*$ and $[P/s]^0 = \Sigma$
-for all $s\in\Sigma^*$. As a consequence, $U_F(j)$
-may execute $\card{\Sigma}^j$ different traces, each time executing branch (\ref{eq:ufc}),
-before finally entering branch (\ref{eq:ufd}). As shown in Theorem~\ref{th:upperboundh},
-$\card{\minhits(P/s)} =  \binom{n}{\lfloor\frac{n}{2}\rfloor}$, so there are
-$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ possible executions of branch (\ref{eq:ufd})
-after every trace of length $j$. This proves the theorem.
-\xbox
-\end{proof}
-
-% -------------------------------------------------------------------------
-\subsection{Upper Bounds of Test Executions for Checking Failures Refinement}
-
-By Theorem~\ref{th:failurestest}, we need to execute the tests $U_F(j)$ for
-$j = 0,\dots,(pq-1)$; this results in a worst-case bound defined below, where
-we use the formula for the sum of the geometric progression.
-%
-\[
-h\cdot \big( \frac{1-\card{\Sigma}^{pq}}{1-\card{\Sigma}} \big),\
- \text{or, asymptotically,}\  O(\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}\cdot\card{\Sigma}^{(pq-1)}).
- \]
-%
-From Theorem~\ref{th:upperboundh} we know that the worst-case bound for $h$
-above cannot be further reduced, since the full collection of minimal hitting
-sets needs to be checked at the end of each execution of $U_F(j)$.
-
 In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test {\it every}
 non-empty subset of $\Sigma$ whose events cannot be completely refused in a
 given process state of the reference model; this leads to a worst-case
 estimate of $2^{\card{\Sigma}}-1$ for the number of different sets to be
-offered to the SUT in the last step of the test execution, so our approach
-reduces the number of test executions in comparison
-to~\cite{Hennessy:1988:ATP:50497} by a factor of $1/{\sqrt{2\pi
-\card{\Sigma}}}$. In Fig.~\ref{fig:minhita}, the reduction is visualised by a
-function plot of $2^{\card{\Sigma}}$ versus
-$\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$.
+offered to the SUT in the last step of the test execution. This number is significantly larger than the worst-case estimate $\binom{n}{\lfloor n/2\rfloor}$ calculated above for the 
+hitting sets to be checked.
+In Fig.~\ref{fig:minhita}, the reduction is visualised by plots of
+the two functions. 
 
+
+
+ 
 In~\cite{DBLP:conf/icfem/CavalcantiG07}, the authors also use minimal hitting
 sets\footnote{However, they are denoted by {\it minimal acceptances}
-in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but they do not give an upper
-bound for the number of test executions to be performed.
+in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but they do not give an estimate for the number of test executions to be performed.
+
 
 % .....................................................................................
  \begin{figure}
  %%\hspace*{-40mm}
  \begin{center}
-\includegraphics[width=.8\textwidth]{minhit-fig.pdf}
+\includegraphics[width=.8\textwidth]{curvecomparison.pdf}
 \end{center}
-\vspace*{-10mm}
+%\vspace*{-10mm}
 \caption{Function plot $2^{\card{\Sigma}}$ versus $\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$.}
  \label{fig:minhita}
  \end{figure}
-% .......................................................................................
-
+% ....................................................................................... 
+ 
+ 
 % -------------------------------------------------------------------------
-\subsection{Upper Bounds of Test Executions for Checking Trace Refinement}
+\subsection{Estimates for the Maximal Number of Trace Test Executions}
 
 According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
 refinement just contains the adaptive test case $U_T(pq-1)$. As derived for
-$U_F(j)$ above, the number of executions performed by $(Q\parallel[\Sigma]
-U_T(pq-1))$ is bounded by $\card{\Sigma}^{pq-1}$.
+$U_F(j)$ above, the maximal number of executions to be performed by $(Q\parallel[\Sigma]
+U_T(pq-1))$ is of order  $O\big(\card{\Sigma}^{pq-1}\big)$.
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
