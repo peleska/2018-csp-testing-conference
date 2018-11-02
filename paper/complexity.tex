@@ -285,7 +285,7 @@ from $Z(\ol s)$ and those generated from  $Z$ is
 %
 This expression is maximal for $\card{\minhits(Z/\ol s)} = 1$ (recall that
 the definition of $Z(\ol s)$ requires $\card{\minhits(Z/\ol s)} > 0$). 
-The number of hitting sets in $\minhits(Z/\ol s)$ is one if and only if the
+The number of hitting sets in $\minhits(Z/\ol s)$ is 1, for example, if   the
 minimal acceptances of $Z/\ol s$ have exactly one element in their common intersection.
 The maximal length of 
 $\ol s$ where the expression remains strictly positive is then $pq - 2$.
@@ -314,12 +314,17 @@ an upper bound of
  \card{\Sigma}^{\ol j}(pq - \ol j      - 1)
 \end{equation}
 additional test executions in comparison to the number of executions needed for all tests
-of $Z$. The maximal value of this term is reached for $\ol j = pq - 2$: this is the maximal exponent where $(pq - \ol j      - 1)$ is still greater than zero. We conclude that the
-maximal increase of test executions to be gained if processes possess failures $(s,\Sigma)$
-is of the order $\card{\Sigma}^{pq - 2}$. This can be neglected in comparison to 
-the worst case applicable for processes that do not possess any failures $(s,\Sigma)$, because 
-formula (\ref{eq:maxO}) shows that the number of test executions required for the latter   is of order $\card{\Sigma}^{pq - 1}$.
+of $Z$. 
 
+So far, the additional executions originating from traces with fixed length $\ol j\in\{0,\dots,pq-2\}$ have been considered. Summing up over all lengths $\ol j$ results in
+an upper bound of 
+%
+\begin{equation}
+\sum_{j=0}^{pq-2} n^j(pq - j - 1) = \frac{n^{pq} - npq + pq - 1}{(n-1)^2}\quad\text{with}\ 
+n=\card{\Sigma}
+\end{equation}
+%
+additional test executions. This has the order of magnitude $O(n^{pq-2})$. Therefore, the additional test executions won by being able to enter branches (\ref{eq:ufb}) in test executions  can be neglected in comparison to the order of magnitude calculated for $\pmax$ in (\ref{eq:maxO}).  
 These considerations lead to the following theorem
 %
 \begin{theorem}
@@ -360,7 +365,7 @@ in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but they do not give an estimate for 
 \includegraphics[width=.8\textwidth]{curvecomparison.pdf}
 \end{center}
 %\vspace*{-10mm}
-\caption{Function plot $2^{\card{\Sigma}}$ versus $\frac{2^\card{\Sigma}}{\sqrt{2\pi \card{\Sigma}}}$.}
+\caption{Function plot $2^{\card{\Sigma}}$ versus $\binom{n}{\lfloor \frac{n}{2}\rfloor}$.}
  \label{fig:minhita}
  \end{figure}
 % ....................................................................................... 
