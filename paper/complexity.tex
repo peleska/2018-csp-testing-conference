@@ -205,66 +205,83 @@ $(s,\Sigma)\in\fails(P)$ or
 $\maxrefs(P/s) = \{ \Sigma \}$ or $\minaccs(P/s) = \{ \varnothing\}$.
 
 It remains to 
-consider the question whether reference processes $\ol Z$ possessing failures $(s,\Sigma)$
+consider the question whether reference processes $Z$ possessing failures $(s,\Sigma)$
 may require more test executions for their associated tests $U_F(j)$ than the bound
-given for $\pmax$ in (\ref{eq:pmaxcomplexity}), because process states $\ol Z/s$ with  
-$\minhits(\ol Z/s)=\varnothing$ allow for test executions entering branch (\ref{eq:ufb}).
-To this end, we consider an {\it arbitrary} process  $Z$ represented by its transition graph $G(Z)$ with $p$ nodes. 
-Let $v$ be any node of $G(Z)$, such 
-that $\minaccs(v)\neq\{\varnothing \}$. Now modify $G(Z)$ by setting $v$'s acceptance label
-to $\{\varnothing \}$. This produces a modified node $\ol v$ with $[\ol v]^0=[v]^0$, but
-$\minaccs(\ol v)=\{\varnothing \}$. Now it is checked whether $\ol v$ is equivalent to any other node of $G(Z)$. If this is not the case, the modified transition graph $G(\ol Z)$ constructed by
-exchanging $v$ with $\ol v$ and keeping all other nodes and all edges of $G(Z)$  in the new graph without changes has exactly the same number of nodes as $G(Z)$.
-
-Now consider a test case ${\ol U}_F(j)$ for $j\in\{ 0,\dots,pq-1 \}$ derived from $G(\ol Z)$
-and compare it to $U_F(j)$ derived from $G(Z)$. Let $s$ be a trace of  $\ol Z$ such that
-$\#s\le j$ and   $G(\ol Z)/s = \ol v$, so that $s$ is also a trace of ${\ol U}_F(j)$. 
-Then we have two cases to distinguish.
+given for $\pmax$ in (\ref{eq:pmaxcomplexity}), because process states $Z/s$ with  
+$\minhits(Z/s)=\varnothing$ allow for test executions entering branch (\ref{eq:ufb}).
+To this end, consider a test cases $U_F(j)$ constructed from such a process $Z$. Every trace
+$s\in\trc(Z)$ with $\#s<j$ ending in a process state $Z/s$ with $\minhits(Z/s)=\varnothing$ allows for 
+%
+\begin{itemize}
+\item one execution of branch (\ref{eq:ufb}), where the test execution 
+$(Z\parallel[\Sigma]U_F(j))/s$ stops after $\epass$, and
+\item $\card{[Z/s]^0}$   continuations of the test execution with events $e\in [Z/s]^0$. 
+\end{itemize}
+%
+For every trace $s\in\trc(Z)$ with $\#s=j$,
+%
+\begin{itemize}
+\item one execution of branch (\ref{eq:ufb}) follows if 
+$\minhits(Z/s)=\varnothing$, and otherwise
+\item $\card{\minhits(Z/s)}$ executions checking acceptance of minimal hitting sets. 
+\end{itemize}
+%
+For a rough estimate of the worst case upper bound suppose that
+%
 \begin{enumerate}
-\item If $\#s < j$, then ${\ol U}_F(j)/s$ allows for one additional execution step entering branch 
-(\ref{eq:ufb}) of the test, due to construction of $\ol v$. (The other executable branch after
-$s$ is (\ref{eq:ufc}) which is also executable for $U_F(j)/s$.)
-
-\item If $\#s = j$, then ${\ol U}_F(j)/s$ loses $\card{\minhits(v)}$ execution steps checking 
-that $Z/s$ never blocks one of the hitting sets in $\minhits(v)$ and wins one execution step 
-because again, branch 
-(\ref{eq:ufb}) of the test can now be entered. The difference $1 - \card{\minhits(v)}$ has 0 as
-the largest possible value. This applies, for example, if the intersection of 
-all minimal acceptances of $n$ contains exactly one element.
+\item $[Z/s]^0 = \Sigma$ for all traces $s$ of $Z$,
+\item all traces $s$ with $\#s<j$ end in a state with empty minimal hitting sets, and
+\item all traces $s$ with $\#s=j$ end in a state with a maximal number $\binom{n}{n/2}$
+ of hitting sets.
 \end{enumerate}
 %
-The exchange of node $v$ by $\ol v$ can be repeated several times, as long as $\ol v$ is not equivalent to any other node in the successively updated transition graph  $G(\ol Z)$.
-As a very rough estimate for the maximal number of additional test executions of ${\ol U}_F(j)/s$
-in comparison to $U_F(j)$ we can   assume that $\card{\minhits(v)} = 1$ and that {\it all}
-$\card{\Sigma}^k$ traces of length $k < j$ lead to one of the new nodes $\ol v$. As a result,
-${\ol U}_F(j)/s$ has one additional execution step for every trace of length less than $j$.  
-This results in an upper bound of 
+Note that this situation cannot be realised for all $j\in\{0,\dots,pq-1\}$, because
+the traces of 
+$U_F(p-1)$ already cover all states of $Z$'s transition graph according to Lemma~\ref{lemma:extendV}, and if all states of $Z$ have empty hitting sets, there are no acceptance checks to be performed in the last step of the test execution. Therefore, the   upper bound calculated next cannot be reached by a real CSP process.
+
+With the 3 assumptions above, we calculate that
+%
+\begin{itemize}
+\item  $U_F(0)$ has  $\binom{n}{n/2}$ executions,
+\item $U_F(j),\ j > 0$ has $\sum_{i=0}^{j-1} n^i = \frac{n^j - 1}{n-1}$ executions of branch (\ref{eq:ufb}), ($n = \card{\Sigma}$), and  
+\item $U_F(j),\ j > 0$ has $\binom{n}{n/2}\cdot n^j$ executions where the acceptance of 
+hitting sets is checked after having run through a trace of length $j$. 
+\end{itemize}
+%
+Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$ this results in an upper bound of
+%
 \begin{equation}
-\sum_{i=0}^{j-1}n^i = \frac{n^j - 1}{n - 1} \quad\text{with}\ n = \card{\Sigma}
+\frac{(n-1)n(n^{pq} - 1)\binom{n}{\lfloor\frac{n}{2}\rfloor} + n^{pq} - n^2(pq-1) + n(pq-2)}{(n-1)^2n}
 \end{equation}
-test executions. Summing up over additional test executions stemming from al test cases 
- ${\ol U}_F(j),\ j = 0,\dots,pq-1$, results in the following upper bound for the number of 
- additional executions.
-\begin{equation}
-\sum_{j=0}^{pq-1}\frac{n^j - 1}{n - 1} = \frac{n^{pq} - npq + pq - 1}{(n-1)^2}\quad\text{with}\ 
-n=\card{\Sigma}.
-\end{equation}
-This expression has the order of magnitude $O(n^{pq-2})$.  Therefore, the additional test executions won by being able to enter branches (\ref{eq:ufb}) in test executions  can be neglected in comparison to the order of magnitude calculated for $\pmax$ in (\ref{eq:maxO}).  
-These considerations lead to the following theorem
+%
+test executions. Since this upper bound cannot be reached anyway, 
+we just calculate its order of magnitude, and this results again in $O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}  \cdot n^{pq-1}\big)$, as calculated already for $\pmax$ in (\ref{eq:maxO}). 
+
+Summarising these complexity calculations, this results in the following theorem.
 %
 \begin{theorem}
-Given a process alphabet $\Sigma$ with cardinality $
-\card{\Sigma} = n$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
+\label{th:maxexecs}
+Given a process alphabet $\Sigma$, consider a fault model ${\cal F} = (P,\lessdet_F,{\cal D})$, such that
 the normalised transition graph of $P$ has $p$ states, and the fault domain 
-${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most $q$ states. Then the maximal 
+${\cal D}$ contains all processes $Q$ over alphabet $\Sigma$, such that $G(Q)$ has at most 
+$q\ge p$ states. Then the maximal 
 number of test executions to be performed   using the complete test 
 suite $\TS_F = \{ U_F(j)~|~0 \le j < pq  \}$ created from $P$ as specified in Theorem~\ref{th:failurestest} is of order
 %
 \begin{equation*} 
 O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot n^{pq-1}\big)\quad\text{with $n=\card{\Sigma}$}.
 \end{equation*} 
+For processes $P$ satisfying $(s,\Sigma)\not\in\fails(P)$ for all traces $s$, the reachable
+precise  upper bound is given by
+%
+\begin{equation*}\label{eq:pmaxcomplexity} 
+\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}\quad\text{with $n=\card{\Sigma}$}.
+\end{equation*}
 \xbox
 \end{theorem}
+%
+
+
 %
 In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test {\it every}
 non-empty subset of $\Sigma$ whose events cannot be completely refused in a
