@@ -231,7 +231,7 @@ For a rough estimate of the worst case upper bound suppose that
 \begin{enumerate}
 \item $[Z/s]^0 = \Sigma$ for all traces $s$ of $Z$,
 \item all traces $s$ with $\#s<j$ end in a state with empty minimal hitting sets, and
-\item all traces $s$ with $\#s=j$ end in a state with a maximal number $\binom{n}{n/2}$
+\item all traces $s$ with $\#s=j$ end in a state with a maximal number $\binom{n}{\lfloor n/2\rfloor}$
  of hitting sets.
 \end{enumerate}
 %
@@ -242,9 +242,9 @@ $U_F(p-1)$ already cover all states of $Z$'s transition graph according to Lemma
 With the 3 assumptions above, we calculate that
 %
 \begin{itemize}
-\item  $U_F(0)$ has  $\binom{n}{n/2}$ executions,
+\item  $U_F(0)$ has  $\binom{n}{\lfloor n/2\rfloor}$ executions,
 \item $U_F(j),\ j > 0$ has $\sum_{i=0}^{j-1} n^i = \frac{n^j - 1}{n-1}$ executions of branch (\ref{eq:ufb}), ($n = \card{\Sigma}$), and  
-\item $U_F(j),\ j > 0$ has $\binom{n}{n/2}\cdot n^j$ executions where the acceptance of 
+\item $U_F(j),\ j > 0$ has $\binom{n}{\lfloor n/2\rfloor}\cdot n^j$ executions where the acceptance of 
 hitting sets is checked after having run through a trace of length $j$. 
 \end{itemize}
 %
