@@ -253,11 +253,13 @@ Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$,  an upper bound $B$ for the n
 B & = & \binom{n}{\lfloor n/2\rfloor} + \sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1} + 
 \sum_{j=1}^{pq-1}\binom{n}{\lfloor n/2\rfloor}\cdot n^j
    \\
-& = & \binom{n}{\lfloor n/2\rfloor}\cdot\big(1 + \frac{n^{pq}-n}{n-1} \big)  + 
-\sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1}
-   \\
-& = &\binom{n}{\lfloor n/2\rfloor}\cdot\big(\frac{n^{pq}-1}{n-1} \big)  +
-\frac{n^{pq}-n pq+pq-1}{(n-1)^2}
+& = &    \sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1} + 
+\sum_{j=0}^{pq-1}\binom{n}{\lfloor n/2\rfloor}\cdot n^j
+\\    
+& = & \frac{n^{pq}-n pq+pq-1}{(n-1)^2} +
+\binom{n}{\lfloor n/2\rfloor} \cdot \frac{n^{pq} - 1}{n-1}
+\\
+& = & 
 \\
 & = & \frac{\binom{n}{\left\lfloor \frac{n}{2}\right\rfloor}(n-1) \left(n^{pq}-1\right) +n^{pq}-npq+pq-1}{(n-1)^2}
 \end{eqnarray*}
