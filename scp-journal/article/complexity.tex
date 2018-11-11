@@ -209,7 +209,7 @@ consider the question whether reference processes $Z$ possessing failures $(s,\S
 may require more test executions for their associated tests $U_F(j)$ than the bound
 given for $\pmax$ in (\ref{eq:pmaxcomplexity}), because process states $Z/s$ with  
 $\minhits(Z/s)=\varnothing$ allow for test executions entering branch (\ref{eq:ufb}).
-To this end, consider a test cases $U_F(j)$ constructed from such a process $Z$. Every trace
+To this end, consider a test case $U_F(j)$ constructed from such a process $Z$. Every trace
 $s\in\trc(Z)$ with $\#s<j$ ending in a process state $Z/s$ with $\minhits(Z/s)=\varnothing$ allows for 
 %
 \begin{itemize}
@@ -238,7 +238,6 @@ For a rough estimate of the worst case upper bound suppose that
 Note that this situation cannot be realised for all $j\in\{0,\dots,pq-1\}$, because
 the traces of 
 $U_F(p-1)$ already cover all states of $Z$'s transition graph according to Lemma~\ref{lemma:extendV}, and if all states of $Z$ have empty hitting sets, there are no acceptance checks to be performed in the last step of the test execution. Therefore, the   upper bound calculated next cannot be reached by a real CSP process.
-
 With the 3 assumptions above, we calculate that
 %
 \begin{itemize}
@@ -248,15 +247,24 @@ With the 3 assumptions above, we calculate that
 hitting sets is checked after having run through a trace of length $j$. 
 \end{itemize}
 %
-Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$, this results in an upper bound of
+Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$,  an upper bound $B$ for the number of test executions may be calculated as follows.
 %
-\begin{equation}
-\frac{(n-1)n(n^{pq} - 1)\binom{n}{\lfloor\frac{n}{2}\rfloor} + n^{pq} - n^2(pq-1) + n(pq-2)}{(n-1)^2n}
-\end{equation}
+\begin{eqnarray*}
+B & = & \binom{n}{\lfloor n/2\rfloor} + \sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1} + 
+\sum_{j=1}^{pq-1}\binom{n}{\lfloor n/2\rfloor}\cdot n^j
+   \\
+& = & \binom{n}{\lfloor n/2\rfloor}\cdot\big(1 + \frac{n^{pq}-n}{n-1} \big)  + 
+\sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1}
+   \\
+& = &\binom{n}{\lfloor n/2\rfloor}\cdot\big(\frac{n^{pq}-1}{n-1} \big)  +
+\frac{n^{pq}-n pq+pq-1}{(n-1)^2}
+\\
+& = & \frac{\binom{n}{\left\lfloor \frac{n}{2}\right\rfloor}(n-1) \left(n^{pq}-1\right) +n^{pq}-npq+pq-1}{(n-1)^2}
+\end{eqnarray*}
 %
-test executions. Since this upper bound cannot be reached anyway, 
+Since  $B$ cannot be reached anyway, 
 we just calculate its order of magnitude, and this results again in $O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}  \cdot n^{pq-1}\big)$, as calculated already for $\pmax$ in (\ref{eq:maxO}). 
-
+%
 Summarising these complexity calculations, this results in the following theorem.
 %
 \begin{theorem}
