@@ -5,7 +5,7 @@
 
 % =================================================================================
 
-\subsubsection*{Motivation}
+\subsection{Motivation}
 
 Model-based testing (MBT) is an active research field; results are currently
 being evaluated and integrated into industrial verification processes by many
@@ -33,7 +33,7 @@ example, \cite{976937,DBLP:conf/prdc/ShiPK99,DBLP:conf/amast/ButhKPS97}.
 
 % ==================================================================================
 
-\subsubsection*{Contributions}
+\subsection{Contributions}
 
 This paper presents complete black-box test suites for software and systems
 modelled using CSP. They can be generated for non-terminating,
@@ -42,7 +42,12 @@ interpreted both in the trace and the failures semantics. Divergence freedom
 is usually assumed in black-box testing, since it cannot distinguish between
 divergence and deadlock.
 
-Our results complement work in~\cite{DBLP:conf/pts/CavalcantiS17}. There,
+Our results complement work 
+in~\cite{DBLP:conf/icfem/CavalcantiG07,DBLP:conf/pts/CavalcantiS17}. 
+
+@todo -- refer to/ compare to both publications
+
+There,
 fault domains are specified as collections of processes refining a ``most
 general'' fault domain member. With that concept, complete test suites may be
 finite or infinite. This result gives important insight into the theory of
@@ -108,7 +113,7 @@ failures refinement.
 
 % ==================================================================================
 
-\subsubsection*{Overview}
+\subsection{Overview}
 In Section~\ref{section:preliminaries}, we present the background
 relevant to our work. In Section~\ref{sec:finitecompletefails}, finite
 complete test suites for verifying failures refinement are presented. Test
