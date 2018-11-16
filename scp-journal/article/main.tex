@@ -1,14 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\documentclass[3p,times]{elsarticle}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[1p]{elsarticle}
-
-%
-%
-%\usepackage{lineno,hyperref}
-%\modulolinenumbers[5]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \journal{Science of Computer Programming}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %% Elsevier bibliography styles
@@ -55,25 +57,7 @@
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 
-
-
 \usepackage{hyperref}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 %\usepackage{float}
 %\usepackage{lscape}
@@ -276,14 +260,11 @@
 
 \newcommand{\pmax}{P_\text{max}}
 
-
 \newtheorem{definition}{Definition}
 \newtheorem{property}{Property}
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
-
-
 
 \newcounter{examplectr}
 \newenvironment{example}[1][]
@@ -304,7 +285,7 @@
 
 \medskip
 \noindent
-{\bf Proof.\ }}      
+{\bf Proof.\ }}
 {
 %\unskip\nobreak\hfil\penalty50
 %      \hskip2em\hbox{}\nobreak\hfil$\Box$%
@@ -322,6 +303,8 @@
 
 \begin{document}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frontmatter}
 
 \title{Finite Complete Suites for CSP Refinement Testing}
@@ -336,7 +319,6 @@
 \address{York, United Kingdom}
 \fntext[ana]{University of York, \mailsb}
 
-
 %% or include affiliations in footnotes:
 %\author[mymainaddress,mysecondaryaddress]{Elsevier Inc}
 %\ead[url]{www.elsevier.com}
@@ -348,15 +330,25 @@
 %\address[mymainaddress]{1600 John F Kennedy Boulevard, Philadelphia}
 %\address[mysecondaryaddress]{360 Park Avenue South, New York}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{abstract}
 \input{abstract}
 \end{abstract}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{keyword}
-Model-based testing, CSP\sep Trace Refinement\sep Failures Refinement\sep Complete Test Suites\sep
+Model-based testing, CSP\sep Trace Refinement\sep Failures Refinement\sep
+Complete Test Suites
 \end{keyword}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \end{frontmatter}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{introduction}
 
@@ -366,20 +358,26 @@ Model-based testing, CSP\sep Trace Refinement\sep Failures Refinement\sep Comple
 
 \input{casestudies}
 
-
 \input{finitecomplete-trace}
 
 \input{complexity}
-
 
 %%%\input{related}
 
 \input{conclusion}
 
-
 % ===============================================================================
 \section*{References}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \bibliography{references,jp}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

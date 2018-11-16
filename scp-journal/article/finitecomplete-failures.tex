@@ -11,8 +11,7 @@ identifying a bound on the number of tests we need in a complete suite.
 \subsection{Test Cases for Verifying CSP Failures Refinement}
 
 % -------------------------------------------------------------------------
-\subsubsection*{Test Definition and Basic Properties}
-
+\paragraph{Test Definition and Basic Properties}
 In the domain of process algebras, test cases are typically represented by
 processes interacting concurrently with the
 SUT~\cite{Hennessy:1988:ATP:50497}. Considering an (unknown) process that
@@ -42,22 +41,20 @@ U_F(j,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
 \\ & & (k < j) \& \big(e:[n]^0   \then U_F(j,k+1,t(n,e) \big)
 \label{eq:ufc}
 \\ & & \extchoice \nonumber
-\\ & & (k = j \wedge \minhits(n)\neq\varnothing) \&  \nonumber
-\\ & & \taba \big( \Intchoice_{H\in\minhits(n)} (e:H   \then \epass \then\Stop   )  \big)
+\\ & & (k = j \wedge \minhits(n)\neq\varnothing) \& \taba \big( \Intchoice_{H\in\minhits(n)} (e:H   \then \epass \then\Stop   )  \big)
 \label{eq:ufd}
 \end{eqnarray}
 
 % --------------------------------------------------------------------------
-\subsubsection*{Explanation of the Test Definition}
-A test is performed by running $U_F(j)$ concurrently with any SUT process
-$Q$, synchronising over $\Sigma$. So, a \emph{test execution} is a trace of the
-concurrent process
+\paragraph{Explanation of the Test Definition} A test \pagebreak is performed by running
+$U_F(j)$ concurrently with any SUT process $Q$, synchronising over $\Sigma$.
+So, a \emph{test execution} is a trace of the concurrent process
 %\[
 $Q\parallel[\Sigma] U_F(j)$.
 %\]
 
-It is assumed that the events $\efail$ and $\epass$, indicating a verdict
-FAIL and PASS for the test execution, are not included in $\Sigma$. Since we
+It is assumed that the events $\efail$ and $\epass$, indicating verdicts FAIL
+and PASS for the test execution, are not included in $\Sigma$. Since we
 assume that $Q$ is free of livelocks, it is guaranteed that events $\efail$
 or $\epass$ always become visible, if they are the only events $U_F(j)/s$ is
 ready to engage in: if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the
@@ -75,26 +72,25 @@ refinement as defined below.
 Q\ \pass\ U_F(j) \defs (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide \Sigma
 \end{equation}
 %
-This type of pass relation is often called \emph{must test} in the
-literature, because every test execution must end with the $\epass$
+This type of pass relation is often called \emph{must test}, because every
+test execution must end with the $\epass$
 event~\cite{Hennessy:1988:ATP:50497}.
 
-We note that it is necessary to use failures refinement in the definition
-above, and not just trace refinement:~$(Q\parallel[\Sigma] U_F(j)) \hide
-\Sigma$ may have the same visible traces $\varepsilon$ and $\epass$ as the
-``Test Passed Process'' $(\epass\then\Stop)$. However, the former may
-nondeterministically refuse $\epass$, due to a deadlock occurring when a
-faulty SUT process executes concurrently with $U_F(j,k,n)$ executing
-branch~(\ref{eq:ufd}), when the guard condition $(k = j\wedge
-\minhits(n)\neq\varnothing)$ evaluates to $\ist$. This is explained further
-in the next paragraphs. Alternatively, a faulty SUT $Q$ might internally
-deadlock after a trace $s$ where $\#s < j$ and $\minhits(G(P)/s) \neq
-\varnothing$, so that the process $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks
-as well.
+It is necessary to use failures refinement in the definition above, and not
+just trace refinement:~$(Q\parallel[\Sigma] U_F(j)) \hide \Sigma$ may have
+the same visible traces $\varepsilon$ and $\epass$ as the ``Test Passed
+Process'' $(\epass\then\Stop)$. However, the former may nondeterministically
+refuse $\epass$, due to a deadlock occurring when a faulty SUT process
+executes concurrently with $U_F(j,k,n)$ executing branch~(\ref{eq:ufd}), when
+the guard condition $(k = j\wedge \minhits(n)\neq\varnothing)$ evaluates to
+$\ist$. This is explained further in the next paragraphs. Alternatively, a
+faulty SUT $Q$ might internally deadlock after a trace $s$ where $\#s < j$
+and $\minhits(G(P)/s) \neq \varnothing$, so that the process
+$(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
 
-Intuitively speaking, $U_F(j)$ is able to perform any trace $s$ of $P$, up to
-a length $j$. If, after having already run through $s\in\trc(P)$ with $\#s
-\le j$, an event is accepted by the SUT that is outside the initials of $P/s$
+Intuitively, $U_F(j)$ is able to perform any trace $s$ of $P$, up to a length
+$j$. If, after having already run through $s$ with $\#s \le j$, the SUT
+accepts an event outside the initials of $P/s$
  (recall from Lemma~\ref{lemma:ufproperties} that $[n]^0 = [P/s]^0$ for $U_F(j)/s$),
 the test immediately terminates with FAIL-event $\efail$. This is handled by
 the branch (\ref{eq:ufa}) of the external choice. %in the process
@@ -104,32 +100,32 @@ If $P/s$ is the $\Stop$ process or has $\Stop$ as an internal choice, this is
 revealed by $\minhits(G(P)/s) = \varnothing$ (recall
 (\ref{eq:minhitminaccempty}) and Lemma~\ref{lemma:ufproperties}). In this
 case, the test may terminate successfully (branch (\ref{eq:ufb}) of the
-external choice in $U_F(j,\#s,G(P)/s)$). If $P/s$ may also
-nondeterministically engage into events in such a situation, branch
-(\ref{eq:ufc}) of the test is simultaneously enabled. If $Q/s$ is able to
-engage into an event from $\Sigma - [P/s]^0$, a test execution exists where
-$U_F(j,\#s,G(P)/s)$ branches into (\ref{eq:ufa}) and produces the $\efail$
-event.
+choice in $U_F(j,\#s,G(P)/s)$). If $P/s$ may also nondeterministically engage
+into events, branch (\ref{eq:ufc}) is simultaneously enabled. If $Q/s$ is
+able to engage into an event in $\Sigma - [P/s]^0$, a test execution exists
+where $U_F(j,\#s,G(P)/s)$ branches into (\ref{eq:ufa}) and produces the
+$\efail$ event.
 
 If the length of $s$ is still less than $j$, the test accepts any event $e$
 from the initials $[P/s]^0 = [G(P)/s]^0$ and continues recursively as
-$U_F(j,\#s+1,G(P)/s.e)$ (note that $G(P)/s.e = t(G(P)/s,e)$)
-in branch~(\ref{eq:ufc}); this follows from
-Lemma~\ref{lemma:ufproperties}. A test of this type is called
-\emph{adaptive}, because it accepts any legal behaviour of the SUT and adapts
-its consecutive behaviour to the event selected by the SUT.
+$U_F(j,\#s+1,G(P)/s.e)$ in branch~(\ref{eq:ufc}); this follows from
+Lemma~\ref{lemma:ufproperties}~(note that $G(P)/s.e = t(G(P)/s,e)$). A test
+of this type is called \emph{adaptive}, because it accepts any legal
+behaviour of the SUT, here any event from $[P/s]^0$, and adapts its
+consecutive behaviour to the event selected by the SUT, here
+$U_F(j,\#s+1,G(P)/s.e)$.
 
-Now suppose that a test execution has run through a trace
-$s\in\trc(P)$ of length $j$, so that $U_F(j)/s = U_F(j,j,n)$ with $n =
-G(P)/s$. If $\minhits(n)\neq \varnothing$, the test changes its
-behaviour:~instead of offering {\it all} legal events from $[n]^0$ to the
-SUT, it nondeterministically chooses a minimal hitting set $H\in \minhits(n)$
-and only offers the events contained in $H$. If the SUT refuses to engage
-into some event of $H$, this reveals a violation of failures
-refinement:~according to Lemma~\ref{lemma:hseta}, a conforming SUT should
-accept at least one event of each minimal hitting set in $\minhits(n)$.
-Therefore, the test execution only terminates with  $\epass$, if such an
-event is accepted by the SUT. Otherwise, it deadlocks, and the test fails.
+Now suppose that a test execution has run through a trace $s\in\trc(P)$ of
+length $j$, so that $U_F(j)/s = U_F(j,j,n)$ with $n = G(P)/s$. If
+$\minhits(n)\neq \varnothing$, the test changes its behaviour:~instead of
+offering {\it all} legal events from $[n]^0$ to the SUT, it
+nondeterministically chooses a minimal hitting set $H\in \minhits(n)$ and
+only offers the events contained in $H$. If the SUT refuses to engage into
+some event of $H$, this reveals a violation of failures refinement:~according
+to Lemma~\ref{lemma:hseta}, a conforming SUT should accept at least one event
+of each minimal hitting set in $\minhits(n)$. Therefore, the test execution
+terminates with  $\epass$, only if such an event is accepted. Otherwise, it
+deadlocks, and the test fails.
 
 The specification of $U_F(j,k,n)$ implies that the test always stops after
 having engaged into a trace $s\in\trc(Q)$ of maximal length $j$ or $j+1$. If
@@ -137,14 +133,15 @@ branch (\ref{eq:ufa}) is the last to be entered, the maximal length of $s$ is
 $j+1$, and the test execution stops with $\efail$. If branch (\ref{eq:ufb})
 is the last to be entered, the maximal length of $s$ is $j$, and the
 execution stops with $\epass$. If branch (\ref{eq:ufd}) is the last to be
-entered, the process either accepts another event $e$ of some minimal hitting
-set $H\in\minhits(n)$ with $n = G(P)/s$ according to
-Lemma~\ref{lemma:ufproperties}. Then the final length of $s$ is $j+1$, and
-the execution terminates with $\epass$. Or the test execution
-$(Q\parallel[\Sigma] U_F(j))/s$ deadlocks,  the final length of $s$ is $j$,
-and the execution stops without a PASS or FAIL event. Such an execution is
-also interpreted as FAIL, because it reveals that $(\epass\then\Stop)
-\not\lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide \Sigma$.
+entered, then there are two possibilities. The first is that the process
+accepts another event $e$ of some minimal hitting set $H\in\minhits(n)$ with
+$n = G(P)/s$ according to Lemma~\ref{lemma:ufproperties}. In this case, the
+final length of $s$ is $j+1$, and the execution terminates with $\epass$.
+Alternatively, the test execution $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks,
+the final length of $s$ is $j$, and the execution stops without a PASS or
+FAIL event. Such an execution is also interpreted as FAIL, because it reveals
+that $(\epass\then\Stop) \not\lessdet_F (Q\parallel[\Sigma] U_F(j)) \hide
+\Sigma$.
 
 We observe that the number of possible executions of $Q\parallel[\Sigma]
 U_F(j)$ is finite, because the number of traces $s$ with maximal length
@@ -154,11 +151,8 @@ which case the indexed internal choice in (\ref{eq:ufd}) would be undefined.
 The guard in that branch, however, requires $\minhits(n)\neq\varnothing$, and
 branches (\ref{eq:ufa}) or (\ref{eq:ufb}) can be taken in this situation.
 
-
-
-We state basic properties of our tests in the following lemma, to show the
-relationships between $U_F(j)$ and the reference process $P$ from which it is
-derived.
+The following lemma establishes relationships between $U_F(j)$ and the
+reference process $P$ from which it is derived.
 
 \begin{lemma}\label{lemma:ufproperties}
 If $s\in\trc(P)$ satisfies $\#s\le j$, then
@@ -193,11 +187,9 @@ To prove (\ref{eq:ifpb}), we apply (\ref{eq:ifpa}) to conclude that $U_F(j)/s
 = U_F(j,\#s,G(P)/s)$, because $s$ is a trace of $P$. Noting again that
 $[G(P)/s]^0 = [P/s]^0$, this implies that $e\not\in [G(P)/s]^0$, so
 $U_F(j,\#s,G(P)/s)$ can engage in $e$ by entering branch (\ref{eq:ufa}). The
-specification of this branch implies that
-$$
-U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e = (\efail\then\Stop).
-$$
-%
+specification of this branch implies that $_F(j)/s.e = U_F(j,\#s,G(P)/s)/e =
+(\efail\then\Stop)$.
+
 Statement (\ref{eq:ifpc}) follows trivially from (\ref{eq:ifpa}), because
 $[G(P)/s]^0 = [P/s]^0$ for all traces $s$ of $P$. Finally, statement
 (\ref{eq:ifpd}) follows trivially from (\ref{eq:ifpa}), because, according to
@@ -213,37 +205,32 @@ Lemma~\ref{lemma:ufproperties} just states the existence of
 $U_F(j)$-executions $s, s.e$ satisfying the properties stated there.
 
 % -------------------------------------------------------------------------
-\subsubsection*{Complete Testing Assumption}
-As explained above, passing a test case $U_F(j)$ requires that none of
-the possible executions $(Q\parallel[\Sigma] U_F(j))$ stops after $\efail$ or
-stops without having produced event $\epass$. Therefore, it is necessary to determine
-whether all possible executions have been covered in the repeated runs of
-$(Q\parallel[\Sigma] U_F(j))$.
-The theoretical completeness results are therefore based on
-a  \emph{complete testing
-assumption}~\cite{hierons_testing_2004,DBLP:conf/icfem/CavalcantiG07},
- which means that every
-possible behaviour of the SUT is performed after a finite number of test
-executions. In practice, this is realised by executing each test several
-times, recording the traces that have been performed, and using hardware or
-software coverage analysers to determine whether all possible test execution
-behaviours of the SUT have been observed. Therefore,
-testing nondeterministic SUTs
-  comes
-at the price of having to apply some grey-box testing techniques enabling us
-to decide whether all SUT behaviours have been observed.
+\paragraph{Complete Testing Assumption} As explained above, passing a test case
+$U_F(j)$ requires that none of the possible executions $(Q\parallel[\Sigma]
+U_F(j))$ stops after $\efail$ or stops without having produced the event
+$\epass$. Therefore, it is necessary to determine whether all possible
+executions have been covered in the repeated runs of $(Q\parallel[\Sigma]
+U_F(j))$. The theoretical completeness results are, therefore, based on a
+\emph{complete testing
+assumption}~\cite{hierons_testing_2004,DBLP:conf/icfem/CavalcantiG07}, which
+means that every possible behaviour of the SUT is performed after a finite
+number of test executions. In practice, this is realised by executing each
+test several times, recording the traces that have been performed, and using
+hardware or software coverage analysers to determine whether all possible
+behaviours of the SUT have been observed. Therefore, testing nondeterministic
+SUTs comes at the price of having to apply some grey-box testing techniques.
+%enabling us to decide whether all SUT behaviours have been observed.
 
 % =========================================================================
 \subsection{A Finite Complete Test Suite for Failures Refinement}
 % =========================================================================
 
-A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ counsists of a
+A CSP \emph{fault model} ${\cal F} = (P,\sqsubseteq,{\cal D})$ consists of a
 reference process $P$, a conformance relation $\sqsubseteq \in \{\lessdet_T,
 \lessdet_F\}$, and a fault domain ${\cal D}$, which is a set of CSP processes
-over $P$'s alphabet that may or may not conform to $P$.
-
-A test suite $\TS$ is called \emph{complete} with respect to fault model
-${\cal F}$, if, and only if, the following conditions are fulfilled.
+over $P$'s alphabet that may or may not conform to $P$. A test suite $\TS$ is
+called \emph{complete} with respect to fault model ${\cal F}$, if, and only
+if, the following conditions are fulfilled.
 \begin{description}
 \item[1.~Soundness] If $P \sqsubseteq Q$, then $Q$ passes all tests in $\TS$.
 \item[2.~Exhaustiveness] If $P \not\sqsubseteq Q$ and $Q\in{\cal D}$,
@@ -260,15 +247,15 @@ D}$ as the set of all divergence-free CSP processes over alphabet $\Sigma$,
 whose transition graph has at most $q$ states with $q \ge p$. Then the test
 suite
 \[
-\TS_F = \{ U_F(j)~|~0 \le j < pq  \}\quad\text{$U_F(j)$ specified in (\ref{eq:UFP})}
+\TS_F = \{ U_F(j)~|~0 \le j < pq  \}\quad\text{with $U_F(j)$ as specified in (\ref{eq:UFP})}
 \]
 is complete with respect to ${\cal F} = (P,\lessdet_F,{\cal D})$.
 \end{theorem}
 % ------------------------------------------------------------------------
 %
-The proof of the theorem follows from the two lemmas below. The first states
-that test suite $\TS_F$ is sound, the second states that the suite is also
-exhaustive.
+The proof of the theorem follows directly from the two lemmas below. The
+first lemma establishes that test suite $\TS_F$ is sound, and the second
+establishes that the suite is also exhaustive.
 %
 \begin{lemma}\label{lemma:mainfsound}
 A test suite $\TS_F$ generated from a CSP process $P$, as specified in
