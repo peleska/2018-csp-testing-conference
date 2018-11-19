@@ -288,46 +288,43 @@ branch (\ref{eq:ufc}) nor at branch (\ref{eq:ufd}). These cases are
 considered separately below.
 
 \paragraph{Step~2.1} Suppose that the test execution blocks at branch (\ref{eq:ufc})
-after having run through trace $s$ with $\#s < j$. Since  $P\lessdet_T Q$ by
-assumption, $s$ is a trace of $P$, thus $U_F(j)/s = U_F(j,\#s,G(P)/s)$
+after having run through a trace $s$ with $\#s < j$. Since  $P\lessdet_T Q$
+by assumption, $s$ is a trace of $P$, thus $U_F(j)/s = U_F(j,\#s,G(P)/s)$
 according to Lemma~\ref{lemma:ufproperties}. Therefore, $U_F(j)/s$  can enter
 branch (\ref{eq:ufc}) with any event from $[G(P)/s]^0$. Since we assume that
 $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks, this means that $[G(P)/s]^0$ is
 {\it not} a hitting set of $\minaccs(Q/s)$, because otherwise at least one
-$e\in [G(P)/s]^0$ would be accepted by $Q/s$. Now suppose that
-$\minhits(G(P)/s) = \varnothing$. Then   branch (\ref{eq:ufb}) can be
-entered, and the test stops after $\epass$. Otherwise, if $\minhits(G(P)/s)
-\neq \varnothing$, let $H\in\minhits(G(P)/s)$. Since $H$ contains only
-elements that are contained in some minimal acceptance of $P/s$, and all
-these minimal acceptances are subsets of $[G(P)/s]^0$, $H$ is a subset of
-$[G(P)/s]^0$ as well. Since $[G(P)/s]^0$, however, is not a hitting set of
-$\minaccs(Q/s)$, also $H$ is not a hitting set of $\minaccs(Q/s)$. Now this
-is a contradiction to Lemma~\ref{lemma:hseta}, since $Q\ conf\ P$ by
-assumption, so $H$ should also be a (not necessarily minimal) hitting set in
-$\minaccs(Q/s)$. This proves that the test execution cannot block  at branch
-(\ref{eq:ufc}) without being able to pass the test by entering branch
-(\ref{eq:ufb}).
+$e\in [G(P)/s]^0$ would be accepted by $Q/s$ and the test execution would not
+deadlock. Now suppose that $\minhits(G(P)/s) = \varnothing$. Then   branch
+(\ref{eq:ufb}) can be entered, and the test stops after $\epass$. Otherwise,
+if $\minhits(G(P)/s) \neq \varnothing$, let $H\in\minhits(G(P)/s)$. Since $H$
+contains only elements that are contained in some minimal acceptance of
+$P/s$, and all these minimal acceptances are subsets of $[G(P)/s]^0$, $H$ is
+a subset of $[G(P)/s]^0$ as well. Since $[G(P)/s]^0$, however, is not a
+hitting set of $\minaccs(Q/s)$, also $H$ is not a hitting set of
+$\minaccs(Q/s)$. Now this is a contradiction to Lemma~\ref{lemma:hseta},
+since $Q\ conf\ P$ by assumption, so $H$ should also be a (not necessarily
+minimal) hitting set in $\minaccs(Q/s)$. This proves that the test execution
+cannot block  at branch (\ref{eq:ufc}) without being able to pass the test by
+entering branch (\ref{eq:ufb}).
 
-\paragraph{Step~2.2} Now suppose that the test execution blocks at
-branch (\ref{eq:ufd}) after having run through some $s\in\trc(Q)\subseteq \trc(P)$
-with $\#s = j$.
-From Lemma~\ref{lemma:ufproperties} we know
-that $U_F(j)/s = U_F(j,k,n)$ with $U_F(j,k,n) = U_F(j,\#s,G(P)/s)$, so
-$\minhits(n) = \minhits(P/s)$. The branch (\ref{eq:ufb}) of the test
-$U_F(j,k,n)$ leads always to a PASS verdict and is taken if $\minhits(n) =
-\varnothing$.
-If $\minhits(n) \neq \varnothing$,  the assumption that $(Q\parallel[\Sigma] U_F(j))/s$
-blocks at branch (\ref{eq:ufd}) implies that there exists some $H\in\minhits(n)$
-which is not a hitting set of $\minaccs(Q/s)$. Again, we can apply Lemma~\ref{lemma:hseta}
-to conclude that this contradicts the assumption that $Q\ conf\ P$. As a consequence,
-the test execution can never deadlock at branch (\ref{eq:ufd}) without entering
-branch (\ref{eq:ufb}) and passing the test.
+\paragraph{Step~2.2} Suppose that the execution blocks at
+branch (\ref{eq:ufd}) after having run through some $s\in\trc(Q)\subseteq
+\trc(P)$ with $\#s = j$. From Lemma~\ref{lemma:ufproperties} we know that
+$U_F(j)/s = U_F(j,k,n) = U_F(j,\#s,G(P)/s)$, so $\minhits(n) =
+\minhits(P/s)$. Branch (\ref{eq:ufb}) of $U_F(j,k,n)$ leads always to a PASS
+verdict and is taken if $\minhits(n) = \varnothing$. If $\minhits(n) \neq
+\varnothing$,  the assumption that $(Q\parallel[\Sigma] U_F(j))/s$ blocks at
+branch (\ref{eq:ufd}) implies that there exists some $H\in\minhits(n)$ that
+is not a hitting set of $\minaccs(Q/s)$. Again, by Lemma~\ref{lemma:hseta},
+this contradicts the assumption that $Q\ conf\ P$. As a
+consequence, the test execution can never deadlock at branch (\ref{eq:ufd})
+without entering branch (\ref{eq:ufb}) and passing the test.
 
-
+\bigskip \noindent%
 Note that the line of reasoning in this proof requires that $Q$ is free of
-livelocks, because otherwise a $\epass$ event might not become visible,
-due to unbounded sequences of hidden events performed by $Q$.
-\xbox
+livelocks, because otherwise a $\epass$ event might not become visible, due
+to unbounded sequences of hidden events performed by $Q$. \xbox
 \end{proof}
 %
 \begin{lemma}\label{lemma:mainfexhaustive}
@@ -341,9 +338,9 @@ corresponding to the cases $P\not\lessdet_T Q$ and $\neg(Q\ conf\ P)$. These
 cases can be characterised as follows:
 \begin{description}
 \item[Case~1] $\trc(Q)\not\subseteq \trc(P)$
-\item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a minimal acceptance $A_Q$
-of $\minaccs(Q/s)$, such that
-(see Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb})).
+\item[Case~2] There exists a joint trace $s\in\trc(Q)\cap\trc(P)$ and a
+    minimal acceptance $A_Q$ of $\minaccs(Q/s)$, such that (see
+    Lemma~\ref{lemma:tgtrcref}, (\ref{eq:failrefb}))
 \begin{equation}
 \label{eq:accsnotcontained}
 \forall A_P\in\minaccs(P/s): A_P\not\subseteq A_Q,
@@ -355,17 +352,15 @@ event or deadlocks. We do this by analysing the product graph of the
 reference process $P$ and the SUT process $Q$: any trace
 $s\in\trc(Q)\cap\trc(P)$ gives rise to a path labelled by the events of $s$
 through this product graph. Any error can be detected after running through
-such a trace and then either observing an event outside $[P/s]^0$ (this is
-the violation described by Case~1) or identifying an illegal acceptance $A_Q$
-(as specified in Case~2). It is not guaranteed, however, that trace $s$ is
-short enough to be executed by one of the test cases $U_F(j)$ with $0\le j <
-pq$. So, it has to be shown that for any $s$ leading to an error situation
-specified by Case~1 or Case~2, there exists a trace $u$ of maximal length
-$pq-1$ leading to the same error.
+such a trace and then either observing an event outside $[P/s]^0$ (the
+violation described by Case~1) or identifying an illegal acceptance $A_Q$ (as
+in Case~2). It is not guaranteed, however, that $s$ is short enough to be
+executed by one of the test cases $U_F(j)$ with $0\le j < pq$. So, it has to
+be shown that for any $s$ leading to an error situation, there exists a trace
+$u$ of maximal length $pq-1$ leading to the same error.
 
 \medskip
-\noindent {\bf Case~1.}
-Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
+\noindent {\bf Case~1.} Consider a  trace $s.e\in\trc(Q)$ with $s\in\trc(P)$,
 but $s.e\not\in\trc(P)$. Such a trace always exists because $\varepsilon$ is
 a trace of every process. In this case, $s$ is also a trace of the product
 graph $G = G(P)\times G(Q)$ defined in Section~\ref{sec:ntg}, and $G/s =
@@ -385,12 +380,12 @@ event $e$, so that the test fails. Again, the assumption of non-divergence of
 $Q$ is needed for this conclusion.
 
 \medskip
-\noindent {\bf Case~2.} We note that trace $s$ is again a trace of the
-product graph $G$, but we do not know its length. Again, by applying
-Lemma~\ref{lemma:reachproduc}, we know that the state $G/s$ can be reached by
-a trace $u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider
-the test $U_F(\# u)$, for which $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because
-of Lemma~\ref{lemma:ufproperties}. Test $U_F(\#u)$  always performs branch
+\noindent {\bf Case~2.} We note again that $s$ is a trace of the product
+graph $G$, but we do not know its length. Again, by
+Lemma~\ref{lemma:reachproduc}, the state $G/s$ can be reached by a trace
+$u\in\trc(Q)\cap\trc(P)$ of maximal length $\#u < pq$. We consider the test
+$U_F(\# u)$, for which $U_F(\# u)/u = U_F(\#u,\#u,G(P)/u)$, because of
+Lemma~\ref{lemma:ufproperties}. $U_F(\#u)$ can always perform branch
 (\ref{eq:ufc}) until the trace $u$ has been completely processed.
  $U_F(\#u,\#u,G(P)/u)$ may execute branches (\ref{eq:ufa}) or (\ref{eq:ufd})
 only:~(\ref{eq:accsnotcontained}) implies that $P/s$ has at least one
@@ -413,8 +408,7 @@ execution really occurs if $(Q\parallel[\Sigma]U_F(\# u))$ is executed
 sufficiently often. This concludes the proof. \xbox
 \end{proof}
 %
-Our notion of tests can be specialised to deal with traces refinement, as we
-explain in Section~\ref{sec:finitecomplete}.
-The next section presents and example.
+Our notion of test can be specialised to deal with traces refinement~(see
+Section~\ref{sec:finitecomplete}). We next present an example.
 
 % ==========================================================================
