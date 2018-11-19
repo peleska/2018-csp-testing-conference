@@ -180,14 +180,15 @@ of $P$, so that $e\in [P/s]^0$. Since $[G(P)/s]^0 = [P/s]^0$ for all traces
 $s$ of $P$, we conclude that $e\in  [G(P)/s]^0$, so $U_F(j,\#s,G(P)/s)$ can
 engage into $e$ by executing branch (\ref{eq:ufc}). Since $t$ is the
 transition function of $G(P)$ and $e\in [G(P)/s]^0$, $t(G(P)/s,e)$ is
-defined, and $t(G(P)/s,e) = G(P)/s.e$. This leads to a new recursion, so that
-$U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e = U_F(j,\#s+1,G(P)/s.e)$ as required.
+defined, and $t(G(P)/s,e) = G(P)/s.e$. So, the new recursion in branch
+(\ref{eq:ufc}) is so that $U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e =
+U_F(j,\#s+1,G(P)/s.e)$ as required.
 
 To prove (\ref{eq:ifpb}), we apply (\ref{eq:ifpa}) to conclude that $U_F(j)/s
 = U_F(j,\#s,G(P)/s)$, because $s$ is a trace of $P$. Noting again that
 $[G(P)/s]^0 = [P/s]^0$, this implies that $e\not\in [G(P)/s]^0$, so
 $U_F(j,\#s,G(P)/s)$ can engage in $e$ by entering branch (\ref{eq:ufa}). The
-specification of this branch implies that $_F(j)/s.e = U_F(j,\#s,G(P)/s)/e =
+specification of this branch implies that $U_F(j)/s.e = U_F(j,\#s,G(P)/s)/e =
 (\efail\then\Stop)$.
 
 Statement (\ref{eq:ifpc}) follows trivially from (\ref{eq:ifpa}), because
@@ -269,7 +270,7 @@ $pass$ event. This case would also be interpreted as FAIL, since then
 $\epass\then\Stop$ is not failures refined by $(Q\parallel[\Sigma]
 U_F(j))\hide \Sigma$.
 
-\paragraph{Step~1.} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and $Q\
+\paragraph{Step~1} Suppose that $P\lessdet_F Q$, so $P\lessdet_T Q$ and $Q\
 conf\ P$ according to (\ref{eq:failconf}). Since   $\trc(Q)\subseteq
 \trc(P)$, any adaptive test $U_F(j)$ running in parallel with $Q$ will always
 enter the branches (\ref{eq:ufb}), (\ref{eq:ufc}), or (\ref{eq:ufd}) of the
@@ -281,7 +282,7 @@ $[Q/s]^0\subseteq [P/s]^0 = [n]^0$, so branch~(\ref{eq:ufa}) can never be
 entered in the parallel execution of $Q$ and $U_F(j)$, and the $fail$ event
 cannot occur.
 
-\paragraph{Step~2.} For proving that a test execution can never deadlock without a
+\paragraph{Step~2} For proving that a test execution can never deadlock without a
 $\epass$ event, it has to be shown that a test execution can neither block at
 branch (\ref{eq:ufc}) nor at branch (\ref{eq:ufd}). These cases are
 considered separately below.

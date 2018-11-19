@@ -429,7 +429,7 @@ To prove (\ref{eq:failrefa}), we derive
   \Leftrightarrow \forall s\in\trc(G(P))\cap \trc(G(Q)), R_Q\in r_Q(G(Q)/s):
   \exists R_P\in r_P(G(P)/s): R_Q\subseteq R_P
   \\ %
-  & Property of $r_P, r_Q$ and (\ref{eq:refMaxRef})
+  & Property of $r_P, r_Q$~(subset closure) and (\ref{eq:refMaxRef})
 \end{argue}
 
 \medskip
@@ -550,7 +550,7 @@ hitting sets.
 interested in the minimal hitting sets of minimal acceptances; for these, the
 abbreviated notation
 $%\[ \
-minhits(P/s) = \minhits(\minaccs(P/s))
+\minhits(P/s) = \minhits(\minaccs(P/s))
 $ %\]
 is used. The minimal hitting sets
 of minimal acceptances may be alternatively characterised by means of the
@@ -581,18 +581,19 @@ for all traces $s$ of $P$.
 \begin{proof}
 We derive
 \begin{argue}
-(s,A)\not\in {\text{failures}}(P)
+(s,A)\not\in \fails(P)
 \\
-\Leftrightarrow A\not\in {\text{Ref}}(P/s)
+\Leftrightarrow A\not\in Ref(P/s)
 \\
-\Leftrightarrow  \forall R\in {\text{maxRef}}(P/s): A\not\subseteq R
+\Leftrightarrow  \forall R\in maxRef(P/s): A\not\subseteq R
 \\
-\Leftrightarrow   \forall B\in {\text{minAcc}}(P/s): A\not\subseteq (\Sigma\setminus B)& this follows from (\ref{eq:accref})
+\Leftrightarrow   \forall B\in minAcc(P/s): A\not\subseteq (\Sigma\setminus
+B)& this follows from (\ref{eq:accref})
 \\
-\Leftrightarrow  \forall B\in {\text{minAcc}}(P/s): A\cap B\neq \varnothing
+\Leftrightarrow  \forall B\in minAcc(P/s): A\cap B\neq \varnothing
 \\
 \Leftrightarrow  A \text{ is a (not necessarily minimal)}
-              \text{ hitting set of } {\text{minAcc}}(P/s)
+              \text{ hitting set of } minAcc(P/s)
 \end{argue}
 %
 Specialising this derivation valid for arbitrary $A$ satisfying $(s,A)\not\in {\text{failures}}(P)$ to
@@ -659,7 +660,7 @@ Let $A$ be such an acceptance set $A_Q$ fulfilling (*).
 Define
 $%\[
 \overline H = \bigcup\{ A_P \setminus A~|~A_P\in\minaccs(G(P)/s) \}.
-$. %\]
+$ %\]
 Since $A_P \setminus A \neq\varnothing$ for all $A_P$ because of (*),
 $\overline H$ is a hitting set of $\minaccs(G(P)/s)$ which has an  empty
 intersection with $A$. Minimising $\overline H$ yields   a minimal hitting
