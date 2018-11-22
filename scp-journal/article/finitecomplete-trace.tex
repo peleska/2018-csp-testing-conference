@@ -18,8 +18,8 @@ We use the condition on acceptances $\minaccs(n) = \{ \varnothing \}$ instead
 of the condition on hitting sets $\minhits(n) = \varnothing$ in branch
 (\ref{eq:utb}). From (\ref{eq:minhitminaccempty}) we know that these
 conditions are equivalent, but, with the use of $\minaccs(n) = \{ \varnothing
-\}$, we make it unnecessary to calculate hitting sets for generating these
-tests from $G(P)$.
+\}$, \pagebreak we make it unnecessary to calculate hitting sets for
+generating these tests from $G(P)$, which is expensive.
 
 %\begin{eqnarray}
 %U_T(p) & = & U_T(p,\varepsilon)
@@ -141,10 +141,11 @@ $P\lessdet_T Q$.
 Suppose that $P\lessdet_T Q$, so that $\trc(Q)\subseteq\trc(P)$, and assume
 that $s\in\trc(Q)$ with $\#s < pq$. Since $s$ is also a trace of $P$, we can
 conclude
-$$U_T(pq-1)/s = U_T(pq-1,\#s,G(P)/s)$$ because of (\ref{eq:ifpaT}). Now $\trc(Q)\subseteq\trc(P)$
-implies $[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$
-cannot enter branch (\ref{eq:uta}) and produce a $\efail$ event when running
-in parallel with $Q$ and synchronising over $\Sigma$. Therefore, only four
+$$U_T(pq-1)/s = U_T(pq-1,\#s,G(P)/s)$$
+because of (\ref{eq:ifpaT}). \pagebreak Now $\trc(Q)\subseteq\trc(P)$ implies
+$[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$ cannot
+enter branch (\ref{eq:uta}) and produce a $\efail$ event when running in
+parallel with $Q$ and synchronising over $\Sigma$. Therefore, only four
 options are available for the test execution    $(Q\parallel[\Sigma]
 U_T(j))/s$ to continue.
 
@@ -167,13 +168,14 @@ continues without producing a $\epass$ or a $\efail$ event.
 
 \medskip
 \noindent {\bf Case~4.} $\#s = pq-1$ holds. In this case,
-$U_T(pq-1,\#s,G(P)/s)$ can only enter branch (\ref{eq:utd}), and the test
+$U_T(pq-1,\#s,G(P)/s)$ can enter branch (\ref{eq:utd}), and the test
 execution stops after $\epass$.
 
-This case analysis shows that every   execution of $(Q\parallel[\Sigma] U_T(j))$
-either stops after $\epass$ or produces neither $\epass$ nor $\efail$. This
-proves that $Q$ passes test $U_T(pq-1)$ according to the pass  criterion (\ref{eq:passT}).
-\xbox
+\bigskip\noindent%
+This case analysis shows that every   execution of $(Q\parallel[\Sigma]
+U_T(j))$ either stops after $\epass$ or produces neither $\epass$ nor
+$\efail$. This proves that $Q$ passes test $U_T(pq-1)$ according to the pass
+criterion (\ref{eq:passT}). \xbox
 \end{proof}
 % ===============================================================================
 
@@ -182,12 +184,12 @@ A test suite $\TS_T$ specified as in Theorem~\ref{th:tracetest} is
 exhaustive for the fault model specified there.
 \end{lemma}
 \begin{proof}
-As before in the proofs for failures testing, we construct the product graph
+As in the proof for failures testing, we construct the product graph
 $G=G(P)\times G(Q)$ and recall that every trace $s\in\trc(P)\cap\trc(Q)$ is
 associated with a path through $G$ labelled with the same events as $s$, such
 that $G/s = (G(P)/s,G(Q)/s)$. Furthermore, we recall from
-Lemma~\ref{lemma:extendV} that graph state $(G(P)/s,G(Q)/s)$ can always be
-reached by a trace $u$ of length less or equal $pq-1$, where  the order of
+Lemma~\ref{lemma:extendV} that the graph state $(G(P)/s,G(Q)/s)$ can always
+be reached by a trace $u$ of length less or equal $pq-1$, where  the order of
 $G(P)$ is $p$ and that of $G(Q)$ is $q$.
 
 Suppose that $P\not\lessdet_T Q$. Since the empty trace is a trace of every
@@ -198,10 +200,10 @@ $$
 U_T(pq-1)/u = U_T(pq-1,\#u,G(P)/s).
 $$
 By assumption, $e\in (\Sigma -[P/s]^0) = (\Sigma - [G(P)/s]^0)$. Since
-$G(Q)/u = G(Q)/s$, $Q/u$ can engage into $e$. Then $U_T(pq-1,\#u,G(P)/s)$
-will enter branch (\ref{eq:uta}), and the test execution stops after having
+$G(Q)/u = G(Q)/s$, $Q/u$ can engage into $e$. Then $U_T(pq-1,\#u,G(P)/s)$ can
+enter branch (\ref{eq:uta}), and the test execution stops after having
 produced $\efail$. This proves that $Q$  fails test $U_T(pq-1)$. \xbox
 \end{proof}
 %
-Having established completeness of our test suites, we now consider the
+Having established completeness of our test suites, we consider
 complexity of a testing technique that uses them.
