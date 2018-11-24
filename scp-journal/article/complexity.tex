@@ -2,7 +2,6 @@
 \label{sec:complexity}
 % ================================================================================
 
-
 %In this section, we calculate estimates for the maximal number of test
 %executions to be performed when testing for failures refinement
 %and---as a corollary---trace refinement.
@@ -38,91 +37,107 @@
 %in the last step of a test execution. \fixme{But doesn't this add to the
 %number of executions?} \fxnote{jp: should be clear now from the revised test}
 
-We consider first failures
-refinement~(Section~\ref{section:complexity:failures}) and then traces
-refinement~(Section~\ref{section:complexity:traces}) testing.
+Since we have finite complete CSP test suites, it is useful for the first
+time to calculate how many test executions are needed when using them.
+Previous work did not consider sufficient conditions for finiteness, so
+complexity was not a concern. We answer the following questions. (1)~What is
+the worst-case bound on the number of test executions to be performed to
+verify an SUT with respect to failures refinement, when we use our test
+suite? (2)~What is the worst-case bound for trace refinement? (3)~Is it
+possible to reduce the maximal length of traces when testing for failures or
+trace refinement? We consider the first question~(1) in
+Section~\ref{section:complexity:failures}), where we also discuss whether it
+it is possible to reduce the number of test executions with a different test
+suite.  With the answer to question~(1), question~(2) is a fairly simple
+consequence we discuss in Section~\ref{section:complexity:traces}.
+Question~(3) is the subject of Section~\ref{section:complexity:length}.
 
 % -------------------------------------------------------------------------
 \subsection{Estimates for the Maximal Number of Failures Test Executions}
 \label{section:complexity:failures}
 
+An arbitrary CSP process $P$ might have $\minhits(P/s) = \varnothing$ for
+some traces $s$, so that a test case $U_F(j)$ for a $j$ greater than the size
+of $s$ can enter branch~(\ref{eq:ufb}). In this case, further executions are
+needed to consider traces that have $s$ as a prefix.  To provide a bound on
+the number of test executions needed, we first define a process $\pmax$~(see
+(\ref{eq:pmax})), which, when used as a reference process, requires the
+maximal number of test executions among all reference processes $P$
+fulfilling $\minhits(P/s) != \varnothing$ for all traces $s$. For $\pmax$, we
+can establish the actual number of test executions required~(see
+(\ref{eq:pmaxcomplexity})).
+
 % -----------------------------------------------------------------------------
 \paragraph{A Reference Process} Given an alphabet $\Sigma$ of size $\card{\Sigma} =
 n\ge 2$, define a collection of subsets of $\Sigma$ by
 \begin{equation}\label{eq:defC}
-{\cal C} = \{ A\subseteq\Sigma~|~\card{A} = n - \lfloor\frac{n}{2}\rfloor + 1 \}.
+  {\cal C} = \{ A\subseteq\Sigma~|~\card{A} = n - \lfloor\frac{n}{2}\rfloor + 1 \}.
 \end{equation}
 %
 With this choice of ${\cal C}$, define
 \begin{equation}\label{eq:pmax}
-\pmax = \Intchoice_{A\in{\cal C}} e:A\then \pmax
+  \pmax = \Intchoice_{A\in{\cal C}} e:A\then \pmax
 \end{equation}
 %
 The relevant properties of $\pmax$ are summarised in the following lemma.
 %
 \begin{lemma}\label{lemma:pmax}
-Given alphabet $\Sigma$ with cardinality $\card{\Sigma} = n\ge 2$,
-process $\pmax$ fulfils
-%
-\begin{eqnarray}
-{}[\pmax/s]^0 & = & \Sigma \quad\text{for all $s\in \Sigma^*$}
-\label{eq:pmaxa}
-\\
-\trc(\pmax) & = & \Sigma^*
-\label{eq:pmaxb}
-\\
-\minaccs(P/s) & = & {\cal C} \quad\text{for all $s\in \Sigma^*$}
-\label{eq:pmaxc}
-\\
-\minhits(P/s) & = & \minhits({\cal C}) \quad\text{for all $s\in \Sigma^*$}
-\label{eq:pmaxe}
-\\
-\card{\minhits(P/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor}
-\quad \text{for all $s\in \Sigma^*$}
-\label{eq:pmaxd}
-\\
-\minhits({\cal C})  & = & \{ H\subseteq \Sigma~|~\card{H} = \lfloor\frac{n}{2}\rfloor\}
-\label{eq:pmaxf}
-\end{eqnarray}
+  Given alphabet $\Sigma$ with cardinality $\card{\Sigma} = n\ge 2$,
+  process $\pmax$ fulfils
+  %
+  \begin{eqnarray}
+  {}[\pmax/s]^0 & = & \Sigma \quad\text{for all $s\in \Sigma^*$}
+  \label{eq:pmaxa}
+  \\
+  \trc(\pmax) & = & \Sigma^*
+  \label{eq:pmaxb}
+  \\
+  \minaccs(P/s) & = & {\cal C} \quad\text{for all $s\in \Sigma^*$}
+  \label{eq:pmaxc}
+  \\
+  \minhits(P/s) & = & \minhits({\cal C}) \quad\text{for all $s\in \Sigma^*$}
+  \label{eq:pmaxe}
+  \\
+  \card{\minhits(P/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor}
+  \quad \text{for all $s\in \Sigma^*$}
+  \label{eq:pmaxd}
+  \\
+  \minhits({\cal C})  & = & \{ H\subseteq \Sigma~|~\card{H} = \lfloor\frac{n}{2}\rfloor\}
+  \label{eq:pmaxf}
+  \end{eqnarray}
 \end{lemma}
 \begin{proof}
- Since
-$
-\bigcup_{A\in{\cal C}} A = \Sigma
-$
-by construction of ${\cal C}$, $[\pmax]^0 = \Sigma$. Since $\pmax/e = \pmax$ for all
-$e\in\Sigma$, this proves statements (\ref{eq:pmaxa}) and (\ref{eq:pmaxb}).
-The internal choice construct used in the specification of $\pmax$ implies
-$\minaccs(\pmax) = {\cal C}$. Again, $\pmax/e = \pmax$ for all
-$e\in\Sigma$ implies $\minaccs(\pmax/s) = {\cal C}$ for all traces of $\pmax$, so this shows (\ref{eq:pmaxc}). Statement (\ref{eq:pmaxe}) is a direct consequence
-of (\ref{eq:pmaxc}).
-
-Let $H$ be any minimal hitting set of ${\cal C}$. Then
-$H$ contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because
-otherwise $\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any
-subset $A\subseteq \Sigma\setminus H$ with cardinality
-$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in ${\cal C}$, but satisfy
-$A\cap H=\varnothing$. Since
+Since $\bigcup_{A\in{\cal C}} A = \Sigma $ by construction of ${\cal C}$,
+$[\pmax]^0 = \Sigma$ and stated by (\ref{eq:pmaxa}). Since $\pmax/e = \pmax$
+for all $e\in\Sigma$, this proves statement (\ref{eq:pmaxb}). The internal
+choice construct used in the specification of $\pmax$ implies
+$\minaccs(\pmax) = {\cal C}$. Again, $\pmax/e = \pmax$ for all $e\in\Sigma$
+implies $\minaccs(\pmax/s) = {\cal C}$ for all traces of $\pmax$, so this
+shows (\ref{eq:pmaxc}). Statement (\ref{eq:pmaxe}) is a direct consequence of
+(\ref{eq:pmaxc}). Let $H$ be any minimal hitting set of ${\cal C}$. Then $H$
+contains at least $\lfloor{\frac{n}{2}}\rfloor$ elements, because otherwise
+$\card{\Sigma\setminus H} > n-\lfloor{\frac{n}{2}}\rfloor$, and any subset
+$A\subseteq \Sigma\setminus H$ with cardinality
+$n-\lfloor{\frac{n}{2}}\rfloor+1$  would be contained in ${\cal C}$, but
+satisfy $A\cap H=\varnothing$. Since
 $\lfloor{\frac{n}{2}}\rfloor+n-\lfloor{\frac{n}{2}}\rfloor+1=n+1$, we
-conclude
- that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
- intersects  every element of ${\cal C}$.  Therefore, every minimal hitting set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements; this shows (\ref{eq:pmaxf})
-and $\card{\minhits({\cal C})} = \binom{n}{\lfloor{\frac{n}{2}}\rfloor}$. The latter
-shows  (\ref{eq:pmaxd}) and completes the proof.
-\xbox
+conclude that any $\lfloor{\frac{n}{2}}\rfloor$-element subset of $\Sigma$
+intersects  every element of ${\cal C}$.  Therefore, every minimal hitting
+set of ${\cal C}$ has exactly $\lfloor{\frac{n}{2}}\rfloor$ elements; this
+shows (\ref{eq:pmaxf}) and $\card{\minhits({\cal C})} =
+\binom{n}{\lfloor{\frac{n}{2}}\rfloor}$. The latter shows  (\ref{eq:pmaxd})
+and completes the proof. \xbox
 \end{proof}
 
 % -----------------------------------------------------------------------------
-\subsubsection*{Test Cases of $\pmax$}
-The test cases $U_F(j)$ generated from $\pmax$
-can never enter branch (\ref{eq:ufa}), because $\pmax/s$ has initials $\Sigma$ for
-all traces $s\in\trc(\pmax)$ according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxa}).
-Moreover, they can never enter branch (\ref{eq:ufb}), because $\minhits(\pmax/s)$
-is never empty according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxd}).
-Finally, the minimal hitting sets used to probe the SUT at the end of a
-non-blocking  test execution are always the hitting sets of ${\cal C}$
-according to Lemma~\ref{lemma:pmax}, (\ref{eq:pmaxe}).
-This results in a test case structure
+\paragraph{Test Cases of $\pmax$} The test cases $U_F(j)$ generated from $\pmax$ can
+never enter branch (\ref{eq:ufa}), because $\pmax/s$ has initials $\Sigma$
+for all traces $s\in\trc(\pmax)$ according to (\ref{eq:pmaxa}). Moreover,
+they can never enter branch (\ref{eq:ufb}), because $\minhits(\pmax/s)$ is
+never empty according to (\ref{eq:pmaxd}). Finally, the minimal hitting sets
+used to probe the SUT at the end of a non-blocking test execution are always
+the hitting sets of ${\cal C}$ according to (\ref{eq:pmaxe}). This results in
+the following test case structure.
 \begin{eqnarray*}
 \label{eq:UFPpmax}
 U_F(j) & = & U_F(j,0,\ii n)
@@ -132,20 +147,17 @@ U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
 \\ & & (k = j) \& \big( \Intchoice_{H\in\minhits({\cal C})} (e:H   \then \epass \then\Stop   )  \big)
 \end{eqnarray*}
 
-
-
 % -----------------------------------------------------------------------------
-\subsubsection*{Maximal Number of Test Executions for $\pmax$}
-
-When considering the number of test executions to be performed by
-$U_F(j)$ against some SUT $Q$ for all $j=0,\dots,pq-1$, the maximal number of
-test executions is only reached if $Q$ is a correct refinement of the reference
+\paragraph{Maximal Number of Test Executions for $\pmax$}
+When considering the number of test executions to be performed by $U_F(j)$
+against some SUT $Q$ for all $j=0,\dots,pq-1$, the maximal number of test
+executions is only reached if $Q$ is a correct refinement of the reference
 process or if it fails in the very last execution of the very last $U_F(j)$
-executed against $Q$. If an erroneous behaviour of $Q$ is revealed before this
-very last execution, the test suite is stopped and $Q$ is fixed before
-executing the suite again.
-Therefore, we consider only correct SUTs $Q$ when determining the
-maximal number of executions that can be executed.
+executed against $Q$. If an erroneous behaviour of $Q$ is revealed before
+this very last execution, the test experiment is stopped (and $Q$ can be
+fixed before executing the suite again). Therefore, we consider only correct
+SUTs $Q$ when determining the maximal number of executions that can be
+executed.
 
 For the  $U_F(j)$ generated from $\pmax$, the number of test executions
  to be performed is maximal if $\pmax\lessdet_F Q$ and
@@ -333,6 +345,7 @@ U_T(pq-1))$ is of order  $O\big(\card{\Sigma}^{pq-1}\big)$.
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
+\label{section:complexity:length}
 
 According to Theorem~\ref{th:failurestest}, the tests $U_F(j)$ need to be
 executed for $j = 0,\dots,pq-1$ to guarantee completeness.
