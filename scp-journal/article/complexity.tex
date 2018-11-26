@@ -146,82 +146,98 @@ U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
 \\ & & \extchoice
 \\ & & (k = j) \& \big( \Intchoice_{H\in\minhits({\cal C})} (e:H   \then \epass \then\Stop   )  \big)
 \end{eqnarray*}
+This means that the branches of $U_F(j)$ that can lead to an early
+termination are not feasible. All tests deadlock, or run to the end of a
+trace of size $j$ and then present the choice of event of a minimal hitting
+set.
 
 % -----------------------------------------------------------------------------
 \paragraph{Maximal Number of Test Executions for $\pmax$}
-When considering the number of test executions to be performed by $U_F(j)$
-against some SUT $Q$ for all $j=0,\dots,pq-1$, the maximal number of test
-executions is only reached if $Q$ is a correct refinement of the reference
-process or if it fails in the very last execution of the very last $U_F(j)$
-executed against $Q$. If an erroneous behaviour of $Q$ is revealed before
-this very last execution, the test experiment is stopped (and $Q$ can be
-fixed before executing the suite again). Therefore, we consider only correct
-SUTs $Q$ when determining the maximal number of executions that can be
-executed.
-
-For the  $U_F(j)$ generated from $\pmax$, the number of test executions
- to be performed is maximal if $\pmax\lessdet_F Q$ and
-$\trc(Q) = \Sigma^*$. In such a situation, no test execution blocks early, because
-$Q/s$ can always engage into some $e\in\Sigma$   while $\#s<j$ and will never block
-in the last step when $\#s = j$ and a hitting set $H\in\minhits({\cal C})$ is
-offered by the test case. The resulting number of executions is
+When considering the number of test executions to be performed using $U_F(j)$
+derived from $\pmax$ against some SUT $Q$ for all $j = 0,\dots,pq-1$, and
+considering that we need to cover all the possible behaviours of $Q$, the
+maximal number of test executions is only reached if (a)~$Q$ is a correct
+refinement of $\pmax$ (or more generally, of the reference process) and
+(b)~its traces are $\Sigma^*$.
+%or if it fails in the very last execution of the very last $U_F(j)$
+%executed against $Q$. If an erroneous behaviour of $Q$ is revealed before
+%this very last execution, the test experiment is stopped (and $Q$ can be
+%fixed before executing the suite again). Therefore, we consider only correct
+%SUTs $Q$ when determining the maximal number of executions that can be
+%executed.
+%
+%For the  $U_F(j)$ generated from $\pmax$, the number of test executions
+% to be performed is maximal if $\pmax\lessdet_F Q$ and
+%$\trc(Q) = \Sigma^*$.
+In such a situation, no test execution blocks early, because $Q/s$ can always
+engage into some $e\in\Sigma$  while $\#s<j$, and never blocks in the last
+step when $\#s = j$ and a hitting set $H\in\minhits({\cal C})$ is offered by
+the test case. The resulting number of executions in this case is
 %
 \begin{equation}
 \label{eq:maxexec}
 n^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor},
 \end{equation}
 %
-because all traces up to length $j$ can be executed with $U_F(j)$ entering branch
-(\ref{eq:ufc}), and each of these traces is followed by one event
-from each of the hitting sets of ${\cal C}$.
+because \pagebreak all traces up to length $j$ can be executed with $U_F(j)$
+entering branch (\ref{eq:ufc}), and each of these traces is followed by one
+event from each of the hitting sets of ${\cal C}$ since $Q$ is correct.  %(b) leads to the maximal number of
+%executions possible, because it is responsible for the factor *n^{(pq-1)} in
+%the upper bound (47), (48) [n = |Sigma|]. Considering a reference process
+%with fewer traces or an implementation Q with fewer traces would
+%significantly reduce the value of this factor, while just adding one
+%additional execution possibility for branch (20), after which the test suite
+%is stopped due to failure.
 
-The number of executions specified in (\ref{eq:maxexec}) is indeed maximal for
-all reference processes $P$ fulfilling $\minhits(P/s)\neq\varnothing$ for all
-traces $s$: All these processes can never enter branch (\ref{eq:ufb}), and,
-if an execution with an SUT entered branch (\ref{eq:ufa}), this would only lead to early termination of the whole test suite, because a failure has been detected.
-As a consequence, $\card{\Sigma}^{j}$ is the maximal number of traces to be executed
-up to length $j$, and from Theorem~\ref{th:sperner} we know that the number
-$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ of hitting sets to be tested at the end of each trace of length $j$ is already maximal.
+The number of executions in (\ref{eq:maxexec}) is indeed maximal for all
+reference processes $P$ fulfilling $\minhits(P/s)\neq\varnothing$ for all
+traces $s$. All these processes can never enter branch (\ref{eq:ufb}), and,
+if an execution with an SUT entered branch (\ref{eq:ufa}), this would only
+lead to early termination of the whole test suite, because a failure has been
+detected. As a consequence, $\card{\Sigma}^{j}$ is the maximal number of
+traces to be executed up to length $j$, and from Theorem~\ref{th:sperner} we
+know that the number $\binom{n}{\lfloor\frac{n}{2}\rfloor}$ of hitting sets
+to be tested at the end of each trace of length $j$ is already maximal.
 
-Summing up  formula
-(\ref{eq:maxexec}) over all test cases $U_F(0),\dots,U_F(pq-1)$ to be executed and applying the formula for the sum of a geometric progression,  this results in
+Summing up  formula (\ref{eq:maxexec}) over all test cases
+$U_F(0),\dots,U_F(pq-1)$ to be executed and applying the formula for the sum
+of a geometric progression,  this results int
 %
 \begin{equation}\label{eq:pmaxcomplexity}
 \sum_{j=0}^{pq-1} n^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor}  =
 \binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot\frac{1-n^{pq}}{1-n}\quad\text{with $n=\card{\Sigma}$}
 \end{equation}
 %
-as the maximal number of test executions to be performed when testing an error-free
-SUT $Q$ against reference process $\pmax$. This maximum is met when $\trc(Q) = \Sigma^*$.
-If one is only interested in the order of magnitude, the maximal nmber of executions
-may be re-written as
+as the maximal number of test executions to be performed when testing an
+error-free SUT $Q$ with $\trc(Q) = \Sigma^*$ against the reference process
+$\pmax$. If we are interested only in the order of magnitude, the maximal
+number of executions may be given as
 %
 \begin{equation}
 \label{eq:maxO}
 O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot n^{pq-1}\big)\quad\text{with $n=\card{\Sigma}$}.
 \end{equation}
 
-
 % -----------------------------------------------------------------------------
-\subsubsection*{Considering Empty Collections of Minimal Hitting Sets}
-
-The argument so far has shown that reference process $\pmax$ requires the most test
-executions among all CSP processes $P$ whose collections of minimal hitting sets
-$\minhits(P/s)$ are never empty for any trace $s$, so that the branch
+\paragraph{Considering Empty Collections of Minimal Hitting Sets}
+The argument so far has shown that the tests derived from the reference
+process $\pmax$ require the most test executions when compared to tests
+derived from any other CSP process $P$ whose collections of minimal hitting
+sets $\minhits(P/s)$ are never empty for any trace $s$, so that the branch
 (\ref{eq:ufb}) of the related test cases $U_F(j)$ can never be entered.
 Lemma~\ref{lemma:failureshittingsets} implies that an empty collection
-$\minhits(P/s)$
-is equivalent to $(s,A)\in\fails(P)$ for all $A\subseteq\Sigma$. This is equivalent to
-$(s,\Sigma)\in\fails(P)$ or
-$\maxrefs(P/s) = \{ \Sigma \}$ or $\minaccs(P/s) = \{ \varnothing\}$.
+$\minhits(P/s)$ is equivalent to $(s,A)\in\fails(P)$ for all
+$A\subseteq\Sigma$. This is equivalent to $\maxrefs(P/s) = \{ \Sigma \}$ or
+$\minaccs(P/s) = \{ \varnothing\}$.
 
-It remains to
-consider the question whether reference processes $Z$ possessing failures $(s,\Sigma)$
-may require more test executions for their associated tests $U_F(j)$ than the bound
-given for $\pmax$ in (\ref{eq:pmaxcomplexity}), because process states $Z/s$ with
-$\minhits(Z/s)=\varnothing$ allow for test executions entering branch (\ref{eq:ufb}).
-To this end, consider a test case $U_F(j)$ constructed from such a process $Z$. Every trace
-$s\in\trc(Z)$ with $\#s<j$ ending in a process state $Z/s$ with $\minhits(Z/s)=\varnothing$ allows for
+It remains to consider whether reference processes $Z$ possessing failures
+$(s,\Sigma)$ may require more test executions for their associated tests
+$U_F(j)$ than the bound given for $\pmax$ in (\ref{eq:pmaxcomplexity}),
+because process states $Z/s$ with $\minhits(Z/s)=\varnothing$ allow for test
+executions entering branch (\ref{eq:ufb}). To this end, consider a test case
+$U_F(j)$ constructed from such a process $Z$. Every trace $s\in\trc(Z)$ with
+$\#s<j$ ending in a process state $Z/s$ with $\minhits(Z/s)=\varnothing$
+allows for
 %
 \begin{itemize}
 \item one execution of branch (\ref{eq:ufb}), where the test execution
