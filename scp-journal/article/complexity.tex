@@ -48,8 +48,9 @@ trace refinement? We consider the first question~(1) in
 Section~\ref{section:complexity:failures}), where we also discuss whether it
 it is possible to reduce the number of test executions with a different test
 suite.  With the answer to question~(1), question~(2) is a fairly simple
-consequence we discuss in Section~\ref{section:complexity:traces}.
-Question~(3) is the subject of Section~\ref{section:complexity:length}.
+consequence we discuss briefly also in
+Section~\ref{section:complexity:failures}. Question~(3) is the subject of
+Section~\ref{section:complexity:length}.
 
 % -------------------------------------------------------------------------
 \subsection{Estimates for the Maximal Number of Failures Test Executions}
@@ -336,6 +337,14 @@ precise  upper bound is given by
 \xbox
 \end{theorem}
 %
+As established by Lemma~\ref{lemma:hseta}, the number of hitting sets used to
+probe the SUT cannot be reduced:~if the reference process is $\pmax$, we need
+to consider all of them, otherwise illegal blocking may remain undetected. In
+addition, if $\pmax$ defines the behaviour of the SUT, using smaller sets
+that are no longer hitting sets lead to a rejection of correct
+implementations. Our explicit definition of $\pmax$ to establish this
+worst-case is useful to illustrate this point.
+
 In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test {\it every}
 non-empty subset of $\Sigma$ whose events cannot be completely refused in a
 given process state of the reference model; this leads to a worst-case
@@ -362,32 +371,30 @@ not give an estimate for the number of test executions.
 % .......................................................................................
 
 % -------------------------------------------------------------------------
-\subsection{Estimates for the Maximal Number of Trace Test Executions}
-\label{section:complexity:traces}
-
+\paragraph{Estimate for the Maximal Number of Trace Test Executions}
+%\label{section:complexity:traces}
 According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
 refinement just contains the adaptive test case $U_T(pq-1)$. As derived for
-$U_F(j)$ above, the maximal number of executions to be performed by $(Q\parallel[\Sigma]
-U_T(pq-1))$ is of order  $O\big(\card{\Sigma}^{pq-1}\big)$.
+$U_F(j)$ above, the maximal number of executions to be performed by
+$(Q\parallel[\Sigma] U_T(pq-1))$ is of order
+$O\big(\card{\Sigma}^{pq-1}\big)$.
 
 % -------------------------------------------------------------------------
 \subsection{Upper Bound $pq$ for the Maximal Length of Test Traces}
 \label{section:complexity:length}
 
 According to Theorem~\ref{th:failurestest}, the tests $U_F(j)$ need to be
-executed for $j = 0,\dots,pq-1$ to guarantee completeness.
- This means that the SUT is verified with test
-traces up to, and including, length $pq$: recall from the test specification,
-branch (\ref{eq:ufa}), that $U_F(j)$ will accept all traces $s.e$ with
-$s\in\trc(P), \#s = j, e\not\in\trc(P/s)$, so erroneous traces up to length
-$j+1$ are detected.
+executed for $j = 0,\dots,pq-1$ to guarantee completeness. So, the SUT is
+verified with test traces up to, and including, length $pq$. With branch
+(\ref{eq:ufa}), $U_F(j)$ accepts all traces $s.e$ with $s\in\trc(P), \#s
+= j, e\not\in\trc(P/s)$, so erroneous traces up to length $j+1$ are detected.
 
-It is interesting to investigate whether this maximal length is really
-necessary, or whether one could elaborate alternative complete test
-strategies where the SUT is tested with shorter traces only. Indeed, an
-example  presented in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} shows
-that when testing for equivalence of deterministic FSMs, it is sufficient to
-test the SUT with traces of significantly shorter length.
+It is interesting to investigate whether this maximal length is necessary, or
+one could elaborate alternative complete test strategies where the
+SUT is tested with shorter traces only. Indeed, an example
+in~\cite[Exercise~5]{PeleskaHuangLectureNotesMBT} shows that, when testing
+for equivalence of deterministic FSMs, it is sufficient to test with
+traces of significantly shorter length.
 
 The following example, however, shows that the maximal length $pq$ is really
 required when testing for refinement.
@@ -431,21 +438,6 @@ required when testing for refinement.
 %is refused by $Q$. \xbox
 %\end{example}
 
-\begin{figure}[htbp]
-\begin{center}
-\begin{minipage}{.4\textwidth}
-\includegraphics[width=1.2\textwidth]{theorem5p.pdf}
-\end{minipage}
-\hfill
-\begin{minipage}{.55\textwidth}
-\includegraphics[width=1.2\textwidth]{theorem5q.pdf}
-\end{minipage}
-\caption{Transition graphs of $P$ (left) and $Q$ (right) from Example~\ref{ex:pq}
- for $p=3$ and $q=4$.}
-\label{fig:examplepq}
-\end{center}
-\end{figure}
-
 \begin{example}\label{ex:pq}
 Consider the CSP reference process $P$ and an erroneous implementation $Q$
 specified as follows.
@@ -469,34 +461,48 @@ Fig.~\ref{fig:examplepq} for the case $p=3,\ q=4$. Using FDR4, it can be
 shown for concrete values of $p$ and $q$ that the  ``test passed conditions''
 \[
 (\epass\then\Stop) \lessdet_F (Q\parallel[\Sigma] U_F(j))\hide \Sigma
-\]
-and
-\[
+\quad
+\mathrm{and}
+\quad
 (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(j))\hide \Sigma
 \]
-hold for $j = 0,\dots,pq-2$. This means that none of the test cases $U_F(j)$
-and $U_T(j)$ are capable of detecting failures and trace refinement
-violations, if they only check traces up to length $pq-1$
-(recall that this corresponds to $j\le pq-2$).
+hold for $j = 0,\dots,pq-2$. So, none of the test cases $U_F(j)$ and $U_T(j)$
+are capable of detecting failures and trace refinement violations, if they
+only check traces up to length $pq-1$. (We recall that this corresponds to
+$j\le pq-2$).
 
-Process $Q$, however, neither conforms to $P$ in the failures refinement
-relation, nor in the trace
-refinement relation. This can only be seen when executing the test $U_F(pq-1)$ and
-$U_T(pq-1)$, respectively. These tests fail, so this shows that $P\not\lessdet_F Q$ and
-$P\not\lessdet_T Q$ according to Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this shows that
-the maximal trace
-length $pq$ to be investigated in the tests cannot be further reduced without losing
-the completeness property of the test suites.
-\xbox
+$Q$, however, neither conforms to $P$ in the failures refinement relation,
+nor in the trace refinement relation. This can only be seen when executing
+the test $U_F(pq-1)$ and $U_T(pq-1)$, respectively. These tests fail, so this
+shows that $P\not\lessdet_F Q$ and $P\not\lessdet_T Q$ according to
+Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this
+shows that the maximal trace length $pq$ to be investigated in the tests
+cannot be further reduced without losing the completeness property of the
+test suites. \xbox
 \end{example}
 %
-Generalising Example~\ref{ex:pq}, it can be shown that for any pair
-$2\le p,q \in\mathbb{N}$,
-there exist reference processes $P$ with $p$ states
-and implementation processes $Q$ with $q$ states, such that
-a violation of the trace refinement property
-can only be detected with a trace of length $pq$. This is proven in the following
-theorem. In the proof, we use the processes $P$ and $Q$ introduced in Example~\ref{ex:pq}.
+Generalising Example~\ref{ex:pq}, it can be shown that for any $p,q \geq 2$,
+%\in\mathbb{N}$,
+there exist reference processes $P$ with $p$ states and
+implementation processes $Q$ with $q$ states, such that a violation of the
+trace refinement property can only be detected with a trace of length $pq$.
+This is proven in the following
+theorem. %In the proof, we use the processes $P$ and $Q$ introduced in Example~\ref{ex:pq}.
+
+\begin{figure}[tbp]
+\begin{center}
+\begin{minipage}{.4\textwidth}
+\includegraphics[trim=1.4cm 0cm 0cm 0cm,clip,width=1.1\textwidth]{theorem5p.pdf}
+\end{minipage}
+\hfill
+\begin{minipage}{.55\textwidth}
+\includegraphics[trim=1.4cm 0cm 0cm 0cm,clip,width=1.1\textwidth]{theorem5q.pdf}
+\end{minipage}
+\caption{Transition graphs of $P$ (left) and $Q$ (right) from Example~\ref{ex:pq}
+ for $p=3$ and $q=4$.}
+\label{fig:examplepq}
+\end{center}
+\end{figure}
 
 % ----------------------------------------------------------------------------
 \begin{theorem}\label{th:maxtracelen}
@@ -514,10 +520,11 @@ cannot be reduced without losing the test suite's completeness property.
 \end{theorem}
 % ----------------------------------------------------------------------------
 \begin{proof}
-Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and implementation process $Q$ as in Example~\ref{ex:pq}. It is trivial to see that
-$G(P)$ has $p$ nodes and $G(Q)$ has $q$ nodes, so statements 1 and 2 of the theorem hold.
-
-Using regular expression notation, the traces of $P$ can be specified as
+Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and
+implementation process $Q$ as in Example~\ref{ex:pq}. It is trivial to see
+that $G(P)$ has $p$ nodes and $G(Q)$ has $q$ nodes, so statements 1 and 2 of
+the theorem hold. Using regular expression notation, the traces of $P$ can be
+specified as
 \[
 \trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
 \]
