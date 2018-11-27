@@ -1,5 +1,4 @@
-\section{Complexity Considerations}
-\label{sec:complexity}
+i\section{Complexity Considerations} \label{sec:complexity}
 % ================================================================================
 
 %In this section, we calculate estimates for the maximal number of test
@@ -65,7 +64,10 @@ the number of test executions needed, we first define a process $\pmax$~(see
 maximal number of test executions among all reference processes $P$
 fulfilling $\minhits(P/s) \neq \varnothing$ for all traces $s$. For $\pmax$,
 we can establish the actual number of test executions required~(see
-(\ref{eq:pmaxcomplexity})).
+(\ref{eq:pmaxcomplexity})). We then show that the order of magnitude of the
+worst-case bound for the number of test executions is the same also for
+reference processes $P$ that may have $\minhits(P/s) = \varnothing$ for some
+$s$.
 
 % -----------------------------------------------------------------------------
 \paragraph{A Reference Process} Given an alphabet $\Sigma$ of size $\card{\Sigma} =
@@ -148,8 +150,22 @@ U_F(j,k,n) & = &   (k < j) \& \big(e:\Sigma   \then U_F(j,k+1,t(n,e) \big)
 \end{eqnarray*}
 This means that the branches of $U_F(j)$ that can lead to an early
 termination are not feasible. All tests deadlock, or run to the end of a
-trace of size $j$ and then present the choice of event of a minimal hitting
+trace of size $j$ and then present a choice of events from a minimal hitting
 set.
+
+Moreover, Theorem~\ref{th:sperner} establishes that given an alphabet with
+$n$ elements, there is no Sperner family consisting of more than
+$\binom{n}{\lfloor\frac{n}{2}\rfloor}$. In addition, we recall the minimal
+hitting sets calculated from a given set of minimal acceptances are a Sperner
+family~(see discussion in Section~\ref{sec:sperner}). So, (\ref{eq:pmaxd})
+establishes that there is no possibility of providing more choices fom
+minimal hitting sets with a test derived from a process different from
+$\pmax$.
+
+In summary, the tests derived from $\pmax$ require the most test executions
+when compared to tests derived from any other CSP process $P$ whose
+collections of minimal hitting sets $\minhits(P/s)$ are never empty for any
+trace $s$.
 
 % -----------------------------------------------------------------------------
 \paragraph{Maximal Number of Test Executions for $\pmax$}
@@ -179,7 +195,7 @@ the test case. The resulting number of executions in this case is
 n^{j}\cdot \binom{n}{\lfloor\frac{n}{2}\rfloor},
 \end{equation}
 %
-because \pagebreak all traces up to length $j$ can be executed with $U_F(j)$
+because all traces up to length $j$ can be executed with $U_F(j)$
 entering branch (\ref{eq:ufc}), and each of these traces is followed by one
 event from each of the hitting sets of ${\cal C}$ since $Q$ is correct.  %(b) leads to the maximal number of
 %executions possible, because it is responsible for the factor *n^{(pq-1)} in
@@ -210,8 +226,7 @@ of a geometric progression,  this results int
 %
 as the maximal number of test executions to be performed when testing an
 error-free SUT $Q$ with $\trc(Q) = \Sigma^*$ against the reference process
-$\pmax$. If we are interested only in the order of magnitude, the maximal
-number of executions may be given as
+$\pmax$. If we are interested only in the order of magnitude, we have
 %
 \begin{equation}
 \label{eq:maxO}
@@ -220,16 +235,13 @@ O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}\cdot n^{pq-1}\big)\quad\text{with $n=
 
 % -----------------------------------------------------------------------------
 \paragraph{Considering Empty Collections of Minimal Hitting Sets}
-The argument so far has shown that the tests derived from the reference
-process $\pmax$ require the most test executions when compared to tests
-derived from any other CSP process $P$ whose collections of minimal hitting
-sets $\minhits(P/s)$ are never empty for any trace $s$, so that the branch
-(\ref{eq:ufb}) of the related test cases $U_F(j)$ can never be entered.
-Lemma~\ref{lemma:failureshittingsets} implies that an empty collection
-$\minhits(P/s)$ is equivalent to $(s,A)\in\fails(P)$ for all
-$A\subseteq\Sigma$. This is equivalent to $\maxrefs(P/s) = \{ \Sigma \}$ or
-$\minaccs(P/s) = \{ \varnothing\}$.
-
+The argument so far has shown that the tests derived from $\pmax$ require the
+most test executions when considering processes whose collections of minimal
+hitting sets are never empty. %Lemma~\ref{lemma:failureshittingsets} implies
+%that an empty collection $\minhits(P/s)$ is equivalent to $(s,A)\in\fails(P)$
+%for all $A\subseteq\Sigma$. This is equivalent to $\maxrefs(P/s) = \{ \Sigma
+%\}$ or $\minaccs(P/s) = \{ \varnothing\}$.
+%
 It remains to consider whether reference processes $Z$ possessing failures
 $(s,\Sigma)$ may require more test executions for their associated tests
 $U_F(j)$ than the bound given for $\pmax$ in (\ref{eq:pmaxcomplexity}),
@@ -253,7 +265,7 @@ $\minhits(Z/s)=\varnothing$, and otherwise
 \item $\card{\minhits(Z/s)}$ executions checking acceptance of minimal hitting sets.
 \end{itemize}
 %
-For a rough estimate of the worst case upper bound suppose that
+For a rough estimate of the worst-case upper bound suppose that
 %
 \begin{enumerate}
 \item $[Z/s]^0 = \Sigma$ for all traces $s$ of $Z$,
@@ -262,19 +274,25 @@ For a rough estimate of the worst case upper bound suppose that
  of hitting sets.
 \end{enumerate}
 %
-Note that this situation cannot be realised for all $j\in\{0,\dots,pq-1\}$, because
-the traces of
-$U_F(p-1)$ already cover all states of $Z$'s transition graph according to Lemma~\ref{lemma:extendV}, and if all states of $Z$ have empty hitting sets, there are no acceptance checks to be performed in the last step of the test execution. Therefore, the   upper bound calculated next cannot be reached by a real CSP process.
-With the 3 assumptions above, we calculate that
+We note that this scenario is not feasible for all $j\in\{0,\dots,pq-1\}$,
+because the traces of $U_F(p-1)$ already cover all states of $Z$'s transition
+graph according to Lemma~\ref{lemma:extendV}, and if all states of $Z$ have
+empty hitting sets, there are no acceptance checks to be performed in the
+last step of the test execution. Therefore, \pagebreak the upper bound
+calculated next cannot be reached by a CSP process. With the three
+assumptions above, nevertheless, we can calculate that
 %
 \begin{itemize}
 \item  $U_F(0)$ has  $\binom{n}{\lfloor n/2\rfloor}$ executions,
-\item $U_F(j),\ j > 0$ has $\sum_{i=0}^{j-1} n^i = \frac{n^j - 1}{n-1}$ executions of branch (\ref{eq:ufb}), ($n = \card{\Sigma}$), and
-\item $U_F(j),\ j > 0$ has $\binom{n}{\lfloor n/2\rfloor}\cdot n^j$ executions where the acceptance of
-hitting sets is checked after having run through a trace of length $j$.
+\item $U_F(j)$, for $j > 0$ has $\sum_{i=0}^{j-1} n^i = \frac{n^j -
+    1}{n-1}$ executions of branch (\ref{eq:ufb}), ($n = \card{\Sigma}$),
+    and
+\item $U_F(j)$, for $j > 0$ has $\binom{n}{\lfloor n/2\rfloor}\cdot n^j$
+    executions where the acceptance of hitting sets is checked after having
+    run through a trace of length $j$.
 \end{itemize}
 %
-Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$,  an upper bound $B$ for the number of test executions may be calculated as follows.
+Summing up over all $U_F(j)$ for $j=0,\dots,pq-1$, an upper bound $B$ may be calculated as follows.
 %
 \begin{eqnarray*}
 B & = & \binom{n}{\lfloor n/2\rfloor} + \sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1} +
@@ -291,10 +309,11 @@ B & = & \binom{n}{\lfloor n/2\rfloor} + \sum_{j=1}^{pq-1} \frac{n^j - 1}{n-1} +
 & = & \frac{\binom{n}{\left\lfloor \frac{n}{2}\right\rfloor}(n-1) \left(n^{pq}-1\right) +n^{pq}-npq+pq-1}{(n-1)^2}
 \end{eqnarray*}
 %
-Since  $B$ cannot be reached anyway,
-we just calculate its order of magnitude, and this results again in $O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}  \cdot n^{pq-1}\big)$, as calculated already for $\pmax$ in (\ref{eq:maxO}).
+Since $B$ cannot be reached anyway, we just calculate its order of magnitude,
+and this results again in $O\big(\binom{n}{\lfloor\frac{n}{2}\rfloor}  \cdot
+n^{pq-1}\big)$, as calculated already for $\pmax$ in (\ref{eq:maxO}).
 %
-Summarising these complexity calculations, this results in the following theorem.
+Summarising these complexity calculations, we have the following theorem.
 %
 \begin{theorem}
 \label{th:maxexecs}
@@ -317,38 +336,30 @@ precise  upper bound is given by
 \xbox
 \end{theorem}
 %
-
-
-%
 In~\cite{Hennessy:1988:ATP:50497}, it is suggested to test {\it every}
 non-empty subset of $\Sigma$ whose events cannot be completely refused in a
 given process state of the reference model; this leads to a worst-case
 estimate of $2^{\card{\Sigma}}-1$ for the number of different sets to be
-offered to the SUT in the last step of the test execution. This number is significantly larger than the worst-case estimate $\binom{n}{\lfloor n/2\rfloor}$ calculated above for the
-hitting sets to be checked.
-In Fig.~\ref{fig:minhita}, the reduction is visualised by plots of
-the two functions.
-
-
-
-
-In~\cite{DBLP:conf/icfem/CavalcantiG07}, the authors also use minimal hitting
-sets\footnote{However, they are denoted by {\it minimal acceptances}
-in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but they do not give an estimate for the number of test executions to be performed.
-
+offered to the SUT in the last step of the test execution. This number is
+significantly larger than the worst-case estimate $\binom{n}{\lfloor
+n/2\rfloor}$ above. In Fig.~\ref{fig:minhita}, the reduction is visualised by
+plots of the two functions. In~\cite{DBLP:conf/icfem/CavalcantiG07}, the
+authors also use minimal hitting sets\footnote{However, they are denoted by
+{\it minimal acceptances} in~\cite{DBLP:conf/icfem/CavalcantiG07}.}, but do
+not give an estimate for the number of test executions.
 
 % .....................................................................................
  \begin{figure}
  %%\hspace*{-40mm}
  \begin{center}
-\includegraphics[width=.8\textwidth]{curvecomparison.pdf}
+\includegraphics[scale=.7%width=.8\textwidth
+                        ]{curvecomparison.pdf}
 \end{center}
 %\vspace*{-10mm}
 \caption{Function plot $2^{\card{\Sigma}}$ versus $\binom{n}{\lfloor \frac{n}{2}\rfloor}$.}
  \label{fig:minhita}
  \end{figure}
 % .......................................................................................
-
 
 % -------------------------------------------------------------------------
 \subsection{Estimates for the Maximal Number of Trace Test Executions}
