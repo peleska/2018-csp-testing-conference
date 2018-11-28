@@ -523,29 +523,33 @@ cannot be reduced without losing the test suite's completeness property.
 Given $2\le p,q \in\mathbb{N}$, define reference process $P$ and
 implementation process $Q$ as in Example~\ref{ex:pq}. It is trivial to see
 that $G(P)$ has $p$ nodes and $G(Q)$ has $q$ nodes, so statements 1 and 2 of
-the theorem hold. Using regular expression notation, the traces of $P$ can be
-specified as
-\[
+the theorem hold.
+
+Using regular expression notation, the traces of $P$ can be specified as
+$%\[
 \trc(P) = \prefs\big(  (a^*b)^{p-1}a^* \big),
-\]
-where $\prefs(M)$ denotes the set of all prefixes of traces in $M\subseteq\Sigma^*$,
-including the traces of $M$ themselves.
-The traces of $Q$ can be specified by
-\[
+$ %\]
+where $\prefs(M)$ denotes the set of all prefixes of traces in
+$M\subseteq\Sigma^*$, including the traces of $M$ themselves. The traces of
+$Q$ can be specified by
+$%\[
 \trc(Q) = \prefs\big( (a^{q-1}(a|b))^*  \big).
-\]
+$ %\]
 It is easy to see that $\trc(Q)\not\subseteq\trc(P)$; for example, the trace
-$(a^{q-1}b)^p$ is in $\trc(Q)\setminus\trc(P)$, because $P$-traces may contain at most $p-1$ $b$-events. This proves statement~3 of the theorem.
+$(a^{q-1}b)^p$ is in $\trc(Q)\setminus\trc(P)$, because traces of $P$ contain
+at most $p-1$ $b$-events. This proves statement~3.
 
-Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$. Then $s$ can be represented
-by $s = (a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$.
-Then $s$ is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$
-is also contained in $\prefs\big(  (a^*b)^{p-1}a^* \big)$: this is easy to see, since
-$\prefs\big(  (a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$-events,
-where at most $p-1$ events $b$ have been inserted. This proves statement 4 of the theorem.
+Let $s \in\trc(Q)$ be any trace of length $\#s = pq-1$, then $s =
+(a^{q-1}(a|b))^{p-1}a^{q-1} \in \prefs\big( (a^{q-1}(a|b))^*  \big)$. So, $s$
+is also an element of $\trc(P)$, because $(a^{q-1}(a|b))^{p-1}a^{q-1}$ is
+also contained in $\prefs\big( (a^*b)^{p-1}a^* \big)$, since $\prefs\big(
+(a^*b)^{p-1}a^* \big)$ contains all finite sequences of $a$, where at most
+$p-1$ events $b$ have been inserted. This proves statement 4.
 
-To prove statement~5, we observe that the specification of $P$ implies (the
-expression $(s\cnt b)$ denotes the number of $b$-events occurring in trace $s$)
+To prove statement~5, we observe that the specifications of $P$ and $Q$ lead
+to the following sets of minimal acceptances.  In these definition, the
+expression $(s\cnt b)$ denotes the number of $b$ events occurring in trace
+$s$.
 \[
 \minaccs(P/s) = \left\{
 \begin{array}{ll}
@@ -554,9 +558,7 @@ expression $(s\cnt b)$ denotes the number of $b$-events occurring in trace $s$)
 \{ \{a\} \} & \text{for all $s\in\trc(P)$ with $(s\cnt b) = p-1$.}
 \end{array}
 \right.
-\]
-and
-\[
+\also
 \minaccs(Q/s) = \left\{
 \begin{array}{ll}
 \{ \{a\}  \} & \text{for all $s\in\trc(Q)$ with $\#s \neq 0\mod(q-1)$.}
@@ -565,18 +567,17 @@ and
 \end{array}
 \right.
 \]
-As a  consequence, the minimal acceptance set $A_P = \{a\}$ which is
-contained in every $\minaccs(P/s)$ fulfils $A_P \subseteq A_Q$ for
-any $A_Q\in\minaccs(Q/s)$, when $s\in\trc(P)\cap \trc(Q)$. Now Lemma~\ref{lemma:tgtrcref},
-(\ref{eq:failrefb}) can be applied to conclude that $Q\ conf\ P$.
-\xbox
+So, the minimal acceptance set $A_P = \{a\}$ contained in every
+$\minaccs(P/s)$ fulfils $A_P \subseteq A_Q$ for any $A_Q\in\minaccs(Q/s)$,
+when $s\in\trc(P)\cap \trc(Q)$. Now Lemma~\ref{lemma:tgtrcref}, in particular
+(\ref{eq:failrefb}), can be applied to conclude that $Q\ conf\ P$. \xbox
 \end{proof}
 %
 Since Theorem~\ref{th:maxtracelen} just states that a violation of trace
 refinement may remain undetected if only traces shorter than $pq$ are checked
-during tests, it can also be applied to our trace refinement tests.
+during tests, it can also be applied to our trace-refinement tests.
 Therefore, test suites $\{ U_T(j) \}$ with $j<pq-1$ are not complete. It is
-discussed in Section~\ref{sec:conc} how the number of test traces to be
+discussed next in Section~\ref{sec:conc} how the number of test traces to be
 executed by complete test suites for failures or trace refinement can still
 be reduced {\it without} reducing the maximal length.
 
