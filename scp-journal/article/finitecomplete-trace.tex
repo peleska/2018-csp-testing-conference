@@ -1,13 +1,13 @@
 % ==========================================================================
-\section{Finite Complete Test Suites for CSP Trace Refinement}
+\section{Finite Complete Test Suites for CSP Traces Refinement}
 \label{sec:finitecomplete}
 % ==========================================================================
 
-For establishing trace refinement, the following class of adaptive test cases
-are used for a given reference process $P$ and  integers $j \ge 0$. Just as
-for the tests developed  in Section~\ref{sec:finitecompletefails} to verify
-failures refinement, the tests for trace refinement are derived from the
-reference model's transition graph
+For establishing traces refinement, the following class of adaptive test
+cases are used for a given reference process $P$ and  integers $j \ge 0$.
+Just as for the tests developed  in Section~\ref{sec:finitecompletefails} to
+verify failures refinement, the tests for traces refinement are derived from
+the reference model's transition graph
 $$
 G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)).
 $$
@@ -95,11 +95,9 @@ particular, if neither $\epass$ nor $\efail$ is ever produced, so that
 $(Q\parallel[\Sigma] U_T(j)) \hide \Sigma = \Stop$, the test passes, because
 $(\epass\then\Stop) \lessdet_T \Stop$ holds.
 
-
-
 The existence of complete, finite test suites is expressed in analogy to
 Theorem~\ref{th:failurestest}. A noteworthy difference is that the complete
-suite for trace refinement just needs the single adaptive test case
+suite for traces refinement just needs the single adaptive test case
 $U_T(pq-1)$, while failures refinement requires the execution of $\{
 U_F(0),\dots,U_F(pq-1)\}$. The reason is that $U_T(pq-1)$ identifies trace
 errors for all traces up to length $pq$, while $U_F(pq-1)$ only probes for

@@ -77,7 +77,7 @@ test execution must end with the $\epass$
 event~\cite{Hennessy:1988:ATP:50497}.
 
 It is necessary to use failures refinement in the definition above, and not
-just trace refinement:~$(Q\parallel[\Sigma] U_F(j)) \hide \Sigma$ may have
+just traces refinement:~$(Q\parallel[\Sigma] U_F(j)) \hide \Sigma$ may have
 the same visible traces $\varepsilon$ and $\epass$ as the ``Test Passed
 Process'' $(\epass\then\Stop)$. However, the former may nondeterministically
 refuse $\epass$, due to a deadlock occurring when a faulty SUT process

@@ -42,9 +42,9 @@ Previous work did not consider sufficient conditions for finiteness, so
 complexity was not a concern. We answer the following questions. (1)~What is
 the worst-case bound on the number of test executions to be performed to
 verify an SUT with respect to failures refinement, when we use our test
-suite? (2)~What is the worst-case bound for trace refinement? (3)~Is it
+suite? (2)~What is the worst-case bound for traces refinement? (3)~Is it
 possible to reduce the maximal length of traces when testing for failures or
-trace refinement? We consider the first question~(1) in
+traces refinement? We consider the first question~(1) in
 Section~\ref{section:complexity:failures}), where we also discuss whether it
 it is possible to reduce the number of test executions with a different test
 suite.  With the answer to question~(1), question~(2) is a fairly simple
@@ -373,10 +373,10 @@ not give an estimate for the number of test executions.
 % -------------------------------------------------------------------------
 \paragraph{Estimate for the Maximal Number of Trace Test Executions}
 %\label{section:complexity:traces}
-According to Theorem~\ref{th:tracetest}, a complete test suite checking trace
-refinement just contains the adaptive test case $U_T(pq-1)$. As derived for
-$U_F(j)$ above, the maximal number of executions to be performed by
-$(Q\parallel[\Sigma] U_T(pq-1))$ is of order
+According to Theorem~\ref{th:tracetest}, a complete test suite checking
+traces refinement just contains the adaptive test case $U_T(pq-1)$. As
+derived for $U_F(j)$ above, the maximal number of executions to be performed
+by $(Q\parallel[\Sigma] U_T(pq-1))$ is of order
 $O\big(\card{\Sigma}^{pq-1}\big)$.
 
 % -------------------------------------------------------------------------
@@ -467,12 +467,12 @@ shown for concrete values of $p$ and $q$ that the  ``test passed conditions''
 (\epass\then\Stop) \lessdet_T (Q\parallel[\Sigma] U_T(j))\hide \Sigma
 \]
 hold for $j = 0,\dots,pq-2$. So, none of the test cases $U_F(j)$ and $U_T(j)$
-are capable of detecting failures and trace refinement violations, if they
+are capable of detecting failures and traces-refinement violations, if they
 only check traces up to length $pq-1$. (We recall that this corresponds to
 $j\le pq-2$).
 
 $Q$, however, neither conforms to $P$ in the failures refinement relation,
-nor in the trace refinement relation. This can only be seen when executing
+nor in the traces-refinement relation. This can only be seen when executing
 the test $U_F(pq-1)$ and $U_T(pq-1)$, respectively. These tests fail, so this
 shows that $P\not\lessdet_F Q$ and $P\not\lessdet_T Q$ according to
 Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this
@@ -483,10 +483,10 @@ test suites. \xbox
 %
 Generalising Example~\ref{ex:pq}, it can be shown that for any $p,q \geq 2$,
 %\in\mathbb{N}$,
-there exist reference processes $P$ with $p$ states and
-implementation processes $Q$ with $q$ states, such that a violation of the
-trace refinement property can only be detected with a trace of length $pq$.
-This is proven in the following
+there exist reference processes $P$ with $p$ states and implementation
+processes $Q$ with $q$ states, such that a violation of the traces-refinement
+property can only be detected with a trace of length $pq$. This is proven in
+the following
 theorem. %In the proof, we use the processes $P$ and $Q$ introduced in Example~\ref{ex:pq}.
 
 \begin{figure}[tbp]
@@ -515,8 +515,9 @@ implementation process $Q$ with the following properties.
 \item $\forall s\in\trc(Q): \#s < pq\implies s\in\trc(P)$.
 \item $Q\ conf\ P$.
 \end{enumerate}
-As a consequence, the upper bound $pq$ for the length of traces to be tested when checking for failures refinement or trace refinement
-cannot be reduced without losing the test suite's completeness property.
+As a consequence, the upper bound $pq$ for the length of traces to be tested
+when checking for failures refinement or traces refinement cannot be reduced
+without losing the test suite's completeness property.
 \end{theorem}
 % ----------------------------------------------------------------------------
 \begin{proof}
@@ -573,12 +574,8 @@ when $s\in\trc(P)\cap \trc(Q)$. Now Lemma~\ref{lemma:tgtrcref}, in particular
 (\ref{eq:failrefb}), can be applied to conclude that $Q\ conf\ P$. \xbox
 \end{proof}
 %
-Since Theorem~\ref{th:maxtracelen} just states that a violation of trace
-refinement may remain undetected if only traces shorter than $pq$ are checked
-during tests, it can also be applied to our trace-refinement tests.
-Therefore, test suites $\{ U_T(j) \}$ with $j<pq-1$ are not complete. It is
-discussed next in Section~\ref{sec:conc} how the number of test traces to be
-executed by complete test suites for failures or trace refinement can still
-be reduced {\it without} reducing the maximal length.
+It is discussed next in Section~\ref{sec:conc} how the number of test traces
+to be executed by complete test suites for failures or traces refinement can
+still be reduced {\it without} reducing the maximal length.
 
 % =================================================================================

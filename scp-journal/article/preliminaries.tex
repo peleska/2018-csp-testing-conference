@@ -114,7 +114,7 @@ For divergence-free processes, failures refinement, $P \lessdet_F Q$, is
 defined by $\fails(Q)\subseteq\fails(P)$. Since refusals are subset-closed,
 $P \lessdet_F Q$ implies $(s,\varnothing)\in\fails(P)$ for all traces
 $s\in\trc(Q)$. So, for divergence-free processes, failures refinement implies
-trace refinement. Therefore, using the conformance relation $conf$ below
+traces refinement. Therefore, using the conformance relation $conf$ below
 %
 \begin{equation}\label{eq:conf}
   Q\ conf\ P \defs \forall s\in \trc(P) \cap \trc(Q): \refs(Q/s)
@@ -342,8 +342,8 @@ G(Q) & = & ( N_Q, {\ii n}_Q, \Sigma, t_Q : N_Q\times\Sigma \pfun N_Q, r_Q : N_Q 
 \end{eqnarray*}
 %
 as established by the results  in the following lemma. There, result
-(\ref{eq:trcrefa}) reflects trace refinement in terms of graph traces; result
-(\ref{eq:failconf}) expresses failures refinement in terms of traces
+(\ref{eq:trcrefa}) reflects traces refinement in terms of graph traces;
+result (\ref{eq:failconf}) expresses failures refinement in terms of traces
 refinement and $conf$; result (\ref{eq:failrefa}) states how $conf$ can be
 expressed by means of the maximal refusal functions of the graphs involved;
 and result (\ref{eq:failrefb}) states the same in terms of the minimal
