@@ -1,0 +1,382 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[3p,times]{elsarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\journal{Science of Computer Programming}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Elsevier bibliography styles
+%%%%%%%%%%%%%%%%%%%%%%%
+%% To change the style, put a % in front of the second line of the current style and
+%% remove the % from the second line of the style you would like to use.
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Numbered
+%\bibliographystyle{model1-num-names}
+
+%% Numbered without titles
+%\bibliographystyle{model1a-num-names}
+
+%% Harvard
+%\bibliographystyle{model2-names.bst}\biboptions{authoryear}
+
+%% Vancouver numbered
+%\usepackage{numcompress}\bibliographystyle{model3-num-names}
+
+%% Vancouver name/year
+%\usepackage{numcompress}\bibliographystyle{model4-names}\biboptions{authoryear}
+
+%% APA style
+%\bibliographystyle{model5-names}\biboptions{authoryear}
+
+%% AMA style
+%\usepackage{numcompress}\bibliographystyle{model6-num-names}
+
+%% `Elsevier LaTeX' style
+\bibliographystyle{elsarticle-num}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[cmex10]{amsmath}
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+%
+\usepackage{url}
+\urldef{\mailsa}\path|{peleska,huang}@uni-bremen.de|
+\urldef{\mailsb}\path|ana.cavalcanti@york.ac.uk|
+\urldef{\mailsc}\path|adenilso@icmc.usp.br|
+
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\usepackage{hyperref}
+
+%\usepackage{float}
+%\usepackage{lscape}
+%\usepackage{lscape}
+%
+%\usepackage[linesnumbered,lined,boxed]{algorithm2e}
+\usepackage[draft]{fixme}
+%
+\usepackage{zed-csp}
+%
+%\DeclareMathSymbol{\B}{\mathalpha}{AMSb}{"42}
+%\DeclareMathSymbol{\I}{\mathalpha}{AMSb}{"49}
+%\DeclareMathSymbol{\N}{\mathalpha}{AMSb}{"4E}
+%\DeclareMathSymbol{\Pwr}{\mathalpha}{AMSb}{"50}
+%\DeclareMathSymbol{\Q}{\mathalpha}{AMSb}{"51}
+%\DeclareMathSymbol{\R}{\mathalpha}{AMSb}{"52}
+%\DeclareMathSymbol{\Z}{\mathalpha}{AMSb}{"5A}
+%\DeclareMathSymbol{\Sol}{\mathalpha}{AMSb}{"53}
+%
+%\newcommand{\obsv}[1]{{\cal O}(#1)}
+%\newcommand{\ctrl}[1]{{\cal C}(#1)}
+%\newcommand{\vdot}[1]{\stackrel{.}{#1}}
+%
+%\newcommand{\HS}{{\mathcal H}}
+%
+%\newcommand{\Interval}{\I}
+%
+\newcommand{\ist}{\mbox{{\tt true}}}
+\newcommand{\isf}{\mbox{{\tt false}}}
+%\newcommand{\emptytrace}{\langle~\rangle}
+%\newcommand{\abegin}{\mathbf{begin}}
+%\newcommand{\aend}{\mathbf{end}}
+%\newcommand{\alet}{\mathbf{let}}
+%\newcommand{\aendlet}{\mathbf{endlet}}
+%\newcommand{\ain}{\mathbf{in}}
+%\newcommand{\afor}{\mathbf{for}}
+%\newcommand{\adownto}{\mathbf{downto}}
+%\newcommand{\aforall}{\mathbf{foreach}}
+%\newcommand{\awhile}{\mathbf{while}}
+%\newcommand{\ado}{\mathbf{do}}
+%\newcommand{\aod}{\mathbf{od}}
+%\newcommand{\aenddo}{\mathbf{enddo}}
+%\newcommand{\aif}{\mathbf{if}}
+%\newcommand{\afi}{\mathbf{fi}}
+%\newcommand{\athen}{\mathbf{then}}
+%\newcommand{\aelse}{\mathbf{else}}
+%\newcommand{\aelseif}{\mathbf{elseif}}
+%\newcommand{\aendif}{\mathbf{endif}}
+%\newcommand{\ainout}{\mathbf{inout}}
+%\newcommand{\awhere}{\mathbf{where}}
+%\newcommand{\areturn}{\mathbf{return}}
+%\newcommand{\aout}{\mathbf{out}}
+%\newcommand{\aprocedure}{\mathbf{procedure}}
+%\newcommand{\afunction}{\mathbf{function}}
+%\newcommand{\abreak}{\mathbf{break}}
+%\newcommand{\Sup}[1]{\overline{#1}}
+%\newcommand{\Inf}[1]{\underline{#1}}
+%
+\newcommand{\taba}{\hspace*{3mm}}
+%\newcommand{\tabb}{\hspace*{6mm}}
+\newcommand{\tabc}{\hspace*{9mm}}
+\newcommand{\tabd}{\hspace*{12mm}}
+%\newcommand{\tabe}{\hspace*{15mm}}
+%\newcommand{\tabf}{\hspace*{18mm}}
+%
+%\newcommand{\gca}[1]{{{#1}^{\vartriangleright}}}
+%\newcommand{\gcb}[1]{{{#1}^{\vartriangleleft}}}
+%\newcommand{\gclr}{{{\vartriangleleft\atop\longleftarrow}\atop
+%                   {\longrightarrow\atop\vartriangleright}}}
+%
+%\newcommand{\Nat}{{\mathbb N}}
+%\newcommand{\Real}{{\mathbb R}}
+%
+%\newcommand{\trans}{\longrightarrow}
+%\newcommand{\transp}{\longrightarrow_{\power}}
+%\newcommand{\transl}{\longrightarrow_{L}}
+%\newcommand{\transg}{\longrightarrow_{G}}
+%\newcommand{\transcfg}[1]{\stackrel{#1}{\longrightarrow}_{CFG}}
+%\newcommand{\isdefd}{=_{\mbox{\footnotesize def}}}
+%\newcommand{\equivdef}{\equiv_{\mbox{\footnotesize def}}}
+%\newcommand{\mitem}{\mbox{\em M-Item}}
+%\newcommand{\currt}{\hat{t}}
+%\newcommand{\sigmaa}{\sigma_A}
+%\newcommand{\strictimplies}{\stackrel{\bullet}{\Rightarrow}}
+%\newcommand{\trl}{/\!/}
+%\newcommand{\q}{\textbf{q}}
+%\newcommand{\eqc}[2]{[#1;#2]}
+%\newcommand{\vest}{V_{\text{\sl est}}}
+%\newcommand{\vmax}{V_{\text{\sl MRSP}}}
+%\newcommand{\wout}{\mathsf{W}}
+%\newcommand{\eout}{\mathsf{EB}}
+%\newcommand{\areb}{\mathsf{allowRevokeEB}}
+%\newcommand{\sbia}{\mathsf{SBAvailable}}
+%\newcommand{\sbz}{\mathsf{sb}_0}
+%\newcommand{\ticmd}{\mathsf{TICmd}}
+%\newcommand{\dmicmd}{\mathsf{DMICmd}}
+%
+%\newcommand{\sob}{\mathsf{speedOnBoard}}
+%\newcommand{\std}{\mathsf{speedToDriver}}
+%\newcommand{\pstd}{\mathsf{permittedSpeedToDriver}}
+%\newcommand{\csmsw}{\mathsf{csmSwitch}}
+%\newcommand{\sbicmd}{\mathsf{sbiCmd}}
+%\newcommand{\sbidisplay}{\mathsf{DMIdisplaySBI}}
+%
+%
+%\newcommand{\dvw}{\mathsf{dV}_{\mathsf{warning}}}
+%\newcommand{\dvs}{\mathsf{dV}_{\mathsf{sbi}}}
+%\newcommand{\dve}{\mathsf{dV}_{\mathsf{ebi}}}
+%
+%
+%\newcommand{\calcw}{\mathsf{dV\_warning(float)}}
+%\newcommand{\calcs}{\mathsf{dV\_sbi(float)}}
+%\newcommand{\calce}{\mathsf{dV\_ebi(float)}}
+%\newcommand{\calcstd}{\mathsf{calc\_speed\_to\_driver()}}
+%\newcommand{\calcpstd}{\mathsf{calc\_permitted\_speed\_to\_driver()}}
+%\newcommand{\calcsob}{\mathsf{calc\_speed\_onboard()}}
+%
+\newcommand{\trc}{\text{\it traces}}
+\newcommand{\fails}{\text{\it failures}}
+%\newcommand{\qtrc}{\text{qtraces}}
+%\newcommand{\iotrc}{\text{L}}
+%
+%
+%%\newtheorem{definition}{Definition}
+%%\newtheorem{property}{Property}
+%%\newtheorem{lemma}{Lemma}
+%%\newtheorem{theorem}{Theorem}
+%%\newtheorem{corollary}{Corollary}
+%%\newtheorem{property}{Property}
+%
+%%\newtheorem{note}{Note}[section]
+%
+\newcommand{\xbox}{\unskip\nobreak\hfil\penalty50
+      \hskip2em\hbox{}\nobreak\hfil$\Box$%
+      \parfillskip=0pt\finalhyphendemerits=0 \par%
+
+      \medskip
+      \parfillskip=0pt plus 1fil
+}
+%
+%\newcommand{\dontshow}[1]{}
+%\newcommand{\annot}[1]{\textbf{\textcolor{red}{#1}}}
+%\newcommand{\modelsf}{\models_{\text{F}}}
+%
+%\newcommand{\ta}{\mathbf{A}}
+%\newcommand{\te}{\mathbf{E}}
+%\newcommand{\tx}{\mathbf{X}}
+%\newcommand{\tf}{\mathbf{F}}
+%\newcommand{\tg}{\mathbf{G}}
+%\newcommand{\tu}{\mathbf{U}}
+%\newcommand{\tr}{\mathbf{R}}
+%\newcommand{\tw}{\mathbf{W}}
+%
+%\newcommand{\ttu}[1]{\mathbf{U}^{#1}}
+%\newcommand{\ttg}[1]{\mathbf{G}^{#1}}
+%\newcommand{\ttf}[1]{\mathbf{F}^{#1}}
+%
+\newcommand{\epass}{{\text{\it pass}}}
+\newcommand{\efail}{{\text{\it fail}}}
+%
+\newcommand{\pass}{\underline{\text{pass}}}
+% \newcommand{\tfail}{\underline{\text{fail}}}
+%
+%\newcommand{\xpass}[1]{{#1}_\text{pass}}
+%\newcommand{\xfail}[1]{{#1}_\text{fail}}
+%
+%\newcommand{\tc}{{\text{TC}}}
+\newcommand{\TS}{{\text{TS}}}
+\newcommand{\ii}[1]{\underline{#1}}
+%\newcommand{\inc}{\,{\rm I}\,}
+%
+%\newcommand{\scov}{\text{SCOV}}
+%\newcommand{\after}{\text{-after-}}
+%\newcommand{\reduction}{\preceq}
+%
+%\newcommand{\ps}{\le_s}
+%\newcommand{\pss}[1]{\stackrel{#1}{\ps}}
+%
+%\newcommand{\pe}{\sim_s}
+%\newcommand{\pes}[1]{\stackrel{#1}{\pe}}
+\newcommand{\ol}{\overline}
+%\newcommand{\diag}{\mathbf{diag}}
+%\newcommand{\primem}{\mathbf{prime}}
+%
+%\newcommand{\ltl}{\text{\tt LTL}}
+%
+\newcommand{\accs}{\text{\it Acc}}
+\newcommand{\minaccs}{\text{\it minAcc}}
+%
+\newcommand{\refs}{\text{\it Ref}}
+\newcommand{\maxrefs}{\text{\it maxRef}}
+\newcommand{\minhits}{\text{\it minHit}}
+\newcommand{\minsub}{{\it min}_\subseteq}
+
+%\newcommand{\failure}{{\text {\rm failures}}}
+
+\newcommand{\prefs}{\text{\bf pref}}
+
+\newcommand{\card}[1]{{~|\! #1\!|~}}
+
+\newcommand{\pmax}{P_\text{max}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{property}{Property}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+
+\newcounter{examplectr}
+\newenvironment{example}[1][]
+{\refstepcounter{examplectr}
+
+\medskip
+\noindent
+{\bf Example~\theexamplectr.}}     %%%\label{#1}
+{
+%\unskip\nobreak\hfil\penalty50
+%      \hskip2em\hbox{}\nobreak\hfil$\Box$%
+%      \parfillskip=0pt \finalhyphendemerits=0 \par
+}
+
+
+\newenvironment{proof}[1][]
+{
+
+\medskip
+\noindent
+{\bf Proof.\ }}
+{
+%\unskip\nobreak\hfil\penalty50
+%      \hskip2em\hbox{}\nobreak\hfil$\Box$%
+%      \parfillskip=0pt \finalhyphendemerits=0 \par
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% To avoid formulas in $ $ to be broken across lines
+\relpenalty=10000
+\binoppenalty=10000
+
+% ===========================================================================
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frontmatter}
+
+\title{Finite Complete Suites for CSP Refinement Testing}
+%\tnotetext[mytitlenote]{Fully documented templates are available in the elsarticle package on \href{http://www.ctan.org/tex-archive/macros/latex/contrib/elsarticle}{CTAN}.}
+
+%% Group authors per affiliation:
+\author{Jan Peleska, Wen-ling Huang \fnref{jpwlh}}
+\address{Bremen, Germany}
+\fntext[jpwlh]{University of Bremen, \mailsa}
+
+\author{Ana Cavalcanti \fnref{ana}}
+\address{York, United Kingdom}
+\fntext[ana]{University of York, \mailsb}
+
+%% or include affiliations in footnotes:
+%\author[mymainaddress,mysecondaryaddress]{Elsevier Inc}
+%\ead[url]{www.elsevier.com}
+%
+%\author[mysecondaryaddress]{Global Customer Service\corref{mycorrespondingauthor}}
+%\cortext[mycorrespondingauthor]{Corresponding author}
+%\ead{support@elsevier.com}
+%
+%\address[mymainaddress]{1600 John F Kennedy Boulevard, Philadelphia}
+%\address[mysecondaryaddress]{360 Park Avenue South, New York}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{keyword}
+Model-based testing, CSP\sep Traces Refinement\sep Failures Refinement\sep
+Complete Test Suites
+\end{keyword}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{frontmatter}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{introduction}
+
+\input{preliminaries}
+
+\input{finitecomplete-failures}
+
+\input{casestudies}
+
+\input{finitecomplete-trace}
+
+\input{complexity}
+
+%%%\input{related}
+
+\input{conclusion}
+
+% ===============================================================================
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{references,jp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
