@@ -1,0 +1,9 @@
+- Model-based testing (MBT) can be performed against CSP reference processes
+
+- For the first time, we provide finite, complete test suites for MBT based on CSP
+
+- The suites serve to check traces refinement and failures refinement
+
+- Completeness means that every conformance violation will be uncovered 
+
+- For the first time, we provide complexity results indicating the number of test executions required to achieve conformance
