@@ -12,7 +12,8 @@ We would like to thank the reviewers for their helpful comments!
 Changes suggested/requested by Reviewer #1
 ===================================================================
 
- 
+
+-------------------------- reviewer's remark -------------------------- 
 A general comment
 -----------------
 It would be helpful if the authors could extend their discsussion
@@ -33,9 +34,10 @@ former is much more appealing.  It is interesting to assess whether
 such a methodology would work well in practice, i.e. whether it would
 allow to cut testing time on average.
 
-Detailed comments
------------------
+------------------------ Answer by the authors ------------------
 
+
+-------------------------- reviewer's remark --------------------------
 p.3
 * I would propose to include the grammar of the CSP fragment you discuss
 in section 2.1.
@@ -52,6 +54,13 @@ presentation of CSP suffices in this particular setting.
 * "...not engage into any event or terminate." I suppose you refer to
 successful termination.
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.4 
 * "The maximal refusals in combination with the initials of a process
 express its degree of nondeterminism..." I'm not quite sure how to
@@ -60,21 +69,51 @@ degree of non-determinism?
 * Explain the function 'r' in the Normalised Transition Graphs for CSP
 Processes.
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.6
 * "Given a finite-state CSP process P and its normalised transition graph
 G(P),..." add that G(P) has set of nodes N (as opposed to N_P as indicated
 at the top of p.6). Same for lemma 2. Fix some typesetting/spacing issues
 in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.7/8
 * proof of lemma 4: "...with this property..."; confusing. Mention
 which property you are referring to. Notation: you write Sigma\B, whereas
 elsewhere, you use notation Sigma-B.
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.9
 * Explain the syntax of the U_F process; that is, the condition (the "&"
 operator) was not introduced/is not discussed.
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.10
 * "...can never be blocked due to a livelock in Q..." confusing; I suppose you
 mean here that since Q cannot livelock, it cannot block the pass and fail
@@ -82,27 +121,64 @@ events cannot be blocked, but my initial reading of the sentence is that
 the reason that these events cannot be blocked was exactly because Q livelocks
 (contradicting the assumption that Q cannot livelock).
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.14
 * add the remark about r_max = 3 to the caption of Fig.3
 * "choses"
 * "...with the use of minAcc(n) = {0}..."; somewhat odd phrasing
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.16
 * "...it is useful for the first time to calculate..."; odd phrasing
 * "...not a concern"; maybe it was a concern, but not one that could be
 addressed
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.17
 * why favour the more complex |A| = n - floor(n/2) +1 over |A| = ceil(n/2) +1?
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.20
 * "These tests fail..." it might be instructive to argue, in advance of the
 more formal considerations, why these shorter ones fail and only the maximal
 succeeds in finding the issue.
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 p.23
 * typo in name in reference [4]
 
+------------------------ Answer by the authors ------------------
 
 
 
@@ -110,26 +186,42 @@ p.23
 Changes suggested/requested by Reviewer #3
 ===================================================================
 
-
-
-
-Reviewer #3: The paper presents finite complete test suites for checking the traces and failures refinement of finite, non-terminating, and divergence-free CSP processes. In particular, the underlying fault domains for the tests are specified by means of normalised transition graphs with a given upper bound number of states. The paper computes the worst-case bound on the number of test executions to be performed when using the test suites for both traces and failuares refinement. Moreover, it is proved that the maximal length of the test traces cannot be reduced without losing the test suite's completeness property, also for both traces and failures refinement. For all the lemmas and theorems, they are presented with rigorous proofs. 
-
-Compared to the existing work, the paper provides for the first time the sufficient condition for the finiteness of the test suites, and also show the optimality of the test suites in the sense that the maximal length of test traces, and also the number of probes, cannot be reduced, without losing the completeness property.
-
+ 
+-------------------------- reviewer's remark --------------------------
 This paper is not easy to follow for me. Some paragraphs and sentences are too long. I am not familiar with the the state of art of the topic studied in this paper. But considering the paper's contribution, and that all the proofs and constructions given in the paper are believable from my point of view, I recommend to accept this paper. 
 
-Some detailed comments: 
+------------------------ Answer by the authors ------------------
 
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 Page 7: the definition of (16) is not consistent with the following statement "The collection min(C) contains". According to the (16), it should be "those sets of C that are not true supersets of other members of C", rather than "subsets". 
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 Page 10 Para. 2: it is said that "the occurrence of these events can never be blocked due to a livelock in Q occurring in the same step of execution". How to understand this, with the assumption that Q is free of livelocks.  
 
+------------------------ Answer by the authors ------------------
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 Some typos:
 in Section 6.1) -> in Section 6.1
 it it is -> it is
 fom -> from
 
+------------------------ Answer by the authors ------------------
 
 
 
@@ -139,16 +231,66 @@ Changes suggested/requested by Reviewer #4
 ===================================================================
 
 
+ 
 
-Reviewer #4: The paper proposes two finite test strategies for conformance according to the failures refinement relation and the traces refinement relation respectively. Such test strategies are then proven to be complete and minimal with respect to fault models. A fault model consists of a finite reference model (a CSP process) and a set of finite implementation models which may conform to the reference models, i.e., a refinement of that, or may not, i.e., not a refinement of that. The completeness relation means that (1: soundness) any implementation model, refining the reference model must pass all the test in the test suite proposed by the test strategy, depending on the refinement relation; and (2: exhaustiveness) any implementation model, not refining the reference model, must fail at least one test in that test suite. The minimality of the two test strategies means that the number of CSP processes representing the test cases cannot be reduced, due to a proven result
-that the max length of test cases must be bound by a number determined according to the size of the reference models and the sizes of all implementation models in a given fault model.
-The paper also provides and proves the upper bounds of test cases for each test strategies.
-The paper is well structured with a high quality of English. All the provided proofs seem correct to me. 
-Below are some detailed comments:
+-------------------------- reviewer's remark --------------------------
 -	Page 7, the definition of graph product (12) does not contain the refuse component.
+
+------------------------ Answer by the authors ------------------
+NO CHANGES REQUIRED
+
+Before the formal definition in (12), the text already contains the explanation
+
+"Graph Products. For proving our main theorems, it is necessary to consider the product of normalised transition graphs. We need this only for the investigation of corresponding traces in reference processes and processes for SUTs. So, the labelling of nodes with maximal refusals or minimal acceptances is disregarded in the product construction."
+
+We think that this sufficiently explains why refusals do not occur anymore in the product construction.
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 -	Page 10, line 15: the notation # is first time used without introduction.
+
+------------------------ Answer by the authors ------------------
+fixed.
+
+The sentence has been changed to
+
+"Alternatively, a
+faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$ 
+satisfies  $\#s < j$, such that
+  $\minhits(G(P)/s) \neq \varnothing$, so that the process
+$(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
+"
+
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 -	Page 11, line 4 of section 3.2: If P \refinedby Q, => If P \refinedby Q and Q \in D.
+
+------------------------ Answer by the authors ------------------
+REJECTED
+
+In the testing literature, the soundness condition is usually specified for ALL SUTs, regardless of whether they are in the fault domain or not. Therefore, Lemma 7 proving the soundness of TS, does not refer to the fault domain either. As a consequence, we prefer to leave the definition of the soundness definition as it is.
+
+
+
+
+-------------------------- reviewer's remark --------------------------
 -	Page 17, equations (42), (43), (44): P => P_max
+
+------------------------ Answer by the authors ------------------
+fixed.
+
+
+
+
+
+
+
+
 
 
 

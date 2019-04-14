@@ -1046,7 +1046,7 @@ node $n$ under $V\cup V.\Sigma$. This completes the proof. \xbox
 necessary to consider the \emph{product} of normalised transition graphs. We
 need this only for the investigation of corresponding traces in reference
 processes and processes for SUTs. So, the labelling of nodes with maximal
-refusals or minimal acceptances are disregarded in the product construction.
+refusals or minimal acceptances is disregarded in the product construction.
 We consider two normalised transition graphs
 \[
 G_i = ( N_i, \ii n_i, \Sigma, t_i : N_i\times\Sigma \pfun N_i, r_i : N_i \fun \mathbb{P}\mathbb{P}(\Sigma)),\qquad i = 1,2,
@@ -1394,8 +1394,9 @@ refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(j,k,n)$ executing branch~(\ref{eq:ufd}), when
 the guard condition $(k = j\wedge \minhits(n)\neq\varnothing)$ evaluates to
 $\ist$. This is explained further in the next paragraphs. Alternatively, a
-faulty SUT $Q$ might internally deadlock after a trace $s$ where $\#s < j$
-and $\minhits(G(P)/s) \neq \varnothing$, so that the process
+faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$ 
+satisfies  $\#s < j$, such that
+  $\minhits(G(P)/s) \neq \varnothing$, so that the process
 $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
 
 Intuitively, $U_F(j)$ is able to perform any trace $s$ of $P$, up to a length
@@ -2145,13 +2146,13 @@ The relevant properties of $\pmax$ are summarised in the following lemma.
   \trc(\pmax) & = & \Sigma^*
   \label{eq:pmaxb}
   \\
-  \minaccs(P/s) & = & {\cal C} \quad\text{for all $s\in \Sigma^*$}
+  \minaccs(\pmax/s) & = & {\cal C} \quad\text{for all $s\in \Sigma^*$}
   \label{eq:pmaxc}
   \\
-  \minhits(P/s) & = & \minhits({\cal C}) \quad\text{for all $s\in \Sigma^*$}
+  \minhits(\pmax/s) & = & \minhits({\cal C}) \quad\text{for all $s\in \Sigma^*$}
   \label{eq:pmaxe}
   \\
-  \card{\minhits(P/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor}
+  \card{\minhits(\pmax/s)} & = & \binom{n}{\lfloor\frac{n}{2}\rfloor}
   \quad \text{for all $s\in \Sigma^*$}
   \label{eq:pmaxd}
   \\
