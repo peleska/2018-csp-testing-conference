@@ -35,6 +35,7 @@ such a methodology would work well in practice, i.e. whether it would
 allow to cut testing time on average.
 
 ------------------------ Answer by the authors ------------------
+@todo
 
 
 -------------------------- reviewer's remark --------------------------
@@ -56,6 +57,7 @@ successful termination.
 
 ------------------------ Answer by the authors ------------------
 
+@todo
 
 
 
@@ -71,6 +73,7 @@ Processes.
 
 ------------------------ Answer by the authors ------------------
 
+@todo
 
 
 
@@ -84,6 +87,7 @@ in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
 
 ------------------------ Answer by the authors ------------------
 
+@todo
 
 
 
@@ -97,6 +101,7 @@ elsewhere, you use notation Sigma-B.
 ------------------------ Answer by the authors ------------------
 
 
+@todo
 
 
 
@@ -108,6 +113,7 @@ operator) was not introduced/is not discussed.
 
 ------------------------ Answer by the authors ------------------
 
+@todo
 
 
 
@@ -122,6 +128,10 @@ the reason that these events cannot be blocked was exactly because Q livelocks
 (contradicting the assumption that Q cannot livelock).
 
 ------------------------ Answer by the authors ------------------
+CLARIFIED.
+We clarified this sentence as follows.
+
+"Since we assume that Q is free of livelocks, it is guaranteed that events fail or pass always become visible, if they are the only events UF (j)/s is ready to engage in: if UF (j)/s can only produce pass or fail, the occurrence of these events can never be blocked due to a livelock, since the only process executing concurrently with UF(j) is livelock-free Q."
 
 
 
@@ -135,6 +145,7 @@ p.14
 
 ------------------------ Answer by the authors ------------------
 
+@todo
 
 
 
@@ -146,7 +157,15 @@ p.16
 addressed
 
 ------------------------ Answer by the authors ------------------
+CLARIFIED
 
+We changed the text as follows.
+
+"With finite complete CSP test suites test suites at hand, it is now possible 
+to calculate how many test executions are needed when using them.
+Previous work did not consider sufficient conditions for finiteness, so
+estimates for the maximal number 
+of executions could not be calculated."
 
 
 
@@ -157,7 +176,9 @@ p.17
 * why favour the more complex |A| = n - floor(n/2) +1 over |A| = ceil(n/2) +1?
 
 ------------------------ Answer by the authors ------------------
+NO CHANGES REQUIRED
 
+We prefer to apply the floor-notation only throughout the paper, since it is already used in Theorem 1 (Sperner) and then occurs quite frequently in the rest of the paper. Changing to ceil in the one place you suggested might perhaps be more confusing for readers than helpful. 
 
 
 
@@ -170,6 +191,9 @@ more formal considerations, why these shorter ones fail and only the maximal
 succeeds in finding the issue.
 
 ------------------------ Answer by the authors ------------------
+CLARIFIED.
+
+We have added text in the example explaining for which trace s_fail the tests U_F (pq − 1) and U_T (pq − 1), fail, and we explain that no failures are detected on any true prefix of s_fail.
 
 
 
@@ -179,6 +203,8 @@ p.23
 * typo in name in reference [4]
 
 ------------------------ Answer by the authors ------------------
+fixed.
+
 
 
 

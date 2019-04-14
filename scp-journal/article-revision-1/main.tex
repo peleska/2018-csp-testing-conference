@@ -2087,10 +2087,15 @@ complexity of a testing technique that uses them.
 %in the last step of a test execution. \fixme{But doesn't this add to the
 %number of executions?} \fxnote{jp: should be clear now from the revised test}
 
-Since we have finite complete CSP test suites, it is useful for the first
-time to calculate how many test executions are needed when using them.
+ 
+
+
+With finite complete CSP test suites test suites at hand, it is now possible 
+to calculate how many test executions are needed when using them.
 Previous work did not consider sufficient conditions for finiteness, so
-complexity was not a concern. We answer the following questions. (1)~What is
+estimates for the maximal number 
+of executions could not be calculated. 
+We answer the following questions. (1)~What is
 the worst-case bound on the number of test executions to be performed to
 verify an SUT with respect to failures refinement, when we use our test
 suite? (2)~What is the worst-case bound for traces refinement? (3)~Is it
@@ -2524,9 +2529,21 @@ $j\le pq-2$).
 
 $Q$, however, neither conforms to $P$ in the failures refinement relation,
 nor in the traces-refinement relation. This can only be seen when executing
-the test $U_F(pq-1)$ and $U_T(pq-1)$, respectively. These tests fail, so this
-shows that $P\not\lessdet_F Q$ and $P\not\lessdet_T Q$ according to
-Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}. Moreover, this
+the test $U_F(pq-1)$ and $U_T(pq-1)$, respectively. These tests fail, because
+they allow for execution of the following trace of length 12
+$$
+s_\text{fail} = a.a.a.b.a.a.a.b.a.a.a.b
+$$
+Only in the very last step, the final $b$-event can be produced by $Q$ but is refused by $P$.
+Therefore, tests $U_F(11)$ and $U_T(11)$ enter their first branch (\ref{eq:ufa}) and (\ref{eq:uta}), respectively,\ when engaging into the last $b$, and this produces the $\efail$-event and shows  that $P\not\lessdet_F Q$ and $P\not\lessdet_T Q$ according to
+Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}.. The tests 
+$U_F(j)$ and $U_T(j)$ with $j < pq-1 = 11$ only execute true prefixes of $s_\text{fail}$ which 
+are allowed for $P$, so that these tests pass.
+
+
+
+
+This
 shows that the maximal trace length $pq$ to be investigated in the tests
 cannot be further reduced without losing the completeness property of the
 test suites. \xbox
