@@ -1125,7 +1125,7 @@ any collection ${\cal C}\subseteq 2^\Sigma$ of subsets from $\Sigma$
 B\subseteq A\Rightarrow B = A \}.
 \end{equation}
 The collection $\minsub({\cal C})$ contains all those sets of
-${\cal C}$ that are not true subsets of other members of ${\cal C}$. With
+${\cal C}$ that are not true supersets of other members of ${\cal C}$. With
 this definition, the relation between failures and minimal hitting sets of
 minimal acceptances is established in the following lemma.
 %
@@ -1368,8 +1368,8 @@ and PASS for the test execution, are not included in $\Sigma$. Since we
 assume that $Q$ is free of livelocks, it is guaranteed that events $\efail$
 or $\epass$ always become visible, if they are the only events $U_F(j)/s$ is
 ready to engage in: if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the
-occurrence of these events can never be blocked due to a livelock in $Q$
-occurring in the same step of the execution.
+occurrence of these events can never be blocked due to a livelock, since the only
+  process executing concurrently with  $U_F(j)$  is livelock-free  $Q$.
 
 
 The test is \emph{passed} by the SUT (written $Q\ \pass\ U_F(j)$) if, and
@@ -2096,10 +2096,10 @@ verify an SUT with respect to failures refinement, when we use our test
 suite? (2)~What is the worst-case bound for traces refinement? (3)~Is it
 possible to reduce the maximal length of traces when testing for failures or
 traces refinement? We consider the first question~(1) in
-Section~\ref{section:complexity:failures}), where we also discuss whether it
+Section~\ref{section:complexity:failures}, where we also discuss whether  
 it is possible to reduce the number of test executions with a different test
 suite.  With the answer to question~(1), question~(2) is a fairly simple
-consequence we discuss briefly also in
+consequence we discuss briefly at the end of 
 Section~\ref{section:complexity:failures}. Question~(3) is the subject of
 Section~\ref{section:complexity:length}.
 
@@ -2207,10 +2207,10 @@ set.
 
 Moreover, Theorem~\ref{th:sperner} establishes that given an alphabet with
 $n$ elements, there is no Sperner family consisting of more than
-$\binom{n}{\lfloor\frac{n}{2}\rfloor}$. In addition, we recall the minimal
+$\binom{n}{\lfloor\frac{n}{2}\rfloor}$ members. In addition, we recall the minimal
 hitting sets calculated from a given set of minimal acceptances are a Sperner
 family~(see discussion in Section~\ref{sec:sperner}). So, (\ref{eq:pmaxd})
-establishes that there is no possibility of providing more choices fom
+establishes that there is no possibility of providing more choices from
 minimal hitting sets with a test derived from a process different from
 $\pmax$.
 

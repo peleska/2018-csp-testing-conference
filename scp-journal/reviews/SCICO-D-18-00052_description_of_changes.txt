@@ -191,8 +191,11 @@ Changes suggested/requested by Reviewer #3
 This paper is not easy to follow for me. Some paragraphs and sentences are too long. I am not familiar with the the state of art of the topic studied in this paper. But considering the paper's contribution, and that all the proofs and constructions given in the paper are believable from my point of view, I recommend to accept this paper. 
 
 ------------------------ Answer by the authors ------------------
+NO CHANGES REQUIRED
 
+Since the other reviewers stated that the style of writing was good, we did not change the presentation in this respect. 
 
+However, we fixed all other suggestions for improvement made by Reviewer #3.
 
 
 
@@ -201,7 +204,9 @@ This paper is not easy to follow for me. Some paragraphs and sentences are too l
 Page 7: the definition of (16) is not consistent with the following statement "The collection min(C) contains". According to the (16), it should be "those sets of C that are not true supersets of other members of C", rather than "subsets". 
 
 ------------------------ Answer by the authors ------------------
+fixed.
 
+Changed "subsets" to "supersets" in the explaining text after (16).
 
 
 
@@ -211,6 +216,10 @@ Page 7: the definition of (16) is not consistent with the following statement "T
 Page 10 Para. 2: it is said that "the occurrence of these events can never be blocked due to a livelock in Q occurring in the same step of execution". How to understand this, with the assumption that Q is free of livelocks.  
 
 ------------------------ Answer by the authors ------------------
+CLARIFIED.
+We clarified this sentence as follows.
+
+"Since we assume that Q is free of livelocks, it is guaranteed that events fail or pass always become visible, if they are the only events UF (j)/s is ready to engage in: if UF (j)/s can only produce pass or fail, the occurrence of these events can never be blocked due to a livelock, since the only process executing concurrently with UF(j) is livelock-free Q."
 
 
 
@@ -222,7 +231,7 @@ it it is -> it is
 fom -> from
 
 ------------------------ Answer by the authors ------------------
-
+fixed all.
 
 
 
