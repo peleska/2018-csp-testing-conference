@@ -1,0 +1,234 @@
+From: "SCP Editorial Office" <eesserver@eesmail.elsevier.com>
+Subject: Your Submission SCICO-D-18-00052: Notification
+Date: 28. March 2019 at 12:35:13 CET
+To: jp@cs.uni-bremen.de, peleska@uni-bremen.de
+Cc: jun.pang@uni.lu, pangjun@gmail.com, huang@cs.uni-bremen.de, ana.cavalcanti@york.ac.uk
+Reply-To: "SCP Editorial Office" <vlijmen@science.uva.nl>
+
+Ms. Ref. No.:  SCICO-D-18-00052
+Title: Finite Complete Suites for CSP Refinement Testing
+Science of Computer Programming
+
+Dear Professor Jan Peleska,
+
+Reviewers have now commented on your paper. You will see that they recommend a minor revision and I follow their recommendation. If you are prepared to undertake the work required, I would be pleased to reconsider my decision.  
+
+For your guidance, reviewers' comments are appended below.
+
+The due date for revision is May 27, 2019. If this deadline is out of sync with other due dates communicated to you outside EES, then please contact the handling editor to settle this.
+
+If you decide to revise the work, please submit a list of changes or a rebuttal against each point which is being raised when you submit the revised manuscript.
+
+To submit a revision, please go to https://ees.elsevier.com/scico/ and login as an Author. 
+Your username is: jp@cs.uni-bremen.de
+If you need to retrieve password details, please go to:
+http://ees.elsevier.com/scico/automail_query.asp
+
+On your Main Menu page is a folder entitled "Submissions Needing Revision". You will find your submission record there. 
+
+Mohammad Reza Mousavi, Ph.D.
+Editor-in-Chief
+Science of Computer Programming
+
+Note: While submitting the revised manuscript, please double check the author names provided in the submission so that authorship related changes are made in the revision stage. If your manuscript is accepted, any authorship change will involve approval from co-authors and respective editor handling the submission and this may cause a significant delay in publishing your manuscript.
+
+Reviewers' comments:
+
+
+Reviewer #1: Summary
+-------
+This paper discusses model-based testing (MBT) in the setting of
+the Communicating Sequential Processes (CSP) process algebra.  MBT
+is a well-established methodology for assessing the correctness or
+establishing trust in the correct behaviour of a system, whereas
+CSP is a powerful theory for developing complex, concurrent systems
+which has a proven industrial track record.
+
+A major problem in testing is deciding when to stop testing; in
+MBT, this problem loosely translates to the theoretical problem of
+establishing whether a testing theory is complete (i.e. whether one
+can, in theory, find all non-conforming implementations of a given
+specification).  While completeness is largely a theoretical result,
+the more practical question that can be raised is whether there is
+a finite collection of tests suffices to find all non-conforming
+implementations.
+
+It is essentially this latter problem that is tackled by this paper.
+The authors convincingly demonstrate that for CSP specifications
+and implementations (taken from a fault domain), finite complete
+test suites exist for establishing whether the system under test
+(SUT) conforms to (here: is a correct trace refinement or failures
+refinement of) its CSP specification. Moreover, complexity bounds
+are provided, offering insights into the complexity of testing
+for conformance.
+
+Verdict
+-------
+The problem that is addressed is a relevant one in the field of MBT
+and the authors work out the details with great care. Moreover, the
+general exposition is easy to follow (entirely the authors' merits).
+The results obtained by the authors are, as far as I can tell, sound
+and interesting. Apart from a few minor suggestions for improvement,
+I would propose to accept the paper.
+
+A general comment
+-----------------
+It would be helpful if the authors could extend their discsussion
+by adding their views on how their theory helps testing systems in
+practice and in particular to what types of systems their theory
+applies. The size estimates of the implementation, inspired by FSM
+testing theory may not easily transfer to concurrent systems in
+practice. More concretely, it would be interesting to understand
+whether there are techniques (e.g. non-black box techniques) that
+can be used to establish whether the implementation fits in the
+fault domain and, hence, whether the theory developed in this paper
+applies. 
+One may add a remark that in a practical testing methodological one
+may insist on testing for trace-refinement even if one is only
+interested in failure-refinement since any violation for the former
+also reveals a violation for the latter, and the complexity of the
+former is much more appealing.  It is interesting to assess whether
+such a methodology would work well in practice, i.e. whether it would
+allow to cut testing time on average.
+
+Detailed comments
+-----------------
+
+p.3
+* I would propose to include the grammar of the CSP fragment you discuss
+in section 2.1.
+* The abstract presentation of the CSP semantics obscures some
+aspects such as what exactly the set of traces or failures of a
+process are; in particular, you avoid discussing the operational
+model of CSP, but do sometimes refer to invisible (hidden) events,
+yet refrain from discussing concepts such as stability. While these
+concepts turn out not really to play a role in your setting, ignoring
+these may cause some confusion in readers accustomed to dealing
+with the operational semantics of CSP. 
+At least, you may wish to add a remark stating why a very abstract
+presentation of CSP suffices in this particular setting.
+* "...not engage into any event or terminate." I suppose you refer to
+successful termination.
+
+p.4 
+* "The maximal refusals in combination with the initials of a process
+express its degree of nondeterminism..." I'm not quite sure how to
+interpret this statement; in particular, how do you define the
+degree of non-determinism?
+* Explain the function 'r' in the Normalised Transition Graphs for CSP
+Processes.
+
+p.6
+* "Given a finite-state CSP process P and its normalised transition graph
+G(P),..." add that G(P) has set of nodes N (as opposed to N_P as indicated
+at the top of p.6). Same for lemma 2. Fix some typesetting/spacing issues
+in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
+
+p.7/8
+* proof of lemma 4: "...with this property..."; confusing. Mention
+which property you are referring to. Notation: you write Sigma\B, whereas
+elsewhere, you use notation Sigma-B.
+
+p.9
+* Explain the syntax of the U_F process; that is, the condition (the "&"
+operator) was not introduced/is not discussed.
+
+p.10
+* "...can never be blocked due to a livelock in Q..." confusing; I suppose you
+mean here that since Q cannot livelock, it cannot block the pass and fail
+events cannot be blocked, but my initial reading of the sentence is that
+the reason that these events cannot be blocked was exactly because Q livelocks
+(contradicting the assumption that Q cannot livelock).
+
+p.14
+* add the remark about r_max = 3 to the caption of Fig.3
+* "choses"
+* "...with the use of minAcc(n) = {0}..."; somewhat odd phrasing
+
+p.16
+* "...it is useful for the first time to calculate..."; odd phrasing
+* "...not a concern"; maybe it was a concern, but not one that could be
+addressed
+
+p.17
+* why favour the more complex |A| = n - floor(n/2) +1 over |A| = ceil(n/2) +1?
+
+p.20
+* "These tests fail..." it might be instructive to argue, in advance of the
+more formal considerations, why these shorter ones fail and only the maximal
+succeeds in finding the issue.
+
+p.23
+* typo in name in reference [4]
+
+
+
+
+
+Reviewer #3: The paper presents finite complete test suites for checking the traces and failures refinement of finite, non-terminating, and divergence-free CSP processes. In particular, the underlying fault domains for the tests are specified by means of normalised transition graphs with a given upper bound number of states. The paper computes the worst-case bound on the number of test executions to be performed when using the test suites for both traces and failuares refinement. Moreover, it is proved that the maximal length of the test traces cannot be reduced without losing the test suite's completeness property, also for both traces and failures refinement. For all the lemmas and theorems, they are presented with rigorous proofs. 
+
+Compared to the existing work, the paper provides for the first time the sufficient condition for the finiteness of the test suites, and also show the optimality of the test suites in the sense that the maximal length of test traces, and also the number of probes, cannot be reduced, without losing the completeness property.
+
+This paper is not easy to follow for me. Some paragraphs and sentences are too long. I am not familiar with the the state of art of the topic studied in this paper. But considering the paper's contribution, and that all the proofs and constructions given in the paper are believable from my point of view, I recommend to accept this paper. 
+
+Some detailed comments: 
+
+Page 7: the definition of (16) is not consistent with the following statement "The collection min(C) contains". According to the (16), it should be "those sets of C that are not true supersets of other members of C", rather than "subsets". 
+
+Page 10 Para. 2: it is said that "the occurrence of these events can never be blocked due to a livelock in Q occurring in the same step of execution". How to understand this, with the assumption that Q is free of livelocks.  
+
+Some typos:
+in Section 6.1) -> in Section 6.1
+it it is -> it is
+fom -> from
+
+
+
+
+
+Reviewer #4: The paper proposes two finite test strategies for conformance according to the failures refinement relation and the traces refinement relation respectively. Such test strategies are then proven to be complete and minimal with respect to fault models. A fault model consists of a finite reference model (a CSP process) and a set of finite implementation models which may conform to the reference models, i.e., a refinement of that, or may not, i.e., not a refinement of that. The completeness relation means that (1: soundness) any implementation model, refining the reference model must pass all the test in the test suite proposed by the test strategy, depending on the refinement relation; and (2: exhaustiveness) any implementation model, not refining the reference model, must fail at least one test in that test suite. The minimality of the two test strategies means that the number of CSP processes representing the test cases cannot be reduced, due to a proven result
+that the max length of test cases must be bound by a number determined according to the size of the reference models and the sizes of all implementation models in a given fault model.
+The paper also provides and proves the upper bounds of test cases for each test strategies.
+The paper is well structured with a high quality of English. All the provided proofs seem correct to me. 
+Below are some detailed comments:
+-	Page 7, the definition of graph product (12) does not contain the refuse component.
+-	Page 10, line 15: the notation # is first time used without introduction.
+-	Page 11, line 4 of section 3.2: If P \refinedby Q, => If P \refinedby Q and Q \in D.
+-	Page 17, equations (42), (43), (44): P => P_max
+
+
+
+
+
+
+________________
+
+DATA IN BRIEF CO-SUBMISSION (OPTIONAL) 
+
+We invite you to convert your supplementary data (or a part of it) into a Data in Brief article. Data in Brief articles are descriptions of the data and associated metadata which are normally buried in supplementary material. They are actively reviewed, curated, formatted, indexed, given a DOI and freely available to all upon publication. Data in Brief should be uploaded with your revised manuscript directly to Science of Computer Programming. If your Science of Computer Programming research article is accepted, your Data in Brief article will automatically be transferred over to our new, fully Open Access journal, Data in Brief, where it will be editorially reviewed and published as a separate data article upon acceptance. The Open Access fee for Data in Brief is $500. 
+
+Please just fill in the template found here: https://www.elsevier.com/__data/assets/word_doc/0004/215779/Datainbrief_template.docx. Then, place all Data in Brief files (whichever supplementary files you would like to include as well as your completed Data in Brief template) into a .zip file and upload this as a Data in Brief item alongside your Science of Computer Programming revised manuscript. Note that only this Data in Brief item will be transferred over to Data in Brief, so ensure all of your relevant Data in Brief documents are zipped into a single file. Also, make sure you change references to supplementary material in your Science of Computer Programming manuscript to reference the Data in Brief article where appropriate.
+
+Questions? Please send your inquiries to dib@elsevier.com. Example Data in Brief can be found here: http://www.sciencedirect.com/science/journal/23523409
+
+METHODSX CO-SUBMISSION (OPTIONAL)
+
+If you have customized (a) research method(s) for the project presented in your Science of Computer Programming article, you are invited to submit this part of your work as MethodsX article alongside your revised research article. MethodsX is an independent journal that publishes the work you have done to develop research methods to your specific needs or setting. This is an opportunity to get full credit for the time and money you may have spent on developing research methods, and to increase the visibility and impact of your work. 
+
+How does it work?
+1)	Fill in the MethodsX article template: https://www.elsevier.com/MethodsX-template
+2)	Place all MethodsX files (including graphical abstract, figures and other relevant files) into a .zip file and upload this as a 'Method Details (MethodsX) ' item alongside your revised Science of Computer Programming manuscript. Please ensure all of your relevant MethodsX documents are zipped into a single file. 
+3)	If your Science of Computer Programming research article is accepted, your MethodsX article will automatically be transferred to MethodsX, where it will be reviewed and published as a separate article upon acceptance.  MethodsX is a fully Open Access journal, the publication fee is only 520 US$. 
+
+Questions?  Please contact the MethodsX team at methodsx@elsevier.com.  Example MethodsX articles can be found here: http://www.sciencedirect.com/science/journal/22150161
+Yours sincerely,
+
+INTERACTIVE PLOT VIEWER (OPTIONAL)
+
+Science of Computer Programming features the Interactive Plot Viewer, see: http://www.elsevier.com/interactiveplots. Interactive Plots provide easy access to the data behind plots. To include one with your article, please prepare a .csv file with your plot data and test it online at http://authortools.elsevier.com/interactiveplots/verification before submission as supplementary material.
+PLEASE NOTE: Science of Computer Programming would like to enrich online articles by displaying interactive figures that help the reader to visualize and explore your research results. For this purpose, we would like to invite you to upload figures in the MATLAB .FIG file format as supplementary material to our online submission system. Elsevier will generate interactive figures from these files and include them with the online article on SciVerse ScienceDirect. If you wish, you can submit .FIG files along with your revised submission.
+
+________________
+
+For further assistance, please visit our customer support site at http://help.elsevier.com/app/answers/list/p/7923. Here you can search for solutions on a range of topics, find answers to frequently asked questions and learn more about EES via interactive tutorials. You will also find our 24/7 support contact details should you need any further assistance from one of our customer support representatives.
+
