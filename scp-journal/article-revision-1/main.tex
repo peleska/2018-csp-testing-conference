@@ -414,8 +414,6 @@ interpreted both in the trace and the failures semantics. Divergence freedom
 is usually assumed in black-box testing, since it cannot distinguish between
 divergence and deadlock using testing.
 
-\newpage
-\noindent %
 The main novel contributions in this article may be summarised as
 follows.
 \begin{enumerate}
@@ -624,6 +622,21 @@ terminate. For an external choice $\Extchoice e: A @ e \then P(e), A\subseteq
 \Sigma$ over a set $A$ of events, we use the abbreviation $e:A \then P(e)$.
 An iterated internal choice is not defined for an empty index set.
 
+The branches of an external choice can be protected by \emph{guards}. The
+ process
+$$
+P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice 
+\text{bexpr}_2(x1,\dots,x_n) \& R(x_1,\dots,x_n)
+$$
+parametrised over $x_1,\dots,x_n$ branches according to Boolean expressions
+$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over 
+variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
+$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$. 
+If $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
+$\isf$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
+Boolean expressions evaluate to $\ist$, $P$ behaves as $Q\extchoice R$. Finally, if
+both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$. 
+
 There are several parallelism operators. A widely used form of parallelism $P
 \parallel[cs] Q$ defines a process in which the behaviour is characterised by
 those of $P$ and $Q$ in parallel, synchronising on the events in the set
@@ -708,9 +721,9 @@ reconstruct the refusals in the set $\refs(P/s)$. % as described by
 %
 Deterministic process states $P/s$ have exactly the one maximal refusal
 defined by $\Sigma-[P/s]^0$, where $[P/s]^0$ denotes the \emph{initials} of
-$P/s$, that is, the events that $P/s$ may engage into. The maximal refusals
-in combination with the initials of a process express its degree of
-nondeterminism as illustrated by the next example.
+$P/s$, that is, the events that $P/s$ may engage into. Nondeterministic behaviour in a given process
+state is reflected by non-empty intersections between initials and maximal refusals. This 
+is illustrated by the following example.
 %
 \begin{example}
 \label{ex:nondetdegree} $P = (\Stop \intchoice Q)$ has maximal refusals
@@ -1005,7 +1018,7 @@ $\Sigma - R_P \subseteq \Sigma - R_Q$.
 
 % =========================================================================
 \paragraph{Reachability Under Sets of Traces} \label{sec:V} Given a finite-state CSP
-process $P$ and its normalised transition graph $G(P)$,
+process $P$ and its normalised transition graph $G(P)$ with nodes in set $N$,
 %\[
 %G(P) = ( N, \ii n, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma)),
 %\]
@@ -1020,9 +1033,9 @@ every} node of $N$.
 
 \begin{lemma}
 \label{lemma:extendV} Let $P$ be a CSP process with normalised transition
-graph $G(P)$. Let $V\subseteq\Sigma^*$ be a finite prefix-closed set of
-sequences of events. Suppose that  $G(P)$ reaches $k < |N|$ nodes under $V$,
-that is, $|t(\ii n,V)| = k$. Let $V.\Sigma$ denote the set of all sequences
+graph $G(P) = ( N, {\ii n}, \Sigma, t : N\times\Sigma \pfun N, r : N \fun \mathbb{P}\mathbb{P}(\Sigma))$. Let $V\subseteq\Sigma^*$ be a finite prefix-closed set of
+sequences of events. Suppose that  $G(P)$ reaches $k < \card{N}$ nodes under $V$,
+that is, $\card{t(\ii n,V)} = k$. Let $V.\Sigma$ denote the set of all sequences
 from $V$, extended by any event of $\Sigma$.  Then $G(P)$ reaches at least
 $(k+1)$ nodes under $V\cup V.\Sigma$.
 \end{lemma}
@@ -1137,7 +1150,7 @@ $%\[
 $ %\]
 Then
 $ %\[
-\minhits(P/s) = \minsub {\cal A}_s
+\minhits(P/s) = \minsub({\cal A}_s)
 $ %\]
 for all traces $s$ of $P$.
 \end{lemma}
@@ -1150,7 +1163,7 @@ We derive
 \\
 \Leftrightarrow  \forall R\in maxRef(P/s): A\not\subseteq R
 \\
-\Leftrightarrow   \forall B\in minAcc(P/s): A\not\subseteq (\Sigma\setminus
+\Leftrightarrow   \forall B\in minAcc(P/s): A\not\subseteq (\Sigma -
 B)& this follows from (\ref{eq:accref})
 \\
 \Leftrightarrow  \forall B\in minAcc(P/s): A\cap B\neq \varnothing
@@ -1159,8 +1172,9 @@ B)& this follows from (\ref{eq:accref})
               \text{ hitting set of } minAcc(P/s)
 \end{argue}
 %
-Specialising this derivation valid for arbitrary $A$ satisfying $(s,A)\not\in {\text{failures}}(P)$ to
-minimal $A$ with this property proves the statement of the lemma.
+This derivation is valid  for arbitrary $A$ satisfying $(s,A)\not\in {\text{failures}}(P)$.
+Specialising it to {\it minimal} sets $A$ satisfying  $(s,A)\not\in {\text{failures}}(P)$
+proves the statement of the lemma.
 \xbox
 \end{proof}
 
@@ -1266,8 +1280,7 @@ Given an {\it arbitrary} collection of subsets ${\cal C}\subset 2^\Sigma$,
 the sub-collection $\minsub({\cal C})$ defined in (\ref{eq:minsub}) is a
 Sperner Family contained in ${\cal C}$.
 
-\newpage
-\noindent
+ 
 We further observe that
 \begin{itemize}
 \item the maximal refusals of a CSP process state,
@@ -1356,7 +1369,7 @@ U_F(j,k,n) & = & \big(e:(\Sigma - [n]^0)  \then \efail\then \Stop \big)
 \end{eqnarray}
 
 % --------------------------------------------------------------------------
-\paragraph{Explanation of the Test Definition} A test \pagebreak is performed by running
+\paragraph{Explanation of the Test Definition} A test  is performed by running
 $U_F(j)$ concurrently with any SUT process $Q$, synchronising over $\Sigma$.
 So, a \emph{test execution} is a trace of the concurrent process
 %\[
@@ -1790,7 +1803,7 @@ t(3,c) &  =& 3
                  ]{z.pdf}
 \end{center}
 %%\vspace*{-10mm}
-\caption{Normalised transition graph of faulty implementation $Z$  from Example~\ref{ex:uf1tests}.}
+\caption{Normalised transition graph of faulty implementation $Z$ for $r_\text{max} = 3$ from Example~\ref{ex:uf1tests}.}
  \label{fig:tgZ}
  \end{figure}
 % .......................................................................................
@@ -1832,7 +1845,7 @@ only offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for
 branch (\ref{eq:ufa}).  As a consequence, this execution of
 $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
-$\{c \}$, while $U_F(4)/s$ choses to accept only $\{a,b\}$. Therefore,
+$\{c \}$, while $U_F(4)/s$ chooses to accept only $\{a,b\}$. Therefore,
 $%\[
 (\epass\then \Stop)\not\lessdet_F  (Z\parallel[\Sigma] U_F(4)) \hide\Sigma,
 $ %\]
@@ -1846,8 +1859,9 @@ and the test fails. \xbox
 \label{sec:finitecomplete}
 % ==========================================================================
 
-For establishing traces refinement, the following class of adaptive test
-cases are used for a given reference process $P$ and  integers $j \ge 0$.
+For establishing traces refinement, the   class of adaptive test
+cases specified below in (\ref{eq:utjstart}) -- (\ref{eq:utd})
+is used for a given reference process $P$ and  integers $j \ge 0$.
 Just as for the tests developed  in Section~\ref{sec:finitecompletefails} to
 verify failures refinement, the tests for traces refinement are derived from
 the reference model's transition graph
@@ -1860,8 +1874,8 @@ Therefore, these do not occur in the specification of the test cases below.
 We use the condition on acceptances $\minaccs(n) = \{ \varnothing \}$ instead
 of the condition on hitting sets $\minhits(n) = \varnothing$ in branch
 (\ref{eq:utb}). From (\ref{eq:minhitminaccempty}) we know that these
-conditions are equivalent, but, with the use of $\minaccs(n) = \{ \varnothing
-\}$, \pagebreak we make it unnecessary to calculate hitting sets for
+conditions are equivalent, but, by using  expression $\minaccs(n) = \{ \varnothing
+\}$,  we make it unnecessary to calculate hitting sets for
 generating these tests from $G(P)$, which is expensive.
 
 %\begin{eqnarray}
@@ -1882,6 +1896,7 @@ generating these tests from $G(P)$, which is expensive.
 
 \begin{eqnarray}
 U_T(j) & = & U_T(j,0,\ii n)
+\label{eq:utjstart}
 \\
 U_T(j,k,n) & = & \big(  e:(\Sigma - [n]^0)   \then \efail\then \Stop \big)
 \label{eq:uta}
@@ -1983,7 +1998,7 @@ Suppose that $P\lessdet_T Q$, so that $\trc(Q)\subseteq\trc(P)$, and assume
 that $s\in\trc(Q)$ with $\#s < pq$. Since $s$ is also a trace of $P$, we can
 conclude
 $$U_T(pq-1)/s = U_T(pq-1,\#s,G(P)/s)$$
-because of (\ref{eq:ifpaT}). \pagebreak Now $\trc(Q)\subseteq\trc(P)$ implies
+because of (\ref{eq:ifpaT}).  Now $\trc(Q)\subseteq\trc(P)$ implies
 $[Q/s]^0\subseteq [P/s]^0 = [G(P)/s]^0$, so $U_T(pq-1,\#s,G(P)/s)$ cannot
 enter branch (\ref{eq:uta}) and produce a $\efail$ event when running in
 parallel with $Q$ and synchronising over $\Sigma$. Therefore, only four

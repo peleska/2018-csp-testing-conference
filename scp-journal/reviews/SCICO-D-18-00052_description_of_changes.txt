@@ -68,13 +68,27 @@ p.4
 express its degree of nondeterminism..." I'm not quite sure how to
 interpret this statement; in particular, how do you define the
 degree of non-determinism?
+ 
+------------------------ Answer by the authors ------------------
+CLARIFIED.
+
+We changed this text to "Nondeterministic behaviour in a given process
+state is reflected by non-empty intersections between initials and maximal refusals. This 
+is illustrated by the following example."
+
+
+-------------------------- reviewer's remark --------------------------
+p.4 
 * Explain the function 'r' in the Normalised Transition Graphs for CSP
 Processes.
 
 ------------------------ Answer by the authors ------------------
+NO CHANGE REQUIRED.
 
-@todo
+The explanation is already there, in the text above formula (5). It says
 
+"The total function r maps each node n to a non-empty set of (possibly empty) subsets of Σ. The graph construction
+guarantees that r(G(P)/s) represents the maximal refusals of P/s for all s ∈ traces(P). "
 
 
 
@@ -86,8 +100,12 @@ at the top of p.6). Same for lemma 2. Fix some typesetting/spacing issues
 in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
 
 ------------------------ Answer by the authors ------------------
+fixed.
 
-@todo
+Changed sentence to "Given a finite-state CSP
+process $P$ and its normalised transition graph $G(P)$ with nodes in set $N$, ..."
+
+Fixed this also in Lemma 2, where also the |N|-formatting has been improved.
 
 
 
@@ -95,14 +113,31 @@ in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
 -------------------------- reviewer's remark --------------------------
 p.7/8
 * proof of lemma 4: "...with this property..."; confusing. Mention
-which property you are referring to. Notation: you write Sigma\B, whereas
+which property you are referring to. 
+
+------------------------ Answer by the authors ------------------
+CLARIFIED.
+
+At the end of the proof, we now write
+
+"This derivation is valid  for arbitrary $A$ satisfying $(s,A)\not\in {\text{failures}}(P)$.
+Specialising it to {\it minimal} sets $A$ satisfying  $(s,A)\not\in {\text{failures}}(P)$
+proves the statement of the lemma."
+
+
+
+
+-------------------------- reviewer's remark --------------------------
+p.7/8
+Notation: you write Sigma\B, whereas
 elsewhere, you use notation Sigma-B.
 
 ------------------------ Answer by the authors ------------------
+fixed.
 
+Changed to Sigma - b 
 
-@todo
-
+(we use the convention that "A - B" is written whenever B is a subset of A. If this is not the case, "A \ B" is used. 
 
 
 
@@ -112,9 +147,24 @@ p.9
 operator) was not introduced/is not discussed.
 
 ------------------------ Answer by the authors ------------------
+fixed.
 
-@todo
+An explanation of guarded external choice has been added to Section "2.1. CSP, Refinement, and Normalised Transition Graphs":
 
+"The branches of an external choice can be protected by \emph{guards}. The
+ process
+$$
+P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice 
+\text{bexpr}_2(x1,\dots,x_n) \& R(x_1,\dots,x_n)
+$$
+parametrised over $x_1,\dots,x_n$ branches according to Boolean expressions
+$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over 
+variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
+$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$. 
+If $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
+$\isf$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
+Boolean expressions evaluate to $\ist$, $P$ behaves as $Q\extchoice R$. Finally, if
+both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$."
 
 
 
@@ -144,9 +194,7 @@ p.14
 * "...with the use of minAcc(n) = {0}..."; somewhat odd phrasing
 
 ------------------------ Answer by the authors ------------------
-
-@todo
-
+fixed and re-phrased.
 
 
 
