@@ -2841,7 +2841,54 @@ errors.
 % ==============================================================================
 \paragraph{Practical Application to Embedded Systems Testing}
 
-@todo
+Test models developed in  CSP  are particularly useful for testing embedded control systems; see~\cite{peleska2002tocs,Peleska02}, for example, for reports on practical application.
+Using complete test methods is particularly attractive for justifying the test case selection when
+verifying safety-critical control systems. The complexity estimates in Section~\ref{sec:complexity}, however,  
+indicate that completeness will result in considerable test effort   depending exponentially
+on the number of states in reference model and implementation. Moreover,  the complexity considerations showed that nondeterminism 
+increases the number of test cases further by a significant factor. 
+
+Therefore, we expect that
+the test strategy presented in this paper will only be applicable to rather small control systems,
+when used directly   for   HW/SW integration testing, where tests are executed on the target hardware and in 
+real physical time.  There are, however, several options to circumvent or at least mitigate
+the complexity problem. 
+
+\medskip
+\noindent
+(1) Recent research on the certifiability of autonomous systems advocates 
+a multi-level approach to testing. In the first stage, very many tests  are executed concurrently
+in a cloud configuration.\footnote{An informal overview describing the ongoing discussion about virtualisation of tests and simulations in the cloud can be found in https://www.linkedin.com/pulse/virtual-testing-qualification-autonomous-vehicles-lopez-rodriguez.}   In the second stage, a smaller subset of these tests is then executed against the real physical embedded system.
+We expect that the complete testing approach described here would typically be applied for stage 1 in the cloud configuration.   
+
+\medskip
+\noindent
+(2) The number of test cases to consider in a complete test suite can be significantly reduced by the introduction of equivalence classes. It has been shown in~\cite{Huang2017} that complete testing theories for finite state machines induce likewise complete
+equivalence class testing 
+strategies for more complex modelling formalisms, such as Kripke Structures or CSP. Experimental evaluations have shown that with the help of such classes, complete test suites with manageable size can be generated~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017}. The experiments considered on-board speed monitors for trains, airbag controllers, and route controllers for railway interlocking systems.
+
+\medskip
+\noindent
+(3) A further promising option is to eliminate nondeterminism. For safety-critical systems, nondeterminism usually occurs in environment models or in high-level models of the target system for
+specifying behavioural options. The implementation itself is typically deterministic. As a consequence, the high-level model can be refined until all design decisions are included, so that the 
+lower-level models are deterministic. Now the SUT could be tested for \emph{equivalence} to the lower-level model. The lower-level model would typically have more states than the higher-level one, but 
+-- as mentioned at the beginning of this section -- maximal trace length would now be only $3q-q$ instead of $pq$
+(recall that $p$ denotes the number of states in the reference model, and $q$ the maximal number of states in the implementation). Therefore, complete test suites checking trace or failures equivalence are of considerable interest as well.
+
+
+\medskip
+\noindent
+(4) If the ultimate goal is to establish failures refinement, there is a useful  heuristic for reducing the test effort while the SUT is probably still faulty (e.g.~for newly developed components). We start with the longest test cases $U_F(pq-1), U_F(pq-2), \dots$, and only perform
+the shorter tests $U_F(j)$ with small $j$ when the longer ones do not reveal any errors. This is
+very effective, since longer test cases completely check trace refinement, before hitting sets are
+applied to check admissibility of nondeterministic behaviour at the end of the longest traces. 
+As a consequence, trace errors will be quickly revealed before fully covering the failures-related tests. 
+ 
+
+
+The question whether the SUT is inside the specified fault domain can usually be answered 
+by performing static analyses of the SUT code or by monitoring state coverage and decision coverage during test executions. If the code has been automatically generated
+from a low-level model, this is further simplified when the code generator's strategy for introducing auxiliary variables (if any) is known. Even in the case where it cannot be determined whether the SUT is inside the fault domain, the experiments from~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017} have shown that the test suites generated according to a complete strategy still have superior test strength, when compared to naive heuristic testing approaches.
 
 
 % ==============================================================================
@@ -2915,7 +2962,7 @@ R.~M. Hierons,
 \newline\urlprefix\url{http://doi.ieeecomputersociety.org/10.1109/TC.2004.85}
 
 \bibitem{simao_reducing_2012}
-A.~Simão, A.~Petrenko, N.~Yevtushenko,
+A.~Sim{\~{a}}o, A.~Petrenko, N.~Yevtushenko,
   \href{https://onlinelibrary.wiley.com/doi/abs/10.1002/stvr.452}{On reducing
   test length for {FSMs} with extra states}, Software Testing, Verification and
   Reliability 22~(6) (2012) 435--454.
@@ -3118,6 +3165,42 @@ A.~L.~C. Cavalcanti, M.-C. Gaudel,
 \newblock \href {http://dx.doi.org/10.1016/j.tcs.2014.08.012}
   {\path{doi:10.1016/j.tcs.2014.08.012}}.
 \newline\urlprefix\url{https://www-users.cs.york.ac.uk/~alcc/publications/papers/CG15.pdf}
+
+\bibitem{peleska2002tocs}
+J.~Peleska, Hardware/software integration testing for the new airbus aircraft
+  families, in: I.~Schieferdecker, H.~K{\"o}nig, A.~Wolisz (Eds.), {Testing of
+  Communicating Systems XIV. Application to Internet Technologies and
+  Services}, Kluwer Academic Publishers, 2002, pp. 225--351.
+
+\bibitem{Peleska02}
+J.~Peleska, Formal methods for test automation - hard real-time testing of
+  controllers for the airbus aircraft family, in: Proc. of the Sixth Biennial
+  World Conference on Integrated Design \& Process Technology (IDPT2002),
+  Pasadena, California, June 23-28, 2002, Society for Design and Process
+  Science, 2002, iSSN 1090-9389.
+  
+\bibitem{DBLP:conf/rssrail/PeleskaHH16}
+J.~Peleska, W.~Huang, F.~H{\"{u}}bner,
+  \href{http://dx.doi.org/10.1007/978-3-319-33951-1_3}{A novel approach to
+  {HW/SW} integration testing of route-based interlocking system controllers},
+  in: T.~Lecomte, R.~Pinger, A.~Romanovsky (Eds.), Reliability, Safety, and
+  Security of Railway Systems. Modelling, Analysis, Verification, and
+  Certification - First International Conference, RSSRail 2016, Paris, France,
+  June 28-30, 2016, Proceedings, Vol. 9707 of Lecture Notes in Computer
+  Science, Springer, 2016, pp. 32--49.
+\newblock \href {http://dx.doi.org/10.1007/978-3-319-33951-1_3}
+  {\path{doi:10.1007/978-3-319-33951-1_3}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1007/978-3-319-33951-1_3}
+
+\bibitem{Huebner2017}
+F.~H{\"u}bner, W.-l. Huang, J.~Peleska,
+  \href{https://doi.org/10.1007/s10270-017-0595-8}{Experimental evaluation of a
+  novel equivalence class partition testing strategy}, Software {\&} Systems
+  ModelingDoi=10.1007/s10270-017-0595-8.
+\newblock \href {http://dx.doi.org/10.1007/s10270-017-0595-8}
+  {\path{doi:10.1007/s10270-017-0595-8}}.
+\newline\urlprefix\url{https://doi.org/10.1007/s10270-017-0595-8}  
+
 
 \end{thebibliography}
 

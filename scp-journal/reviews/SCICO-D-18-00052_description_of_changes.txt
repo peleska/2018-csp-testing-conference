@@ -35,7 +35,10 @@ such a methodology would work well in practice, i.e. whether it would
 allow to cut testing time on average.
 
 ------------------------ Answer by the authors ------------------
-@todo
+DONE.
+
+We have added a new paragraph "Practical Application to Embedded Systems Testing" in Section 7. Discussion and Conclusions, where all aspects you mentioned have been addressed.
+
 
 
 -------------------------- reviewer's remark --------------------------
@@ -137,7 +140,7 @@ fixed.
 
 Changed to Sigma - b 
 
-(we use the convention that "A - B" is written whenever B is a subset of A. If this is not the case, "A \ B" is used. 
+(we use the convention that "A - B" is written whenever B is a subset of A. If this is not the case, "A \ B" is used.)
 
 
 
