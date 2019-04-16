@@ -13,7 +13,7 @@ Changes suggested/requested by Reviewer #1
 ===================================================================
 
 
--------------------------- reviewer's remark -------------------------- 
+-------------------------- reviewer's remark --------------------------
 A general comment
 -----------------
 It would be helpful if the authors could extend their discsussion
@@ -25,7 +25,7 @@ practice. More concretely, it would be interesting to understand
 whether there are techniques (e.g. non-black box techniques) that
 can be used to establish whether the implementation fits in the
 fault domain and, hence, whether the theory developed in this paper
-applies. 
+applies.
 One may add a remark that in a practical testing methodological one
 may insist on testing for trace-refinement even if one is only
 interested in failure-refinement since any violation for the former
@@ -39,12 +39,19 @@ DONE.
 
 We have added a new paragraph "Practical Application to Embedded Systems Testing" in Section 7. Discussion and Conclusions, where all aspects you mentioned have been addressed.
 
-
-
 -------------------------- reviewer's remark --------------------------
 p.3
 * I would propose to include the grammar of the CSP fragment you discuss
 in section 2.1.
+
+------------------------ Answer by the authors ------------------
+DONE.
+
+We have added Table 1 with a precise description of the CSP
+operators we use.
+
+-------------------------- reviewer's remark --------------------------
+
 * The abstract presentation of the CSP semantics obscures some
 aspects such as what exactly the set of traces or failures of a
 process are; in particular, you avoid discussing the operational
@@ -52,36 +59,48 @@ model of CSP, but do sometimes refer to invisible (hidden) events,
 yet refrain from discussing concepts such as stability. While these
 concepts turn out not really to play a role in your setting, ignoring
 these may cause some confusion in readers accustomed to dealing
-with the operational semantics of CSP. 
+with the operational semantics of CSP.
 At least, you may wish to add a remark stating why a very abstract
 presentation of CSP suffices in this particular setting.
+
+------------------------ Answer by the authors ------------------
+DONE.
+
+We have added on page 4 a description of the relationship between
+the two semantics, which indicates that we can use either.
+
+"In this work we use the CSP denotational semantics to justify our
+results. We note, however, that the sets of traces and failures of
+a processes can be equivalently defined using the operational
+semantics, as proved in [12]. The operational semantics is
+congruent with the traces and failures models. This justifies our
+use of transition graphs as well."
+
+-------------------------- reviewer's remark --------------------------
 * "...not engage into any event or terminate." I suppose you refer to
 successful termination.
 
 ------------------------ Answer by the authors ------------------
-
-@todo
-
-
+Yes. We clarified.
 
 
 -------------------------- reviewer's remark --------------------------
-p.4 
+p.4
 * "The maximal refusals in combination with the initials of a process
 express its degree of nondeterminism..." I'm not quite sure how to
 interpret this statement; in particular, how do you define the
 degree of non-determinism?
- 
+
 ------------------------ Answer by the authors ------------------
 CLARIFIED.
 
 We changed this text to "Nondeterministic behaviour in a given process
-state is reflected by non-empty intersections between initials and maximal refusals. This 
+state is reflected by non-empty intersections between initials and maximal refusals. This
 is illustrated by the following example."
 
 
 -------------------------- reviewer's remark --------------------------
-p.4 
+p.4
 * Explain the function 'r' in the Normalised Transition Graphs for CSP
 Processes.
 
@@ -93,8 +112,6 @@ The explanation is already there, in the text above formula (5). It says
 "The total function r maps each node n to a non-empty set of (possibly empty) subsets of Σ. The graph construction
 guarantees that r(G(P)/s) represents the maximal refusals of P/s for all s ∈ traces(P). "
 
-
-
 -------------------------- reviewer's remark --------------------------
 p.6
 * "Given a finite-state CSP process P and its normalised transition graph
@@ -103,7 +120,7 @@ at the top of p.6). Same for lemma 2. Fix some typesetting/spacing issues
 in Lemma 2 (in particular, k <|N| and |t(n,V)|=k).
 
 ------------------------ Answer by the authors ------------------
-fixed.
+Fixed.
 
 Changed sentence to "Given a finite-state CSP
 process $P$ and its normalised transition graph $G(P)$ with nodes in set $N$, ..."
@@ -111,12 +128,10 @@ process $P$ and its normalised transition graph $G(P)$ with nodes in set $N$, ..
 Fixed this also in Lemma 2, where also the |N|-formatting has been improved.
 
 
-
-
 -------------------------- reviewer's remark --------------------------
 p.7/8
 * proof of lemma 4: "...with this property..."; confusing. Mention
-which property you are referring to. 
+which property you are referring to.
 
 ------------------------ Answer by the authors ------------------
 CLARIFIED.
@@ -128,21 +143,17 @@ Specialising it to {\it minimal} sets $A$ satisfying  $(s,A)\not\in {\text{failu
 proves the statement of the lemma."
 
 
-
-
 -------------------------- reviewer's remark --------------------------
 p.7/8
 Notation: you write Sigma\B, whereas
 elsewhere, you use notation Sigma-B.
 
 ------------------------ Answer by the authors ------------------
-fixed.
+Fixed.
 
-Changed to Sigma - b 
+Changed to Sigma - b
 
 (we use the convention that "A - B" is written whenever B is a subset of A. If this is not the case, "A \ B" is used.)
-
-
 
 -------------------------- reviewer's remark --------------------------
 p.9
@@ -150,27 +161,24 @@ p.9
 operator) was not introduced/is not discussed.
 
 ------------------------ Answer by the authors ------------------
-fixed.
+Fixed.
 
 An explanation of guarded external choice has been added to Section "2.1. CSP, Refinement, and Normalised Transition Graphs":
 
 "The branches of an external choice can be protected by \emph{guards}. The
  process
 $$
-P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice 
+P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice
 \text{bexpr}_2(x1,\dots,x_n) \& R(x_1,\dots,x_n)
 $$
 parametrised over $x_1,\dots,x_n$ branches according to Boolean expressions
-$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over 
+$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over
 variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
-$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$. 
+$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$.
 If $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
 $\isf$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
 Boolean expressions evaluate to $\ist$, $P$ behaves as $Q\extchoice R$. Finally, if
 both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$."
-
-
-
 
 -------------------------- reviewer's remark --------------------------
 p.10
@@ -187,9 +195,6 @@ We clarified this sentence as follows.
 "Since we assume that Q is free of livelocks, it is guaranteed that events fail or pass always become visible, if they are the only events UF (j)/s is ready to engage in: if UF (j)/s can only produce pass or fail, the occurrence of these events can never be blocked due to a livelock, since the only process executing concurrently with UF(j) is livelock-free Q."
 
 
-
-
-
 -------------------------- reviewer's remark --------------------------
 p.14
 * add the remark about r_max = 3 to the caption of Fig.3
@@ -197,9 +202,7 @@ p.14
 * "...with the use of minAcc(n) = {0}..."; somewhat odd phrasing
 
 ------------------------ Answer by the authors ------------------
-fixed and re-phrased.
-
-
+Fixed and re-phrased.
 
 -------------------------- reviewer's remark --------------------------
 p.16
@@ -212,15 +215,11 @@ CLARIFIED
 
 We changed the text as follows.
 
-"With finite complete CSP test suites test suites at hand, it is now possible 
+"With finite complete CSP test suites test suites at hand, it is now possible
 to calculate how many test executions are needed when using them.
 Previous work did not consider sufficient conditions for finiteness, so
-estimates for the maximal number 
+estimates for the maximal number
 of executions could not be calculated."
-
-
-
-
 
 -------------------------- reviewer's remark --------------------------
 p.17
@@ -229,11 +228,7 @@ p.17
 ------------------------ Answer by the authors ------------------
 NO CHANGES REQUIRED
 
-We prefer to apply the floor-notation only throughout the paper, since it is already used in Theorem 1 (Sperner) and then occurs quite frequently in the rest of the paper. Changing to ceil in the one place you suggested might perhaps be more confusing for readers than helpful. 
-
-
-
-
+We prefer to apply the floor-notation only throughout the paper, since it is already used in Theorem 1 (Sperner) and then occurs quite frequently in the rest of the paper. Changing to ceil in the one place you suggested might perhaps be more confusing for readers than helpful.
 
 -------------------------- reviewer's remark --------------------------
 p.20
@@ -246,48 +241,34 @@ CLARIFIED.
 
 We have added text in the example explaining for which trace s_fail the tests U_F (pq − 1) and U_T (pq − 1), fail, and we explain that no failures are detected on any true prefix of s_fail.
 
-
-
-
 -------------------------- reviewer's remark --------------------------
 p.23
 * typo in name in reference [4]
 
 ------------------------ Answer by the authors ------------------
-fixed.
-
-
-
+Fixed.
 
 ===================================================================
 Changes suggested/requested by Reviewer #3
 ===================================================================
 
- 
 -------------------------- reviewer's remark --------------------------
-This paper is not easy to follow for me. Some paragraphs and sentences are too long. I am not familiar with the the state of art of the topic studied in this paper. But considering the paper's contribution, and that all the proofs and constructions given in the paper are believable from my point of view, I recommend to accept this paper. 
+This paper is not easy to follow for me. Some paragraphs and sentences are too long. I am not familiar with the the state of art of the topic studied in this paper. But considering the paper's contribution, and that all the proofs and constructions given in the paper are believable from my point of view, I recommend to accept this paper.
 
 ------------------------ Answer by the authors ------------------
 NO CHANGES REQUIRED
 
-Since the other reviewers stated that the style of writing was good, we did not change the presentation in this respect. 
+Since the other reviewers stated that the style of writing was good, we did not change the presentation in this respect.
 
 However, we fixed all other suggestions for improvement made by Reviewer #3.
 
-
-
-
 -------------------------- reviewer's remark --------------------------
-Page 7: the definition of (16) is not consistent with the following statement "The collection min(C) contains". According to the (16), it should be "those sets of C that are not true supersets of other members of C", rather than "subsets". 
+Page 7: the definition of (16) is not consistent with the following statement "The collection min(C) contains". According to the (16), it should be "those sets of C that are not true supersets of other members of C", rather than "subsets".
 
 ------------------------ Answer by the authors ------------------
-fixed.
+Fixed.
 
 Changed "subsets" to "supersets" in the explaining text after (16).
-
-
-
-
 
 -------------------------- reviewer's remark --------------------------
 Page 10 Para. 2: it is said that "the occurrence of these events can never be blocked due to a livelock in Q occurring in the same step of execution". How to understand this, with the assumption that Q is free of livelocks.  
@@ -298,9 +279,6 @@ We clarified this sentence as follows.
 
 "Since we assume that Q is free of livelocks, it is guaranteed that events fail or pass always become visible, if they are the only events UF (j)/s is ready to engage in: if UF (j)/s can only produce pass or fail, the occurrence of these events can never be blocked due to a livelock, since the only process executing concurrently with UF(j) is livelock-free Q."
 
-
-
-
 -------------------------- reviewer's remark --------------------------
 Some typos:
 in Section 6.1) -> in Section 6.1
@@ -308,16 +286,11 @@ it it is -> it is
 fom -> from
 
 ------------------------ Answer by the authors ------------------
-fixed all.
-
-
+Fixed all.
 
 ===================================================================
 Changes suggested/requested by Reviewer #4
 ===================================================================
-
-
- 
 
 -------------------------- reviewer's remark --------------------------
 -	Page 7, the definition of graph product (12) does not contain the refuse component.
@@ -331,27 +304,20 @@ Before the formal definition in (12), the text already contains the explanation
 
 We think that this sufficiently explains why refusals do not occur anymore in the product construction.
 
-
-
-
 -------------------------- reviewer's remark --------------------------
 -	Page 10, line 15: the notation # is first time used without introduction.
 
 ------------------------ Answer by the authors ------------------
-fixed.
+Fixed.
 
 The sentence has been changed to
 
 "Alternatively, a
-faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$ 
+faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$
 satisfies  $\#s < j$, such that
   $\minhits(G(P)/s) \neq \varnothing$, so that the process
 $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
 "
-
-
-
-
 
 -------------------------- reviewer's remark --------------------------
 -	Page 11, line 4 of section 3.2: If P \refinedby Q, => If P \refinedby Q and Q \in D.
@@ -361,25 +327,8 @@ REJECTED
 
 In the testing literature, the soundness condition is usually specified for ALL SUTs, regardless of whether they are in the fault domain or not. Therefore, Lemma 7 proving the soundness of TS, does not refer to the fault domain either. As a consequence, we prefer to leave the definition of the soundness definition as it is.
 
-
-
-
 -------------------------- reviewer's remark --------------------------
 -	Page 17, equations (42), (43), (44): P => P_max
 
 ------------------------ Answer by the authors ------------------
-fixed.
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+Fixed.

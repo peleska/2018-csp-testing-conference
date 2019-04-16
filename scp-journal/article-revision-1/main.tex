@@ -584,10 +584,38 @@ events in scope, is denoted by $\Sigma$ and supposed to be finite.
 The FDR tool~\cite{fdr} supports model checking and semantic analyses of
 finite-state CSP processes.
 
-A prefixing operator $e \then P$ defines a process that is ready to engage in
+Table~\ref{table:operators} lists the CSP operators we use in our examples. A
+prefixing operator $e \then P$ defines a process that is ready to engage in
 the event $e$, pending agreement of its environment to synchronise. After $e$
 occurs, the process behaves as defined by $P$. The environment can be other
 processes, in parallel, or the environment of a system as a whole.
+
+\begin{table}\centering
+  \begin{tabular}{|l|l|l|}
+    \hline
+  	$Stop$ & Deadlock process
+    \\
+  	$a \then P$ & Prefixed operator: initially offers to engage in the event $a$, and then behaves as a process $P$
+    \\
+  	$g \& P$ & Guarded process: behaves as $P$ if the predicate $g$ is true. Otherwise, it behaves like $STOP$
+    \\
+  	$P \extchoice Q$ & External choice of $P$ or $Q$ made by the environment
+    \\
+    $\Extchoice i: I @ P(i)$ & Iterated external choice
+    \\
+  	$P \intchoice Q$ & Internal choice of $P$ or $Q$
+    \\
+    $\Intchoice i: I @ P(i)$ & Iterated internal choice
+    \\
+  	$P \hide X $ & Hiding: behaves like $P$ but with all communications in the set $X$ hidden
+    \\
+  	$P \parallel[X] Q $ & Generalised parallel: $P$ and $Q$ must synchronise on events that belong to the set $X$
+    \\
+    \hline
+  \end{tabular}
+  \caption{{CSP operators:~$P$ and $Q$ are metavariables that stand for processes, $a$ for an event, $g$ for a condition, $X$ for a set of events, and $I$ for a set.}}
+  \label{table:operators}
+\end{table}
 
 Two forms of choice support branching behaviour. An external choice $P
 \extchoice Q$ between processes $P$ and $Q$ offers to the environment the
@@ -617,25 +645,25 @@ not have an opportunity to interfere:~the choice is made by the process.
 Iterated forms $\Extchoice i: I @ P(i)$ and $\Intchoice i: I @ P(i)$ of the
 external and internal choice operators define a choice over a collection of
 processes $P(i)$. If the index set $I$ is empty, the external choice is the
-process $\Stop$, which deadlocks:~does not engage into any event or
-terminate. For an external choice $\Extchoice e: A @ e \then P(e), A\subseteq
-\Sigma$ over a set $A$ of events, we use the abbreviation $e:A \then P(e)$.
-An iterated internal choice is not defined for an empty index set.
+process $\Stop$, which deadlocks:~does not engage into any event or terminate
+successfully. For an external choice $\Extchoice e: A @ e \then P(e),
+A\subseteq \Sigma$ over a set $A$ of events, we use the abbreviation $e:A
+\then P(e)$. An iterated internal choice is not defined for an empty index
+set.
 
-The branches of an external choice can be protected by \emph{guards}. The
- process
+The branches of an external choice can be protected by guards. The process
 $$
-P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice 
+P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice
 \text{bexpr}_2(x1,\dots,x_n) \& R(x_1,\dots,x_n)
 $$
 parametrised over $x_1,\dots,x_n$ branches according to Boolean expressions
-$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over 
+$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over
 variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
-$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$. 
+$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$.
 If $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
 $\isf$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
 Boolean expressions evaluate to $\ist$, $P$ behaves as $Q\extchoice R$. Finally, if
-both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$. 
+both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$.
 
 There are several parallelism operators. A widely used form of parallelism $P
 \parallel[cs] Q$ defines a process in which the behaviour is characterised by
@@ -673,11 +701,16 @@ events in which $P$ may refuse to engage, after having performed the events of
 $s$. The failures model of a process $P$ records all its failures in a set
 $\fails(P)$.
 
-Semantic definitions specify, for each operator, how the traces or failures
-of the resulting process can be calculated from those of each operand. For
-example, for internal choice, $\fails(P\intchoice Q) =
+Denotational semantic definitions specify, for each operator, how the traces
+or failures of the resulting process can be calculated from those of each
+operand. For example, for internal choice, $\fails(P\intchoice Q) =
 \fails(P)\cup\fails(Q)$; see~\cite[p.~210]{Roscoe:1997:TPC:550448} for a
 comprehensive list of these definitions covering $\trc(P)$ and $\fails(P)$.
+In this work we use the CSP denotational semantics to justify our results. We
+note, however, that the sets of traces and failures of a processes can be
+equivalently defined using the operational semantics, as proved
+in~\cite{Roscoe2010}. The operational semantics is congruent with the traces
+and failures models. This justifies our use of transition graphs as well.
 
 Using the notation $P/s$ to denote the behaviour ot the process $P$ after
 having engaged into the events in the trace $s$, the set $\refs(P/s) \defs
@@ -720,9 +753,9 @@ reconstruct the refusals in the set $\refs(P/s)$. % as described by
 \end{equation}
 %
 Deterministic process states $P/s$ have exactly the one maximal refusal
-defined by $\Sigma-[P/s]^0$, where $[P/s]^0$ denotes the \emph{initials} of
+$\Sigma-[P/s]^0$, where $[P/s]^0$ denotes the \emph{initials} of
 $P/s$, that is, the events that $P/s$ may engage into. Nondeterministic behaviour in a given process
-state is reflected by non-empty intersections between initials and maximal refusals. This 
+state is reflected by non-empty intersections between initials and maximal refusals. This
 is illustrated by the following example.
 %
 \begin{example}
@@ -1060,11 +1093,11 @@ necessary to consider the \emph{product} of normalised transition graphs. We
 need this only for the investigation of corresponding traces in reference
 processes and processes for SUTs. So, the labelling of nodes with maximal
 refusals or minimal acceptances is disregarded in the product construction.
-We consider two normalised transition graphs
+We consider two normalised transition graphs over the same alphabet $\Sigma$.
 \[
 G_i = ( N_i, \ii n_i, \Sigma, t_i : N_i\times\Sigma \pfun N_i, r_i : N_i \fun \mathbb{P}\mathbb{P}(\Sigma)),\qquad i = 1,2,
 \]
-over the same alphabet $\Sigma$. Their product is defined by
+Their product is defined by
 %
 \begin{eqnarray}
 G_1\times G_2 & = & (N_1\times N_2,(\ii n_1,\ii n_2), t:(N_1\times N_2)\times\Sigma\pfun (N_1\times N_2))
@@ -1074,7 +1107,7 @@ G_1\times G_2 & = & (N_1\times N_2,(\ii n_1,\ii n_2), t:(N_1\times N_2)\times\Si
 t((n_1,n_2),e) & = & (t_1(n_1,e),t_2(n_2,e))\ \text{for $((n_1,n_2),e)\in\dom~t$}
 \end{eqnarray}
 %
-The following lemma is used in the proof of our main theorem.
+The following lemma is used later in the proof of our main theorem.
 %
 \begin{lemma}\label{lemma:reachproduc}
 If $G_1$ has $p$ states and $G_2$ has $q$ states, then every reachable state
@@ -1104,7 +1137,7 @@ semantics that are used in the next section.
 refinement is based on solving a \emph{hitting set problem}. Given a finite
 collection of finite sets ${\cal C} = \{ A_1,\dots,A_n\}$, such that each
 $A_i$ is a subset of a universe $\Sigma$, a \emph{hitting set}
-$H\subseteq\Sigma$ is a set satisfying the following property.
+$H\subseteq\Sigma$ is defined as a set satisfying the following property.
 %
 \begin{equation}
   \label{eq:hit}
@@ -1137,10 +1170,10 @@ any collection ${\cal C}\subseteq 2^\Sigma$ of subsets from $\Sigma$
 \minsub({\cal C}) = \{ A\in {\cal C}~|~\forall B\in {\cal C}:
 B\subseteq A\Rightarrow B = A \}.
 \end{equation}
-The collection $\minsub({\cal C})$ contains all those sets of
-${\cal C}$ that are not true supersets of other members of ${\cal C}$. With
-this definition, the relation between failures and minimal hitting sets of
-minimal acceptances is established in the following lemma.
+The collection $\minsub({\cal C})$ contains all those sets of ${\cal C}$ that
+are not true supersets of other members of ${\cal C}$. With this definition,
+the relation between failures and minimal hitting sets of minimal acceptances
+is established as follows.
 %
 \begin{lemma}
 \label{lemma:failureshittingsets}
@@ -1228,7 +1261,8 @@ $\minaccs(G(Q)/s)$ as required.
 
 To prove ``$(2) \Rightarrow (1)$'', we assume that (2) holds, but that $P\
 conf\ Q$ does {\it not} hold. According to Lemma~\ref{lemma:tgtrcref},
-(\ref{eq:failrefb}), there exists $s\in\trc(P)\cap \trc(Q)$ such that
+(\ref{eq:failrefb}), there exists $s\in\trc(P)\cap \trc(Q)$ that satisfies
+the following property.
 \[
 \exists A_Q\in\minaccs(G(Q)/s): \forall A_P\in\minaccs(G(P)/s):
 A_P\not\subseteq A_Q \qquad (*)
@@ -1280,7 +1314,7 @@ Given an {\it arbitrary} collection of subsets ${\cal C}\subset 2^\Sigma$,
 the sub-collection $\minsub({\cal C})$ defined in (\ref{eq:minsub}) is a
 Sperner Family contained in ${\cal C}$.
 
- 
+
 We further observe that
 \begin{itemize}
 \item the maximal refusals of a CSP process state,
@@ -1378,10 +1412,10 @@ $Q\parallel[\Sigma] U_F(j)$.
 
 It is assumed that the events $\efail$ and $\epass$, indicating verdicts FAIL
 and PASS for the test execution, are not included in $\Sigma$. Since we
-assume that $Q$ is free of livelocks, it is guaranteed that events $\efail$
-or $\epass$ always become visible, if they are the only events $U_F(j)/s$ is
-ready to engage in: if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the
-occurrence of these events can never be blocked due to a livelock, since the only
+assume that $Q$ is free of livelocks, the events $\efail$ or $\epass$ always
+become visible, if they are the only events $U_F(j)/s$ is ready to engage in:
+if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the occurrence of these
+events can never be blocked due to a livelock, since the only
   process executing concurrently with  $U_F(j)$  is livelock-free  $Q$.
 
 
@@ -1407,7 +1441,7 @@ refuse $\epass$, due to a deadlock occurring when a faulty SUT process
 executes concurrently with $U_F(j,k,n)$ executing branch~(\ref{eq:ufd}), when
 the guard condition $(k = j\wedge \minhits(n)\neq\varnothing)$ evaluates to
 $\ist$. This is explained further in the next paragraphs. Alternatively, a
-faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$ 
+faulty SUT $Q$ might internally deadlock after a trace $s$ whose length $\#s$
 satisfies  $\#s < j$, such that
   $\minhits(G(P)/s) \neq \varnothing$, so that the process
 $(Q\parallel[\Sigma] U_F(j))/s$ deadlocks as well.
@@ -1829,19 +1863,18 @@ choice, so $P\not\lessdet_F Z$. Fig.~\ref{fig:tgZ} shows the normalised
 transition graph of $Z$ for $r_{max} = 3$.
 
 Running the test $U_F(j)$ against $Z$ for $j=0,\dots,19$ ($G(P)$ has $p = 4$
-states and $G(Z)$ has $q=5$, so $pq-1=19$ is the index of the last test to
-be executed  according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
+states and $G(Z)$ has $q=5$, so $pq-1=19$ is the index of the last test to be
+executed  according to Theorem~\ref{th:failurestest}), tests $U_F(0),\dots,
 U_F(3)$ are passed by $Z$, but $Z$ fails $U_F(4)$, because after execution of
-the trace
+the following trace.
 \[
-s = a.c.c.c, \qquad\text{(note that $G(P)/s = \text{node}\ 3$ according to Fig.~\ref{fig:tga})},
+s = a.c.c.c \qquad\text{(Note that $G(P)/s = \text{node}\ 3$ according to Fig.~\ref{fig:tga}.)}
 \]
-the test $U_F(4)$ offers hitting sets from $\minhits(3) = \{\{b\},\{c\}\}$
-in branch (\ref{eq:ufd}). Therefore,  there exists one test execution
-where $Z/s$ accepts only $\{b\}$ due to the internal choice (note
-from Fig.~\ref{fig:tgZ} that
-$G(Z)/s = \text{node}\ 4$), while $U_F(4)/s$
-only offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for
+The test $U_F(4)$ offers hitting sets from $\minhits(3) = \{\{b\},\{c\}\}$ in
+branch (\ref{eq:ufd}). Therefore,  there exists one test execution where
+$Z/s$ accepts only $\{b\}$ due to the internal choice (note from
+Fig.~\ref{fig:tgZ} that $G(Z)/s = \text{node}\ 4$), while $U_F(4)/s$ only
+offers $\{c\}$ in branch (\ref{eq:ufd}) or $\{ a\} = \Sigma - [3]^0$ for
 branch (\ref{eq:ufa}).  As a consequence, this execution of
 $(Z\parallel[\Sigma] U_F(4))/s$ deadlocks, and the $pass$ event cannot be
 produced. Another failing execution arises if $Z/s$ chooses to accept only
@@ -2102,26 +2135,20 @@ complexity of a testing technique that uses them.
 %in the last step of a test execution. \fixme{But doesn't this add to the
 %number of executions?} \fxnote{jp: should be clear now from the revised test}
 
- 
-
-
-With finite complete CSP test suites test suites at hand, it is now possible 
-to calculate how many test executions are needed when using them.
-Previous work did not consider sufficient conditions for finiteness, so
-estimates for the maximal number 
-of executions could not be calculated. 
-We answer the following questions. (1)~What is
-the worst-case bound on the number of test executions to be performed to
-verify an SUT with respect to failures refinement, when we use our test
-suite? (2)~What is the worst-case bound for traces refinement? (3)~Is it
-possible to reduce the maximal length of traces when testing for failures or
-traces refinement? We consider the first question~(1) in
-Section~\ref{section:complexity:failures}, where we also discuss whether  
-it is possible to reduce the number of test executions with a different test
-suite.  With the answer to question~(1), question~(2) is a fairly simple
-consequence we discuss briefly at the end of 
-Section~\ref{section:complexity:failures}. Question~(3) is the subject of
-Section~\ref{section:complexity:length}.
+With finite complete CSP test suites, it is possible to calculate how
+many test executions are needed when using them. Previous work did not
+consider sufficient conditions for finiteness, so estimates for the maximal
+number of executions could not be calculated. We answer the following
+questions. (1)~What is the worst-case bound on the number of test executions
+to verify an SUT with respect to failures refinement, when we
+use our test suite? (2)~What is the worst-case bound for traces refinement?
+(3)~Is it possible to reduce the maximal length of traces when testing for
+failures or traces refinement? We consider question~(1) in
+Section~\ref{section:complexity:failures}, where we also discuss whether it
+is possible to reduce the number of test executions with a different test
+suite.  With the answer to question~(1), question~(2) is a simple consequence
+we discuss briefly at the end of Section~\ref{section:complexity:failures}.
+Question~(3) is the subject of Section~\ref{section:complexity:length}.
 
 % -------------------------------------------------------------------------
 \subsection{Estimates for the Maximal Number of Failures Test Executions}
@@ -2350,7 +2377,7 @@ We note that this scenario is not feasible for all $j\in\{0,\dots,pq-1\}$,
 because the traces of $U_F(p-1)$ already cover all states of $Z$'s transition
 graph according to Lemma~\ref{lemma:extendV}, and if all states of $Z$ have
 empty hitting sets, there are no acceptance checks to be performed in the
-last step of the test execution. Therefore, \pagebreak the upper bound
+last step of the test execution. Therefore, the upper bound
 calculated next cannot be reached by a CSP process. With the three
 assumptions above, nevertheless, we can calculate that
 %
@@ -2551,8 +2578,8 @@ s_\text{fail} = a.a.a.b.a.a.a.b.a.a.a.b
 $$
 Only in the very last step, the final $b$-event can be produced by $Q$ but is refused by $P$.
 Therefore, tests $U_F(11)$ and $U_T(11)$ enter their first branch (\ref{eq:ufa}) and (\ref{eq:uta}), respectively,\ when engaging into the last $b$, and this produces the $\efail$-event and shows  that $P\not\lessdet_F Q$ and $P\not\lessdet_T Q$ according to
-Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}.. The tests 
-$U_F(j)$ and $U_T(j)$ with $j < pq-1 = 11$ only execute true prefixes of $s_\text{fail}$ which 
+Theorem~\ref{th:failurestest} and Theorem~\ref{th:tracetest}.. The tests
+$U_F(j)$ and $U_T(j)$ with $j < pq-1 = 11$ only execute true prefixes of $s_\text{fail}$ which
 are allowed for $P$, so that these tests pass.
 
 
@@ -2841,54 +2868,84 @@ errors.
 % ==============================================================================
 \paragraph{Practical Application to Embedded Systems Testing}
 
-Test models developed in  CSP  are particularly useful for testing embedded control systems; see~\cite{peleska2002tocs,Peleska02}, for example, for reports on practical application.
-Using complete test methods is particularly attractive for justifying the test case selection when
-verifying safety-critical control systems. The complexity estimates in Section~\ref{sec:complexity}, however,  
-indicate that completeness will result in considerable test effort   depending exponentially
-on the number of states in reference model and implementation. Moreover,  the complexity considerations showed that nondeterminism 
-increases the number of test cases further by a significant factor. 
+Test models developed in  CSP  are particularly useful for testing embedded
+control systems; see~\cite{peleska2002tocs,Peleska02}, for example, for
+reports on practical application. Using complete test methods is particularly
+attractive for justifying the test-case selection when verifying
+safety-critical control systems. The complexity estimates in
+Section~\ref{sec:complexity}, however, indicate that completeness will result
+in considerable test effort depending exponentially on the number of states
+in the reference model and implementation. Moreover, the complexity
+considerations showed that nondeterminism increases the number of test cases
+further by a significant factor.
 
-Therefore, we expect that
-the test strategy presented in this paper will only be applicable to rather small control systems,
-when used directly   for   HW/SW integration testing, where tests are executed on the target hardware and in 
-real physical time.  There are, however, several options to circumvent or at least mitigate
-the complexity problem. 
-
-\medskip
-\noindent
-(1) Recent research on the certifiability of autonomous systems advocates 
-a multi-level approach to testing. In the first stage, very many tests  are executed concurrently
-in a cloud configuration.\footnote{An informal overview describing the ongoing discussion about virtualisation of tests and simulations in the cloud can be found in https://www.linkedin.com/pulse/virtual-testing-qualification-autonomous-vehicles-lopez-rodriguez.}   In the second stage, a smaller subset of these tests is then executed against the real physical embedded system.
-We expect that the complete testing approach described here would typically be applied for stage 1 in the cloud configuration.   
+Therefore, we expect that the test strategy presented in this paper will only
+be applicable to rather small control systems, when used directly for
+integration testing, where tests are executed on the target hardware and in
+real physical time. There are, however, several options to circumvent or at
+least mitigate the complexity problem.
 
 \medskip
-\noindent
-(2) The number of test cases to consider in a complete test suite can be significantly reduced by the introduction of equivalence classes. It has been shown in~\cite{Huang2017} that complete testing theories for finite state machines induce likewise complete
-equivalence class testing 
-strategies for more complex modelling formalisms, such as Kripke Structures or CSP. Experimental evaluations have shown that with the help of such classes, complete test suites with manageable size can be generated~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017}. The experiments considered on-board speed monitors for trains, airbag controllers, and route controllers for railway interlocking systems.
+\noindent (1) Recent research on the certifiability of autonomous systems
+advocates a multi-level approach to testing. In the first stage, very many
+tests  are executed concurrently in a cloud configuration.\footnote{An
+informal overview describing the ongoing discussion about virtualisation of
+tests and simulations in the cloud can be found in
+https://www.linkedin.com/pulse/virtual-testing-qualification-autonomous-vehicles-lopez-rodriguez.}
+In the second stage, a smaller subset of these tests is then executed against
+the real physical embedded system. We expect that the complete testing
+approach described here would typically be applied for stage 1 in the cloud
+configuration.
 
 \medskip
-\noindent
-(3) A further promising option is to eliminate nondeterminism. For safety-critical systems, nondeterminism usually occurs in environment models or in high-level models of the target system for
-specifying behavioural options. The implementation itself is typically deterministic. As a consequence, the high-level model can be refined until all design decisions are included, so that the 
-lower-level models are deterministic. Now the SUT could be tested for \emph{equivalence} to the lower-level model. The lower-level model would typically have more states than the higher-level one, but 
--- as mentioned at the beginning of this section -- maximal trace length would now be only $3q-q$ instead of $pq$
-(recall that $p$ denotes the number of states in the reference model, and $q$ the maximal number of states in the implementation). Therefore, complete test suites checking trace or failures equivalence are of considerable interest as well.
-
+\noindent (2) The number of test cases to consider in a complete test suite
+can be significantly reduced by the introduction of equivalence classes. It
+has been shown in~\cite{Huang2017} that complete testing theories for finite
+state machines induce likewise complete equivalence class testing strategies
+for more complex modelling formalisms, such as Kripke Structures or CSP.
+Experimental evaluations have shown that with the help of such classes,
+complete test suites with manageable size can be
+generated~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017}. The experiments
+considered several industrial examples:~on-board speed monitors for trains,
+airbag controllers, and route controllers for railway interlocking systems.
 
 \medskip
-\noindent
-(4) If the ultimate goal is to establish failures refinement, there is a useful  heuristic for reducing the test effort while the SUT is probably still faulty (e.g.~for newly developed components). We start with the longest test cases $U_F(pq-1), U_F(pq-2), \dots$, and only perform
-the shorter tests $U_F(j)$ with small $j$ when the longer ones do not reveal any errors. This is
-very effective, since longer test cases completely check trace refinement, before hitting sets are
-applied to check admissibility of nondeterministic behaviour at the end of the longest traces. 
-As a consequence, trace errors will be quickly revealed before fully covering the failures-related tests. 
- 
+\noindent (3) A further promising option is to eliminate nondeterminism. For
+safety-critical systems, nondeterminism usually occurs in environment models
+or in high-level models of the target system for specifying behavioural
+options. The implementation itself is typically deterministic. As a
+consequence, the high-level model can be refined until all design decisions
+are included, so that the lower-level models are deterministic. Now the SUT
+could be tested for \emph{equivalence} to the lower-level model. The
+lower-level model would typically have more states than the higher-level one,
+but -- as mentioned at the beginning of this section -- maximal trace length
+would now be only $3q-q$ instead of $pq$ (recall that $p$ denotes the number
+of states in the reference model, and $q$ the maximal number of states in the
+implementation). Therefore, complete test suites checking trace or failures
+equivalence are of considerable interest as well.
 
+\medskip
+\noindent (4) If the ultimate goal is to establish failures refinement, there
+is a useful  heuristic for reducing the test effort while the SUT is probably
+still faulty (for instance, for newly developed components). We start with
+the longest test cases $U_F(pq-1), U_F(pq-2), \dots$, and only perform the
+shorter tests $U_F(j)$ with small $j$ when the longer ones do not reveal any
+errors. This is very effective, since longer test cases completely check
+trace refinement, before hitting sets are applied to check admissibility of
+nondeterministic behaviour at the end of the longest traces. As a
+consequence, trace errors will be quickly revealed before fully covering the
+failures-related tests.
 
-The question whether the SUT is inside the specified fault domain can usually be answered 
-by performing static analyses of the SUT code or by monitoring state coverage and decision coverage during test executions. If the code has been automatically generated
-from a low-level model, this is further simplified when the code generator's strategy for introducing auxiliary variables (if any) is known. Even in the case where it cannot be determined whether the SUT is inside the fault domain, the experiments from~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017} have shown that the test suites generated according to a complete strategy still have superior test strength, when compared to naive heuristic testing approaches.
+The question whether the SUT is inside the specified fault domain can usually
+be answered by performing static analyses of the SUT code or by monitoring
+state coverage and decision coverage during test executions. If the code has
+been automatically generated from a low-level model, this is further
+simplified when the code generator's strategy for introducing auxiliary
+variables (if any) is known. Even in the case where it cannot be determined
+whether the SUT is inside the fault domain, the experiments
+from~\cite{DBLP:conf/rssrail/PeleskaHH16,Huebner2017} have shown that the
+test suites generated according to a complete strategy still have superior
+test strength, when compared to naive heuristic testing approaches.
 
 
 % ==============================================================================
@@ -2917,7 +2974,8 @@ checking. We are also grateful to Li-Da Tong from National Sun Yat-sen
 University, Taiwan, for suggesting the applicability of Sperner's Theorem in
 the context of the work presented here. Moreover, we thank Adenilso Simao for
 several helpful suggestions. The work of Ana Cavalcanti is funded by the
-Royal Academy of Engineering and UK EPSRC Grant EP/R025134/1.
+Royal Academy of Engineering and UK EPSRC Grant EP/R025134/1. We also thank
+anonymous reviewers for useful suggestions.
 
 % ===============================================================================
 
@@ -2980,7 +3038,7 @@ A.~Cavalcanti, M.-C. Gaudel, Testing for refinement in {\it circus}, Acta Inf.
 
 \bibitem{Schneider:1995:OST:203471.203475}
 S.~Schneider, \href{http://dx.doi.org/10.1006/inco.1995.1014}{An operational
-  semantics for timed csp}, Inf. Comput. 116~(2) (1995) 193--213.
+  semantics for Timed CSP}, Inf. Comput. 116~(2) (1995) 193--213.
 \newblock \href {http://dx.doi.org/10.1006/inco.1995.1014}
   {\path{doi:10.1006/inco.1995.1014}}.
 \newline\urlprefix\url{http://dx.doi.org/10.1006/inco.1995.1014}
@@ -3178,7 +3236,7 @@ J.~Peleska, Formal methods for test automation - hard real-time testing of
   World Conference on Integrated Design \& Process Technology (IDPT2002),
   Pasadena, California, June 23-28, 2002, Society for Design and Process
   Science, 2002, iSSN 1090-9389.
-  
+
 \bibitem{DBLP:conf/rssrail/PeleskaHH16}
 J.~Peleska, W.~Huang, F.~H{\"{u}}bner,
   \href{http://dx.doi.org/10.1007/978-3-319-33951-1_3}{A novel approach to
@@ -3199,7 +3257,7 @@ F.~H{\"u}bner, W.-l. Huang, J.~Peleska,
   ModelingDoi=10.1007/s10270-017-0595-8.
 \newblock \href {http://dx.doi.org/10.1007/s10270-017-0595-8}
   {\path{doi:10.1007/s10270-017-0595-8}}.
-\newline\urlprefix\url{https://doi.org/10.1007/s10270-017-0595-8}  
+\newline\urlprefix\url{https://doi.org/10.1007/s10270-017-0595-8}
 
 
 \end{thebibliography}
