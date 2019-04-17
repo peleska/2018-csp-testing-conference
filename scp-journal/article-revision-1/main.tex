@@ -653,15 +653,15 @@ set.
 
 The branches of an external choice can be protected by guards. The process
 $$
-P(x_1,\dots,x_n) = \text{bexpr}_1(x1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice
-\text{bexpr}_2(x1,\dots,x_n) \& R(x_1,\dots,x_n)
+P(x_1,\dots,x_n) = \text{bexpr}_1(x_1,\dots,x_n) \& Q(x_1,\dots,x_n) \extchoice
+\text{bexpr}_2(x_1,\dots,x_n) \& R(x_1,\dots,x_n)
 $$
 parametrised over $x_1,\dots,x_n$ branches according to Boolean expressions
-$\text{bexpr}_1(x1,\dots,x_n)$ and $\text{bexpr}_2(x1,\dots,x_n)$ over
-variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
-$\ist$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$.
-If $\text{bexpr}_1(x1,\dots,x_n)$ evaluates to
-$\isf$ and $\text{bexpr}_2(x1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
+$\text{bexpr}_1(x_1,\dots,x_n)$ and $\text{bexpr}_2(x_1,\dots,x_n)$ over
+variables from $\{ x_1,\dots,x_n\}$: if $\text{bexpr}_1(x_1,\dots,x_n)$ evaluates to
+$\ist$ and $\text{bexpr}_2(x_1,\dots,x_n)$ to $\isf$, $P$ behaves like $Q$.
+If $\text{bexpr}_1(x_1,\dots,x_n)$ evaluates to
+$\isf$ and $\text{bexpr}_2(x_1,\dots,x_n)$ to $\ist$, $P$ behaves like $R$. If both
 Boolean expressions evaluate to $\ist$, $P$ behaves as $Q\extchoice R$. Finally, if
 both Boolean expressions evaluate to $\isf$, $P$ behaves like $\Stop$.
 
@@ -1413,10 +1413,10 @@ $Q\parallel[\Sigma] U_F(j)$.
 It is assumed that the events $\efail$ and $\epass$, indicating verdicts FAIL
 and PASS for the test execution, are not included in $\Sigma$. Since we
 assume that $Q$ is free of livelocks, the events $\efail$ or $\epass$ always
-become visible, if they are the only events $U_F(j)/s$ is ready to engage in:
+become visible, if they are the only events that $U_F(j)/s$ is ready to engage in:
 if $U_F(j)/s$ can only produce $\epass$ or $\efail$, the occurrence of these
 events can never be blocked due to a livelock, since the only
-  process executing concurrently with  $U_F(j)$  is livelock-free  $Q$.
+  process executing concurrently with  $U_F(j)$  is livelock-free~$Q$.
 
 
 The test is \emph{passed} by the SUT (written $Q\ \pass\ U_F(j)$) if, and
